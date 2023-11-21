@@ -1,20 +1,29 @@
 // ear-training-plugin/modal.ts
 import { App, Modal, Notice, Setting } from 'obsidian';
 import { intervalMap, semitoneIntervals } from './constants';
-import { playNotes, getBaseFrequency } from './audio-utils';
+import { AudioUtils } from './audio-utils';
+import { AudioPlayer } from './audio';
 import EarTrainingResultModal from './result-modal';
 
 export default class EarTrainingModal extends Modal {
-
+    private audioUtils: AudioUtils| null = null;
 	private playedInterval: string | null = null; // To store the currently played interval
     private selectedInterval: string | null = null; // To store the currently selected interval
     private practiceCount: number = 0; // To keep track of the number of exercises done
 	private isAscending: boolean | null = null;
-	private baseFrequency: number| null = null;
-    private selectedIntervalButton: Setting | null = null; // To store the selected interval button
+	private baseNote: number | null = null;
+    private selectedIntervalButton:HTMLButtonElement | null = null; // To store the selected interval button
 
     private mistakes: Record<string, Record<string, number>> = {};
     private score: number = 0;
+
+    private createButton(id:string, onClick: () => void): HTMLButtonElement {
+        const button = document.createElement('button');
+        button.id = id;
+        button.innerText = intervalMap[id];
+        button.addEventListener('click', onClick);
+        return button;
+    }
 
  	// Method to start a new practice session
     private startPractice(): void {
@@ -22,7 +31,7 @@ export default class EarTrainingModal extends Modal {
         this.playedInterval = this.getRandomInterval();
 		this.isAscending = this.plugin.settings.mode === 'oam' || (this.plugin.settings.mode === 'all' && Math.random() < 0.5);
 		this.selectedIntervalButton = null;
-        this.baseFrequency = getBaseFrequency();
+        this.baseNote = this.audioUtils.getBaseNote();
 
 		 // Add a heading for Intervals
         this.contentEl.createEl('h2', { text: `Exercice ${this.practiceCount + 1} / ${this.plugin.settings.numExercises}` });
@@ -39,29 +48,38 @@ export default class EarTrainingModal extends Modal {
 
         this.contentEl.createEl('h4', { text: 'Select the correct interval.' });
 
+
+        const container = document.createElement('div');
+        container.style.display = 'grid';
+        container.style.gridTemplateColumns = '1fr 1fr 1fr 1fr'; // Use 'row' for a horizontal layout
+        container.style.gridGap = '10px';
+        container.style.justifyItems = 'inherit';
+
         // Display the selected interval list as clickable buttons (dropdown-like)
         for (const interval of this.plugin.settings.selectedIntervals) {
-            const intervalButton = new Setting(this.contentEl)
-                .setName(intervalMap[interval])
-                .addButton(button => button
-                    .setButtonText('Select')
-                    .onClick(() => {
-                         // Remove the highlight from the previously selected button
-                        if (this.selectedIntervalButton) {
-                            this.selectedIntervalButton.settingEl.style.backgroundColor = '';
-                        }
 
-                        // Set the selected interval
-                        this.selectedIntervalButton = intervalButton;
-                        this.selectedInterval = interval;
+            const intervalButton = this.createButton(interval, () => {
+                // Code to run when button one is clicked
+                // Remove the highlight from the previously selected button
+                if (this.selectedIntervalButton) {
+                    this.selectedIntervalButton.style.backgroundColor = '';
+                    this.selectedIntervalButton.style.color = '';
+                }
 
-                        // Highlight the selected button with a green color
-                        if (this.selectedIntervalButton) {
-                            this.selectedIntervalButton.settingEl.style.backgroundColor = 'lightgreen';
-                        }
-                    }));
+                // Set the selected interval
+                this.selectedIntervalButton = intervalButton;
+                this.selectedInterval = interval;
+
+                // Highlight the selected button with a green color
+                if (this.selectedIntervalButton) {
+                    this.selectedIntervalButton.style.backgroundColor = 'lightgreen';
+                    this.selectedIntervalButton.style.color = "white"
+                }
+            });
+            container.appendChild(intervalButton);
         }
 
+        this.contentEl.appendChild(container);
         this.addSpacer();
 
         // Display a button to validate the answer
@@ -107,9 +125,7 @@ export default class EarTrainingModal extends Modal {
             // Display a notice with the interval
 
             const semitoneInterval = semitoneIntervals[this.playedInterval];
-            const secondFrequency = this.isAscending ? this.baseFrequency * Math.pow(2, semitoneInterval / 12) : this.baseFrequency / Math.pow(2, semitoneInterval / 12);
-
-            await playNotes(this.baseFrequency, secondFrequency, this.isAscending);
+            await this.audioUtils.playNotesInterval(this.baseNote, semitoneInterval, this.isAscending);
         }
     }
 
@@ -163,6 +179,9 @@ export default class EarTrainingModal extends Modal {
 
     constructor(app: App, private plugin: EarTrainingPlugin) {
         super(app);
+        const baseDir = app.vault.adapter.getBasePath();
+        const pluginDir = baseDir + '/.obsidian/plugins/ear-training-plugin/public';
+        this.audioUtils = new AudioUtils(new AudioPlayer(pluginDir))
     }
 
   	onOpen() {

@@ -43,7 +43,6 @@ export default class EarTrainingPlugin extends Plugin {
 			id: 'ear-training-editor-command',
 			name: 'Ear training editor command',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
-				console.log(editor.getSelection());
 				editor.replaceSelection('Ear Training Editor Command');
 			}
 		});
@@ -61,11 +60,9 @@ export default class EarTrainingPlugin extends Plugin {
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-		console.log('loading settings :', this.settings);
 	}
 
 	async saveSettings() {
-		console.log('saving settings : ', this.settings);
 		await this.saveData(this.settings);
 	}
 }

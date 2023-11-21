@@ -1,4 +1,5 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
+import { intervalMap } from './constants';
 
 export default class EarTrainingSettingTab extends PluginSettingTab {
 	plugin: EarTrainingPlugin;
@@ -35,7 +36,6 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
                                     this.plugin.settings.selectedIntervals.splice(index, 1);
                                 }
                             }
-                            console.log('saving ', this.plugin);
                             await this.plugin.saveSettings();
                         }));
             }
