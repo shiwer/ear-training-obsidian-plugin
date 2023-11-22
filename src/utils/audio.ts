@@ -31,9 +31,6 @@ export class AudioPlayer {
 
     const fileNames = ["C2v10", "C3v10", "C4v10", "C5v10", "C6v10", "C7v10"];
 
-    console.log(baseDir);
-
-
     Promise.all(
       fileNames.map((fileName) =>
         this.loadSample(

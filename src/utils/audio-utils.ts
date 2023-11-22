@@ -11,7 +11,7 @@ export class AudioUtils {
 
 	private printNote(pitch: number, octave: number): string {
   		const noteName = noteNames[pitch % 12];
-  		console.log(`${noteName}${octave}`);
+  		console.debug(`${noteName}${octave}`);
 	}
 
 	constructor(audioPlayer: AudioPlayer)  {

@@ -1,6 +1,6 @@
 // ear-training-plugin/result-modal.ts
 import { App, Modal } from 'obsidian';
-import { intervalMap } from './constants';
+import { intervalMap } from './../utils/constants';
 
 export default class EarTrainingResultModal extends Modal {
     private score: number;

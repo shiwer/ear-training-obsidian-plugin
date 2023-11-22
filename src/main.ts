@@ -1,31 +1,24 @@
 import { App, Plugin } from 'obsidian';
 import EarTrainingSettingTab from './settings';
-import EarTrainingModal from './modal';
-import { intervalMap } from './constants';
-
-
-interface EarTrainingSettings {
-	selectedIntervals: List<string>,
-	mode : string,
-	numExercises: number
-}
-
-const DEFAULT_SETTINGS: EarTrainingSettings = {
-	selectedIntervals: ['minor-second'],
-	mode: 'oam',
-	numExercises: 10
-}
+import MenuModal from './modals/menu-modal';
+import { intervalMap, EarTrainingSettings, BestScoreData, DEFAULT_SETTINGS } from './utils/constants';
+import './css/styles.css';
 
 export default class EarTrainingPlugin extends Plugin {
-	settings: EarTrainingSettings;
+	settings: EarTrainingSettings = DEFAULT_SETTINGS;
+    bestScores: BestScoreData = {};
+    allInformations: {
+    	settings: EarTrainingSettings,
+    	bestScores: BestScoreData
+    }
 
 	async onload() {
-		await this.loadSettings();
+		await this.loadInformations();
 
 		// This creates an icon in the left ribbon.
 		 const earTrainingIcon = this.addRibbonIcon('music', 'Ear Training', async () => {
             // Open the ear training modal
-            new EarTrainingModal(this.app, this).open();
+            new MenuModal(this.app, this).open();
         });
 
 
@@ -35,7 +28,7 @@ export default class EarTrainingPlugin extends Plugin {
 			name: 'Make Practice',
 			callback: () => {
 				// Open the ear training modal
-            	new EarTrainingModal(this.app, this).open();
+            	new MenuModal(this.app, this).open();
 			}
 		});
 		// This adds an editor command that can perform some operation on the current editor instance
@@ -49,20 +42,30 @@ export default class EarTrainingPlugin extends Plugin {
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new EarTrainingSettingTab(this.app, this));
-
-		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
 
 	onunload() {
 
 	}
 
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
+    async loadInformations() {
+    	await this.loadData().then(data => {
+    		if(data) {
+    			this.settings = Object.assign({}, DEFAULT_SETTINGS, data.settings);
+    			this.bestScores = data.bestScores || {};
+    		}
+    		this.allInformations = data || {};
+    	});
+    }
 
 	async saveSettings() {
-		await this.saveData(this.settings);
+		this.allInformations.settings = this.settings;
+		await this.saveData(this.allInformations);
 	}
+
+    async saveBestScores() {
+        console.log('saving best score', this.bestScores);
+        this.allInformations.bestScores = this.bestScores;
+        await this.saveData(this.allInformations);
+    }
 }
