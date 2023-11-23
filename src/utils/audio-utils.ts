@@ -23,7 +23,7 @@ export class AudioUtils {
 		this.audioPlayer = audioPlayer;
 	}
 
-	getBaseNote(): Note {
+	getRootNote(): Note {
 	    // We pick a random note.
 	    const pitch = Math.floor(Math.random() * 12);
 
@@ -33,8 +33,8 @@ export class AudioUtils {
 	    }
 	}
 
-	getNextNote(baseNote:Note, interval: number, isAscending: boolean = true): Note {
-		let secondPitch = isAscending ? baseNote.pitch + interval : baseNote.pitch - interval;
+	getNextNote(baseNote:Note, interval: number): Note {
+		let secondPitch = baseNote.pitch + interval;
 	    let secondOctave = baseNote.octave;
 
 	    if (secondPitch >= 12) {
@@ -53,7 +53,6 @@ export class AudioUtils {
 	}
 
 	async playNotes(isHarmonic: boolean, ...notes: [Note]): Promise<void> {
-
 		for (let i = 0; i < notes.length; i++) {
 			let note = notes[i];
 			let pitch = note.pitch;
@@ -62,7 +61,7 @@ export class AudioUtils {
 		    this.printNote(pitch, octave);
 		    this.audioPlayer.playNote(pitch, octave);
 
-		    if(isHarmonic) {
+		    if(!isHarmonic) {
 				// Introduce a delay before playing the second note
 			    const delayBetweenNotes = 1000; // Adjust the delay in milliseconds
 			    await new Promise(resolve => setTimeout(resolve, delayBetweenNotes));		    	

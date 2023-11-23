@@ -1,5 +1,5 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
-import { intervalMap, EarTrainingSettings } from './utils/constants';
+import { intervalMap } from './utils/constants';
 
 export default class EarTrainingSettingTab extends PluginSettingTab {
 	plugin: EarTrainingPlugin;

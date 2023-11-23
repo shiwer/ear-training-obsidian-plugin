@@ -28,12 +28,12 @@ export default class MenuModal extends Modal {
         // Check if the selected intervals meet the requirement based on the mode
         if (
             (this.plugin.settings.mode === 'oam' || this.plugin.settings.mode === 'odm') &&
-            this.plugin.settings.selectedIntervals.length < 2
+            this.plugin.settings.selectedNotes.length < 2
         ) {
             this.freePracticeButton.components[0].disabled = true;
             this.freePracticeButton.setDesc('Please select at least 2 intervals for OAM or ODM mode.');
             return;
-        } else if (this.plugin.settings.selectedIntervals.length < 1) {
+        } else if (this.plugin.settings.selectedNotes.length < 1) {
             this.freePracticeButton.components[0].disabled = true;
             this.freePracticeButton.setDesc('Please select at least 1 interval.');
             return;
@@ -49,7 +49,7 @@ export default class MenuModal extends Modal {
         const { contentEl } = this;
         contentEl.empty();
 
-        contentEl.createEl('h2', { text: 'Intervals Exercises Menu' });
+        contentEl.createEl('h2', { text: 'Exercises Menu' });
 
         // Display a button to start the free interval practice
         this.freePracticeButton = new Setting(contentEl)
