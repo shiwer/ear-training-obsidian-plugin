@@ -64,7 +64,6 @@ export default class EarTrainingPlugin extends Plugin {
 	}
 
     async saveBestScores() {
-        console.log('saving best score', this.bestScores);
         this.allInformations.bestScores = this.bestScores;
         await this.saveData(this.allInformations);
     }

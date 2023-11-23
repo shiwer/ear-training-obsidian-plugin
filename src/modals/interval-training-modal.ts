@@ -1,7 +1,7 @@
 // ear-training-plugin/modal.ts
 import { App, Modal, Notice, Setting } from 'obsidian';
 import { intervalMap, semitoneIntervals, Exercise, BestScoreData} from './../utils/constants';
-import { AudioUtils } from './../utils/audio-utils';
+import { AudioUtils, Note } from './../utils/audio-utils';
 import EarTrainingResultModal from './result-modal';
 
 export default class EarTrainingModal extends Modal {
@@ -12,7 +12,7 @@ export default class EarTrainingModal extends Modal {
     private selectedInterval: string | null = null; // To store the currently selected interval
     private practiceCount: number = 0; // To keep track of the number of exercises done
 	private isAscending: boolean | null = null;
-	private baseNote: number | null = null;
+	private baseNote: Note | null = null;
     private selectedIntervalButton:HTMLButtonElement | null = null; // To store the selected interval button
     
     private dynamicHeader:HTMLButtonElement | null = null; // To update the header
@@ -31,6 +31,7 @@ export default class EarTrainingModal extends Modal {
  	// Method to start a new practice session
     private startPractice(): void {
         // Pick a random interval from the selected list
+        this.selectedInterval = null;
         this.playedInterval = this.getRandomInterval();
 		this.isAscending = this.exercise.settings.mode === 'oam' || (this.exercise.settings.mode === 'aad' && Math.random() < 0.5);
         if(this.selectedIntervalButton) {
@@ -74,7 +75,9 @@ export default class EarTrainingModal extends Modal {
             // Display a notice with the interval
 
             const semitoneInterval = semitoneIntervals[this.playedInterval];
-            await this.audioUtils.playNotesInterval(this.baseNote, semitoneInterval, this.isAscending);
+
+            const secondNote: Note = this.audioUtils.getNextNote(this.baseNote, semitoneInterval, this.isAscending);
+            await this.audioUtils.playNotes(this.exercise.isHarmonic, this.baseNote, secondNote);
         }
     }
 
@@ -84,7 +87,7 @@ export default class EarTrainingModal extends Modal {
         return this.exercise.settings.selectedIntervals[randomIndex];
     }
 
-     // Method to validate the user's answer
+    // Method to validate the user's answer
     private validateAnswer(): void {
         // Logic for validating the answer
         if(!this.selectedInterval) {
@@ -97,6 +100,8 @@ export default class EarTrainingModal extends Modal {
             // Update score for correct answer
             this.score++;
         } else {
+            new Notice(`The interval played was : ${intervalMap[this.playedInterval]}`);
+
             // Update mistakes for incorrect answer
             if (!this.mistakes[this.playedInterval]) {
                 this.mistakes[this.playedInterval] = {};

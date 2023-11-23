@@ -97,13 +97,120 @@ const Exercise_1_4: EarTrainingSettings = {
 	}
 }
 
-export const chapterExercises: Record<number, string> = {
-	1: [Exercise_1_1, Exercise_1_2, Exercise_1_3, Exercise_1_4]
+const Exercise_2_1: Exercise = {
+	exerciseId: 5,
+	settings: {
+		selectedIntervals: ['perfect-fourth', 'octave'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: false
+	}
 }
 
+const Exercise_2_2: EarTrainingSettings = {
+	exerciseId: 6,
+	settings: {
+		selectedIntervals: ['perfect-fifth', 'octave'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: false	
+	}
+}
+
+const Exercise_2_3: EarTrainingSettings = {
+	exerciseId: 7,
+	settings: {
+		selectedIntervals: ['minor-third', 'major-third', 'perfect-fourth', 'perfect-fifth', 'octave'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: false
+	}
+}
+
+const Exercise_2_4: EarTrainingSettings = {
+	exerciseId: 8,
+	settings: {
+		selectedIntervals: ['minor-third', 'major-third', 'perfect-fourth', 'perfect-fifth', 'octave'],
+		mode: 'aad',
+		numExercises: 32,
+		isHarmonic: false
+	}
+}
+
+const Exercise_3_1: EarTrainingSettings = {
+	exerciseId: 9,
+	settings: {
+		selectedIntervals: ['minor-third', 'major-third', 'octave'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
+const Exercise_3_2: EarTrainingSettings = {
+	exerciseId: 10,
+	settings: {
+		selectedIntervals: ['perfect-fourth', 'perfect-fifth'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
+const Exercise_3_3: EarTrainingSettings = {
+	exerciseId: 11,
+	settings: {
+		selectedIntervals: ['minor-third', 'major-third', 'perfect-fourth'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
+const Exercise_3_4: EarTrainingSettings = {
+	exerciseId: 12,
+	settings: {
+		selectedIntervals: ['minor-third', 'major-third', 'perfect-fourth', 'perfect-fifth'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
+const Exercise_3_5: EarTrainingSettings = {
+	exerciseId: 13,
+	settings: {
+		selectedIntervals: ['perfect-fourth', 'perfect-fifth', 'octave'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
+const Exercise_3_6: EarTrainingSettings = {
+	exerciseId: 14,
+	settings: {
+		selectedIntervals: ['minor-third', 'major-third', 'perfect-fourth', 'perfect-fifth', 'octave'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
+
+
+
 export const chapterTitles: Record<number, string> = {
-	1: "Major, Minor Thirds and Octave (mélodique)"
+	1: "Major, Minor Thirds and Octave (melodic)",
+	2: "Perfect Fourth and Fifth (melodic)",
+	3: "Major, Minor Thirds, Perfect Fourth and Fifth and Octave (harmonic)"
 };
 
+
+export const chapterExercises: Record<number, string> = {
+	1: [Exercise_1_1, Exercise_1_2, Exercise_1_3, Exercise_1_4],
+	2: [Exercise_2_1, Exercise_2_2, Exercise_2_3, Exercise_2_4],
+	3: [Exercise_3_1, Exercise_3_2, Exercise_3_3, Exercise_3_4, Exercise_3_5, Exercise_3_6]
+}
 
 

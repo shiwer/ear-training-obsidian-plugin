@@ -5,6 +5,11 @@ const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', '
 
 const octave = 3;
 
+export interface Note {
+	pitch: number,
+	octave: number
+}
+
 export class AudioUtils {
 	audioPlayer: AudioPlayer;
 
@@ -18,32 +23,51 @@ export class AudioUtils {
 		this.audioPlayer = audioPlayer;
 	}
 
-	getBaseNote(): number {
+	getBaseNote(): Note {
 	    // We pick a random note.
-	    return Math.floor(Math.random() * 12);
+	    const pitch = Math.floor(Math.random() * 12);
+
+	    return {
+	    	pitch: pitch,
+	    	octave: octave
+	    }
 	}
 
-	async playNotesInterval(firstNote: number, interval: number, isAscending: boolean): Promise<void> {
-	    this.printNote(firstNote, octave);
-	    this.audioPlayer.playNote(firstNote, octave);
+	getNextNote(baseNote:Note, interval: number, isAscending: boolean = true): Note {
+		let secondPitch = isAscending ? baseNote.pitch + interval : baseNote.pitch - interval;
+	    let secondOctave = baseNote.octave;
 
-	    // Introduce a delay before playing the second note
-	    const delayBetweenNotes = 1000; // Adjust the delay in milliseconds
-	    await new Promise(resolve => setTimeout(resolve, delayBetweenNotes));
-
-	    let secondNote = isAscending ? firstNote + interval : firstNote - interval;
-	    let secondNoteOctave = octave;
-
-	    if (secondNote >= 12) {
-	      secondNote = secondNote - 12;
-	      secondNoteOctave = (secondNoteOctave as number) + 1;
-	    } else if (secondNote < 0 ) {
-	    	secondNote = 12 + secondNote;
-	    	secondNoteOctave = secondNoteOctave - 1;
+	    if (secondPitch >= 12) {
+	      secondPitch = secondPitch - 12;
+	      secondOctave = (secondOctave as number) + 1;
+	    } else if (secondPitch < 0 ) {
+	    	secondPitch = 12 + secondPitch;
+	    	secondOctave = secondOctave - 1;
 		}
-	    
-		this.printNote(secondNote, secondNoteOctave);
-	   	await this.audioPlayer.playNote(secondNote, secondNoteOctave);
+
+		return {
+			pitch: secondPitch,
+			octave: secondOctave
+		}
+
+	}
+
+	async playNotes(isHarmonic: boolean, ...notes: [Note]): Promise<void> {
+
+		for (let i = 0; i < notes.length; i++) {
+			let note = notes[i];
+			let pitch = note.pitch;
+			let octave = note.octave;
+
+		    this.printNote(pitch, octave);
+		    this.audioPlayer.playNote(pitch, octave);
+
+		    if(isHarmonic) {
+				// Introduce a delay before playing the second note
+			    const delayBetweenNotes = 1000; // Adjust the delay in milliseconds
+			    await new Promise(resolve => setTimeout(resolve, delayBetweenNotes));		    	
+		    }
+		}
 	}
 
 

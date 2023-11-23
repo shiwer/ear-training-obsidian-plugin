@@ -45,10 +45,6 @@ export default class ChapterModal extends Modal {
         const { contentEl } = this;
         contentEl.empty();
 
-        console.log('chapter modal score: ',this.plugin.bestScores);
-        console.log('chapter modal setting: ',this.plugin.settings);
-
-
         contentEl.createEl('h2', { text: chapterTitles[this.chapterNumber] });
 
         for(const exercise of chapterExercises[this.chapterNumber]) {
