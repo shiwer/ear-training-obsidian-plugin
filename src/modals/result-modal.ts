@@ -1,6 +1,6 @@
 // ear-training-plugin/result-modal.ts
 import { App, Modal } from 'obsidian';
-import { intervalMap } from './../utils/constants';
+import { intervalMap, chordsMap } from './../utils/constants';
 
 export default class EarTrainingResultModal extends Modal {
     private score: number;
@@ -30,14 +30,14 @@ export default class EarTrainingResultModal extends Modal {
             const mistakesList = contentEl.createEl('ul');
             for (const correctIntervalKey in this.mistakes) {
                 if (Object.prototype.hasOwnProperty.call(this.mistakes, correctIntervalKey)) {
-                    const correctIntervalLabel = intervalMap[correctIntervalKey]; // Retrieve the English label
+                    const correctIntervalLabel = intervalMap[correctIntervalKey] ? intervalMap[correctIntervalKey] : chordsMap[correctIntervalKey]; // Retrieve the English label
                     const mistakeItem = mistakesList.createEl('li');
                     mistakeItem.innerText = `You mixed up ${correctIntervalLabel} with:`;
 
                     const subList = mistakeItem.createEl('ul');
                     for (const mistakenIntervalKey in this.mistakes[correctIntervalKey]) {
                         if (Object.prototype.hasOwnProperty.call(this.mistakes[correctIntervalKey], mistakenIntervalKey)) {
-                            const mistakenIntervalLabel = intervalMap[mistakenIntervalKey]; // Retrieve the English label
+                            const mistakenIntervalLabel = intervalMap[mistakenIntervalKey] ? intervalMap[mistakenIntervalKey] : chordsMap[mistakenIntervalKey]; // Retrieve the English label
                             const subItem = subList.createEl('li');
                             subItem.innerText = `${mistakenIntervalLabel} ${this.mistakes[correctIntervalKey][mistakenIntervalKey]} times.`;
                         }

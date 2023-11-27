@@ -6,6 +6,7 @@ import EarTrainingResultModal from './result-modal';
 
 export default class BaseTrainingModal extends Modal {
     protected name: string;
+    private refreshCallback: () => void;
 
     protected audioUtils: AudioUtils| null = null;
     plugin: EarTrainingPlugin;
@@ -139,7 +140,9 @@ export default class BaseTrainingModal extends Modal {
             this.startPractice();
         } else {
             // Practice is completed
-            this.updateBestScore(this.exercise.exerciseId, this.score)
+            this.updateBestScore(this.exercise.exerciseId, this.score);
+            // update chapter page
+            this.refreshCallback();
             new EarTrainingResultModal(this.app, this.score, this.exercise.settings.numExercises, this.mistakes).open();
             this.close();
         }
@@ -159,11 +162,12 @@ export default class BaseTrainingModal extends Modal {
         return `Exercise ${practiceCount} / ${totalExercises}`;
     }
 
-    constructor(app: App, plugin: EarTrainingPlugin, protected name: string, protected exercise: Exercise, audioUtils: AudioUtils) {
+    constructor(app: App, plugin: EarTrainingPlugin, protected name: string, protected exercise: Exercise, audioUtils: AudioUtils, refreshCallback: () => void) {
         super(app, plugin);
         this.name = name;
         this.plugin = plugin;
         this.audioUtils = audioUtils;
+        this.refreshCallback = refreshCallback;
     }
 
   	onOpen() {

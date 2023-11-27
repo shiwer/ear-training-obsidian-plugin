@@ -2,8 +2,6 @@
 import { App, Notice } from 'obsidian';
 import { intervalMap, semitoneIntervals, Exercise} from './../utils/constants';
 import { AudioUtils, Note } from './../utils/audio-utils';
-import EarTrainingResultModal from './result-modal';
-
 import BaseTrainingModal from './base-training-modal';
 
 export default class IntervalTrainingModal extends BaseTrainingModal {
@@ -36,10 +34,8 @@ export default class IntervalTrainingModal extends BaseTrainingModal {
         new Notice(`The interval played was : ${intervalMap[this.playedNotes]}`);
     }
 
-    constructor(app: App, plugin: EarTrainingPlugin, protected exercise: Exercise, audioUtils: AudioUtils) {
-        super(app, plugin,'interval', exercise, audioUtils);
-        this.plugin = plugin;
-        this.audioUtils = audioUtils;
+    constructor(app: App, plugin: EarTrainingPlugin, protected exercise: Exercise, audioUtils: AudioUtils, refreshCallback: () => void) {
+        super(app, plugin,'interval', exercise, audioUtils, refreshCallback);
     }
 
 }
