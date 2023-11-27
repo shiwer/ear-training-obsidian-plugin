@@ -1,0 +1,15 @@
+button:disabled, .disabled {
+    pointer-events: none;
+    color: #808080; /* You can choose a different color for disabled state */
+}
+
+
+.ear-plugin-modal button:focus-visible {
+    box-shadow: 0 0 0 1px var(--background-modifier-border-focus);
+}
+
+.modal-title-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}

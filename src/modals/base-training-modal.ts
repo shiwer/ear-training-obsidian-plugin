@@ -19,6 +19,7 @@ export default class BaseTrainingModal extends Modal {
     private selectedNotesButton:HTMLButtonElement | null = null; // To store the selected notes button
     
     private dynamicHeader:HTMLButtonElement | null = null; // To update the header
+    private validateButton:HTMLButtonElement | null = null;
 
     private mistakes: Record<string, Record<string, number>> = {};
     private score: number = 0;
@@ -31,10 +32,10 @@ export default class BaseTrainingModal extends Modal {
         console.log('implement custom reset');
     }
 
-    private createButton(id:string, onClick: () => void): HTMLButtonElement {
+    private createButton(index: number, note:string, onClick: () => void): HTMLButtonElement {
         const button = document.createElement('button');
-        button.id = id;
-        button.innerText = this.getButtonText(id);
+        button.id = 'noteButton-' + index;
+        button.innerText = this.getButtonText(note);
         button.addEventListener('click', onClick);
         return button;
     }
@@ -45,8 +46,11 @@ export default class BaseTrainingModal extends Modal {
     private startPractice(): void {
         this.customReset();
         this.selectedNotes = null;
+        this.validateButton.components[0].buttonEl.disabled = true;
         this.playedNotes = this.getRandomNotes();
         if(this.selectedNotesButton) {
+            // Remove focus from the button
+            this.selectedNotesButton.blur();
             this.selectedNotesButton.style.backgroundColor = '';
             this.selectedNotesButton.style.color = '';
         }
@@ -165,6 +169,8 @@ export default class BaseTrainingModal extends Modal {
   	onOpen() {
         const { contentEl } = this;
         contentEl.empty();
+        contentEl.addClass('ear-plugin-modal');
+
 
         this.practiceCount = 0;
         this.mistakes = {};
@@ -193,11 +199,16 @@ export default class BaseTrainingModal extends Modal {
         container.style.justifyItems = 'inherit';
 
         // Display the selected notes list as clickable buttons (dropdown-like)
-        for (const notes of this.exercise.settings.selectedNotes) {
+        for (let i = 0; i < this.exercise.settings.selectedNotes.length; i++) {
+            const notes = this.exercise.settings.selectedNotes[i];
 
-            const notesButton = this.createButton(notes, () => {
+            const notesButton = this.createButton(i, notes, () => {
                 // Code to run when button one is clicked
                 // Remove the highlight from the previously selected button
+                if(this.validateButton.components[0].buttonEl.disabled) {
+                    this.validateButton.components[0].buttonEl.disabled = false;
+                }
+
                 if (this.selectedNotesButton) {
                     this.selectedNotesButton.style.backgroundColor = '';
                     this.selectedNotesButton.style.color = '';
@@ -220,7 +231,7 @@ export default class BaseTrainingModal extends Modal {
         this.addSpacer();
 
         // Display a button to validate the answer
-        const validateButton = new Setting(this.contentEl)
+        this.validateButton = new Setting(this.contentEl)
             .setName('Validate')
             .setDesc('Click to validate your answer')
             .addButton(button => button
@@ -231,11 +242,32 @@ export default class BaseTrainingModal extends Modal {
                 }));
 
         // Listen for the keydown event on the description container
-        validateButton.components[0].buttonEl.addEventListener('keydown', (event) => {
-            if (event.key === ' ' || event.key === 'Enter') {
+        this.contentEl.addEventListener('keydown', (event) => {
+            const key = event.key.toLowerCase();
+            if (key === ' ' || key === 'enter') {
                 // Spacebar or Enter key pressed, validate the answer
                 this.validateAnswer();
+                event.stopPropagation();
+
+            } else if (key === 'backspace') {
+                this.playNotes();
+                event.stopPropagation();
+            } else {
+
+                if(event.code.startsWith('Digit')) {
+                    const keyNumb = event.code.replace('Digit', '');
+                    // If the pressed key corresponds to a note button, trigger its click event
+
+                    if (keyNumb !== undefined) {
+                        const noteButton = document.getElementById(`noteButton-${keyNumb - 1}`);
+                        if (noteButton) {
+                            noteButton.click();
+                        }
+                    }
+                }
+                
             }
+
         });
 
         this.startPractice();

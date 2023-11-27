@@ -4,6 +4,7 @@ import { AudioUtils } from './../utils/audio-utils';
 import { chapterTitles, chapterExercises, intervalMap, BestScoresData} from './../utils/constants';
 import IntervalTrainingModal from './interval-training-modal';
 import ChordsTrainingModal from './chords-training-modal';
+import MenuModal from './menu-modal';
 
 
 export default class ChapterModal extends Modal {
@@ -17,19 +18,20 @@ export default class ChapterModal extends Modal {
             const intervalDescriptions = exercise.settings.selectedNotes.map(interval => intervalMap[interval]);
 
             description = intervalDescriptions.join(', ');
+        }
+      
+        if (exercise.settings.isHarmonic) {
+            description += ' (harmonic) ';
+        } else {
 
-            if(exercise.settings.mode === 'oam') {
+             if(exercise.settings.mode === 'oam') {
                 description += ' ascendant mode';
             } else if (exercise.settings.mode === 'odm') {
                 description += ' descendant mode';
             } else {
                 description += ' two way mode';
             }
-        }
-      
-        if (exercise.settings.isHarmonic) {
-            description += ' (harmonic) ';
-        } else {
+            
             description += ' (melodic) ';
         }
 
@@ -48,8 +50,25 @@ export default class ChapterModal extends Modal {
     onOpen() {
         const { contentEl } = this;
         contentEl.empty();
+        contentEl.addClass('ear-plugin-modal');
 
-        contentEl.createEl('h2', { text: chapterTitles[this.chapterNumber] });
+
+        const titleContainer = contentEl.createDiv('modal-title-container');
+        titleContainer.createEl('h2', { text: chapterTitles[this.chapterNumber] });
+
+        // Add back button with left arrow icon
+        //const backButton = titleContainer.createDiv('back-button');
+        const backButton = titleContainer.createEl('button', { cls: 'back-button' });
+
+        backButton.textContent = '←';
+        backButton.addEventListener('click', () => {
+            new MenuModal(this.app, this.plugin, this.audioUtils).open();
+            this.close();
+
+        });
+
+        this.contentEl.appendChild(titleContainer);
+
 
         for(const exercise of chapterExercises[this.chapterNumber]) {
             new Setting(contentEl)
@@ -65,8 +84,6 @@ export default class ChapterModal extends Modal {
                         } else {
                             new IntervalTrainingModal(this.app,this.plugin, exercise, this.audioUtils).open();
                         }
-                        
-                        this.close();
                     });
             });
         }

@@ -1,6 +1,6 @@
 {
 	"id": "ear-training-plugin",
-	"name": "Ear Training Plugin",
+	"name": "Ear Training",
 	"version": "0.1.0",
 	"minAppVersion": "0.15.0",
 	"description": "Offers ear training for musician inside your obsidian vault.",
@@ -9,7 +9,6 @@
 	"fundingUrl": "https://obsidian.md/pricing",
 	"isDesktopOnly": false,
 	"dependencies": [],
-    	"theme": "dark",
-    	"license": "MIT",	
-	"main": "main.ts"
+	"theme": "dark",
+	"license": "MIT"
 }

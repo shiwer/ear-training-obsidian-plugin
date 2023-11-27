@@ -16,6 +16,7 @@ export default class EarTrainingResultModal extends Modal {
 
 	onOpen() {
         const { contentEl } = this;
+        contentEl.addClass('ear-plugin-modal');
 
         // Display the score
         const scoreHeading = contentEl.createEl('h2');

@@ -1,9 +1,0 @@
-.disabled {
-    pointer-events: none;
-    color: #808080; /* You can choose a different color for disabled state */
-}
-
-
-body {
-    background: greenyellow;
-}

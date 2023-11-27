@@ -1,7 +1,6 @@
 // ear-training-plugin/menu-modal.ts
 import { App, Modal, Notice, Setting } from 'obsidian';
 import { AudioUtils } from './../utils/audio-utils';
-import { AudioPlayer } from './../utils/audio';
 import { chapterTitles } from './../utils/constants';
 import IntervalTrainingModal from './interval-training-modal';
 import ChapterModal from './chapter-modal';
@@ -12,12 +11,10 @@ export default class MenuModal extends Modal {
     private audioUtils: AudioUtils;
     plugin: EarTrainingPlugin;
 
-    constructor(app: App, plugin: EarTrainingPlugin) {
+    constructor(app: App, plugin: EarTrainingPlugin, audioUtils: AudioUtils) {
         super(app, plugin);
         this.plugin = plugin;
-        const baseDir = app.vault.adapter.getBasePath();
-        const pluginDir = baseDir + '/.obsidian/plugins/ear-training-plugin/public';
-        this.audioUtils = new AudioUtils(new AudioPlayer(pluginDir))
+        this.audioUtils = audioUtils;
     }
 
     // ear-training-plugin/menu-modal.ts
@@ -48,6 +45,7 @@ export default class MenuModal extends Modal {
     onOpen() {
         const { contentEl } = this;
         contentEl.empty();
+        contentEl.addClass('ear-plugin-modal');
 
         contentEl.createEl('h2', { text: 'Exercises Menu' });
 
@@ -61,6 +59,7 @@ export default class MenuModal extends Modal {
                     .onClick(() => {
                         // Open the Free Interval Training modal
                         new IntervalTrainingModal(this.app, {exerciseId: 0, settings: this.plugin.settings}, this.audioUtils).open();
+                        this.close();
                     });
             });
 
@@ -74,6 +73,7 @@ export default class MenuModal extends Modal {
                         .setButtonText('Go')
                         .onClick(() => {
                             new ChapterModal(this.app, this.plugin, this.audioUtils, key).open();
+                            this.close();
                         });
                 });
             }
