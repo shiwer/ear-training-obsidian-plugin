@@ -258,13 +258,94 @@ const Exercise_4_3: EarTrainingSettings = {
 	}
 }
 
+const Exercise_5_1: EarTrainingSettings = {
+	exerciseId: 18,
+	settings: {
+		selectedNotes: ['minor-second', 'major-second'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: false
+	}
+}
 
+const Exercise_5_2: EarTrainingSettings = {
+	exerciseId: 19,
+	settings: {
+		selectedNotes: ['minor-second', 'major-second', 'minor-third', 'major-third'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: false
+	}
+}
+
+const Exercise_5_3: EarTrainingSettings = {
+	exerciseId: 20,
+	settings: {
+		selectedNotes: ['perfect-fourth', 'augmented-fourth', 'perfect-fifth'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: false
+	}
+}
+
+const Exercise_5_4: EarTrainingSettings = {
+	exerciseId: 21,
+	settings: {
+		selectedNotes: ['minor-second', 'major-second', 'minor-third', 'major-third', 'perfect-fourth', 'augmented-fourth', 'perfect-fifth', 'octave'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: false
+	}
+}
+
+
+const Exercise_6_1: EarTrainingSettings = {
+	exerciseId: 22,
+	settings: {
+		selectedNotes: ['minor-second', 'major-second'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
+const Exercise_6_2: EarTrainingSettings = {
+	exerciseId: 23,
+	settings: {
+		selectedNotes: ['minor-second', 'major-second', 'minor-third', 'major-third'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
+const Exercise_6_3: EarTrainingSettings = {
+	exerciseId: 24,
+	settings: {
+		selectedNotes: ['perfect-fourth', 'augmented-fourth', 'perfect-fifth'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
+const Exercise_6_4: EarTrainingSettings = {
+	exerciseId: 25,
+	settings: {
+		selectedNotes: ['minor-second', 'major-second', 'minor-third', 'major-third', 'perfect-fourth', 'augmented-fourth', 'perfect-fifth', 'octave'],
+		mode: 'oam',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
 
 export const chapterTitles: Record<number, string> = {
 	1: "Major, Minor Thirds and Octave (melodic)",
 	2: "Perfect Fourth and Fifth (melodic)",
 	3: "Major, Minor Thirds, Perfect Fourth and Fifth and Octave (harmonic)",
-	4: "Major and Minor Chords"
+	4: "Major and Minor Chords",
+	5: "Major, Minor Seconds and Augmented Fourth (melodic)",
+	6: "Major, Minor Seconds and Augmented Fourth (harmonic)"
 };
 
 
@@ -272,7 +353,9 @@ export const chapterExercises: Record<number, string> = {
 	1: [Exercise_1_1, Exercise_1_2, Exercise_1_3, Exercise_1_4],
 	2: [Exercise_2_1, Exercise_2_2, Exercise_2_3, Exercise_2_4],
 	3: [Exercise_3_1, Exercise_3_2, Exercise_3_3, Exercise_3_4, Exercise_3_5, Exercise_3_6],
-	4: [Exercise_4_1, Exercise_4_2, Exercise_4_3]
+	4: [Exercise_4_1, Exercise_4_2, Exercise_4_3],
+	5: [Exercise_5_1, Exercise_5_2, Exercise_5_3, Exercise_5_4],
+	6: [Exercise_6_1, Exercise_6_2, Exercise_6_3, Exercise_6_4]
 }
 
 
