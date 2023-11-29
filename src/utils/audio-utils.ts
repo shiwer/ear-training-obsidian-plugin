@@ -69,7 +69,20 @@ export class AudioUtils {
 		}
 	}
 
+	orderedChords(...notes: [Note]):[Note] {
+	    // Use the spread operator to create a new array to avoid modifying the original array
+	    const sortedNotes = [...notes];
 
+	    // Sort the array based on pitch and octave
+	    sortedNotes.sort((a, b) => {
+	        if (a.octave !== b.octave) {
+	            return a.octave - b.octave;
+	        }
+	        return a.pitch - b.pitch;
+	    });
+
+	    return sortedNotes;
+    }
 }
 
 

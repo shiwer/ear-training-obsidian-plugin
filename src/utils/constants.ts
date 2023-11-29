@@ -54,19 +54,19 @@ export const semitoneIntervals: Record<string, number> = {
 export const chordsMap: Record<string, string> = {
 	'minor-root-based': 'Minor Chord',
 	'major-root-based': 'Major Chord',
-	'minor-fifth-based': 'Minor Chord Root Fifth',
-	'minor-third-based': 'Minor Chord Root Third',
-	'major-fifth-based': 'Major Chord Root Fifth',
-	'major-third-based': 'Major Chord Root Third',
+	'minor-fifth-based': 'Xm/5th',
+	'minor-third-based': 'Xm/3rd',
+	'major-fifth-based': 'X/5th',
+	'major-third-based': 'X/3rd',
 }
 
 export const chordsIntervals: Record<string, List<number>> = {
 	'minor-root-based': [3, 7],
 	'major-root-based': [4, 7],
 	'minor-fifth-based': [3, -5],
-	'minor-third-based': [-8, -5],
+	'minor-third-based': [-9, -5],
 	'major-fifth-based': [4, -5],
-	'major-third-based': [-7, -5],
+	'major-third-based': [-8, -5],
 }
 
 
@@ -226,6 +226,37 @@ const Exercise_4_1: EarTrainingSettings = {
 	}
 }
 
+const Exercise_4_2: EarTrainingSettings = {
+	exerciseId: 16,
+	settings: {
+		selectedNotes: [
+			'minor-root-based',
+			'major-root-based',
+			'minor-fifth-based',
+			'minor-third-based',
+			'major-fifth-based',
+			'major-third-based'],
+		mode: 'chords',
+		numExercises: 32,
+		isHarmonic: false
+	}
+}
+
+const Exercise_4_3: EarTrainingSettings = {
+	exerciseId: 17,
+	settings: {
+		selectedNotes: [
+			'minor-root-based',
+			'major-root-based',
+			'minor-fifth-based',
+			'minor-third-based',
+			'major-fifth-based',
+			'major-third-based'],
+		mode: 'chords',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
 
 
 
@@ -241,7 +272,7 @@ export const chapterExercises: Record<number, string> = {
 	1: [Exercise_1_1, Exercise_1_2, Exercise_1_3, Exercise_1_4],
 	2: [Exercise_2_1, Exercise_2_2, Exercise_2_3, Exercise_2_4],
 	3: [Exercise_3_1, Exercise_3_2, Exercise_3_3, Exercise_3_4, Exercise_3_5, Exercise_3_6],
-	4: [Exercise_4_1]
+	4: [Exercise_4_1, Exercise_4_2, Exercise_4_3]
 }
 
 

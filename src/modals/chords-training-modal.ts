@@ -25,7 +25,9 @@ export default class ChordsTrainingModal extends BaseTrainingModal {
 
             const third: Note = this.audioUtils.getNextNote(this.rootNote, semitoneIntervals[0]);
             const fifth: Note = this.audioUtils.getNextNote(this.rootNote, semitoneIntervals[1]);
-            await this.audioUtils.playNotes(this.exercise.settings.isHarmonic, this.rootNote, third, fifth);
+
+            const sortedChords = this.audioUtils.orderedChords(this.rootNote, third, fifth);
+            await this.audioUtils.playNotes(this.exercise.settings.isHarmonic, ...sortedChords);
         }
     }
 
@@ -34,6 +36,8 @@ export default class ChordsTrainingModal extends BaseTrainingModal {
         // new Notice(`The ${this.name} played was : ${intervalMap[this.playedNotes]}`);
         new Notice(`The chord played was : ${chordsMap[this.playedNotes]}`);
     }
+
+
 
     constructor(app: App, plugin: EarTrainingPlugin, protected exercise: Exercise, audioUtils: AudioUtils, refreshCallback: () => void) {
         super(app, plugin,'chords', exercise, audioUtils, refreshCallback);
