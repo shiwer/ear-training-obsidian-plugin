@@ -1,19 +1,19 @@
 // ear-training-plugin/modal.ts
 import { App, Modal, Notice, Setting } from 'obsidian';
 import { Exercise, BestScoreData } from './../utils/constants';
-import { AudioUtils, Note } from './../utils/audio-utils';
+import { Note } from './../utils/audio-utils';
+import { MistakeTracker } from './../models/mistakes';
+import { NotePlayer } from './../models/note-players';
 import EarTrainingResultModal from './result-modal';
 
 export default class BaseTrainingModal extends Modal {
     protected name: string;
     private refreshCallback: () => void;
 
-    protected audioUtils: AudioUtils| null = null;
     plugin: EarTrainingPlugin;
 
-	protected playedNotes: string | null = null; // To store the currently played notes
+    protected notePlayer: NotePlayer;
     protected selectedNotes: string | null = null; // To store the currently selected notes
-    protected rootNote: Note | null = null;
 
 
     private practiceCount: number = 0; // To keep track of the number of exercises done
@@ -22,7 +22,7 @@ export default class BaseTrainingModal extends Modal {
     private dynamicHeader:HTMLButtonElement | null = null; // To update the header
     private validateButton:HTMLButtonElement | null = null;
 
-    private mistakes: Record<string, Record<string, number>> = {};
+    private mistakeTracker: MistakeTracker | null = null;
     private score: number = 0;
 
     protected getButtonText(id:string): string {
@@ -48,7 +48,7 @@ export default class BaseTrainingModal extends Modal {
         this.customReset();
         this.selectedNotes = null;
         this.validateButton.components[0].buttonEl.disabled = true;
-        this.playedNotes = this.getRandomNotes();
+        this.notePlayer.setPlayedNotes(this.getRandomNotes());
         if(this.selectedNotesButton) {
             // Remove focus from the button
             this.selectedNotesButton.blur();
@@ -56,13 +56,12 @@ export default class BaseTrainingModal extends Modal {
             this.selectedNotesButton.style.color = '';
         }
 		this.selectedNotesButton = null;
-        this.rootNote = this.audioUtils.getRootNote();
-
+        this.notePlayer.updateRootNote();
 		
         // Increment the practice count
         this.practiceCount++;
         this.dynamicHeader.textContent = this.headerText(this.practiceCount, this.exercise.settings.numExercises);
-        this.playNotes();
+        this.notePlayer.playNotes();
         }
 
      // Method to add a visual transition effect
@@ -91,11 +90,6 @@ export default class BaseTrainingModal extends Modal {
         return this.exercise.settings.selectedNotes[randomIndex];
     }
 
-    protected async playNotes(): void {
-        // To be implemented
-        console.log('you need to implement this method');
-    }
-
     protected displayError() {
         // to be implemented
         console.log('you need to implement this method');
@@ -108,7 +102,7 @@ export default class BaseTrainingModal extends Modal {
         	new Notice(`Please select an ${this.name} !`);
         	return;
 		} 
-		const isCorrect = this.playedNotes === this.selectedNotes;
+		const isCorrect = this.notePlayer.getPlayedNotes() === this.selectedNotes;
 
 		if (isCorrect) {
             // Update score for correct answer
@@ -117,15 +111,7 @@ export default class BaseTrainingModal extends Modal {
             this.displayError();
 
             // Update mistakes for incorrect answer
-            if (!this.mistakes[this.playedNotes]) {
-                this.mistakes[this.playedNotes] = {};
-            }
-
-            if (!this.mistakes[this.playedNotes][this.selectedNotes]) {
-                this.mistakes[this.playedNotes][this.selectedNotes] = 1;
-            } else {
-                this.mistakes[this.playedNotes][this.selectedNotes]++;
-            }
+            this.mistakeTracker.recordMistake(this.notePlayer.getPlayedNotes(), this.selectedNotes, this.notePlayer.getRootNote());
         }
 
 		// Determine the background color based on the correctness of the answer
@@ -143,7 +129,7 @@ export default class BaseTrainingModal extends Modal {
             this.updateBestScore(this.exercise.exerciseId, this.score);
             // update chapter page
             this.refreshCallback();
-            new EarTrainingResultModal(this.app, this.score, this.exercise.settings.numExercises, this.mistakes).open();
+            new EarTrainingResultModal(this.app, this.notePlayer, this.score, this.exercise.settings.numExercises, this.mistakeTracker).open();
             this.close();
         }
     }
@@ -162,12 +148,13 @@ export default class BaseTrainingModal extends Modal {
         return `Exercise ${practiceCount} / ${totalExercises}`;
     }
 
-    constructor(app: App, plugin: EarTrainingPlugin, protected name: string, protected exercise: Exercise, audioUtils: AudioUtils, refreshCallback: () => void) {
+    constructor(app: App, plugin: EarTrainingPlugin, protected name: string, protected exercise: Exercise, refreshCallback: () => void, notePlayer: NotePlayer) {
         super(app, plugin);
         this.name = name;
         this.plugin = plugin;
-        this.audioUtils = audioUtils;
         this.refreshCallback = refreshCallback;
+        this.notePlayer = notePlayer;
+        this.mistakeTracker = new MistakeTracker();
     }
 
   	onOpen() {
@@ -190,7 +177,7 @@ export default class BaseTrainingModal extends Modal {
                 .setButtonText('Play Notes')
                 .onClick(() => {
                     // Play the notes
-                    this.playNotes();
+                    this.notePlayer.playNotes();
                 }));
 
         this.contentEl.createEl('h4', { text: 'Select the correct answer.' });
@@ -254,7 +241,7 @@ export default class BaseTrainingModal extends Modal {
                 event.stopPropagation();
 
             } else if (key === 'backspace') {
-                this.playNotes();
+                this.notePlayer.playNotes();
                 event.stopPropagation();
             } else {
 
@@ -280,6 +267,7 @@ export default class BaseTrainingModal extends Modal {
 
     onClose() {
         const { contentEl } = this;
+        this.mistakeTracker.clearMistakes();
         contentEl.empty();
     }
 }

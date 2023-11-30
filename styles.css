@@ -8,6 +8,10 @@ button:disabled, .disabled {
     box-shadow: 0 0 0 1px var(--background-modifier-border-focus);
 }
 
+.ear-plugin-modal .mistakes-results p button:first-child::after {
+  content: ' ';
+}
+
 .modal-title-container {
     display: grid;
     grid-template-columns: 1fr auto;
