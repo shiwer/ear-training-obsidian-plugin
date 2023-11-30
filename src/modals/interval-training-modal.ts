@@ -20,7 +20,7 @@ export default class IntervalTrainingModal extends BaseTrainingModal {
     protected displayError() {
         // to be implemented
         // new Notice(`The ${this.name} played was : ${intervalMap[this.playedNotes]}`);
-        new Notice(`The interval played was : ${intervalMap[this.notePlayer.getPlayedNotes()]}`);
+        new Notice(`The interval played was : ${intervalMap[this.playedNotes]}`);
     }
 
     constructor(app: App, plugin: EarTrainingPlugin, protected exercise: Exercise, audioUtils: AudioUtils, refreshCallback: () => void) {

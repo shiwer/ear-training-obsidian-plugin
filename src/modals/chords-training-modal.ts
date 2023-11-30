@@ -19,7 +19,7 @@ export default class ChordsTrainingModal extends BaseTrainingModal {
     protected displayError() {
         // to be implemented
         // new Notice(`The ${this.name} played was : ${intervalMap[this.playedNotes]}`);
-        new Notice(`The chord played was : ${chordsMap[this.notePlayer.getPlayedNotes()]}`);
+        new Notice(`The chord played was : ${chordsMap[this.playedNotes]}`);
     }
 
 

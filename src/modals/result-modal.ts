@@ -6,14 +6,14 @@ import { MistakeTracker, MistakeInfo } from './../models/mistakes';
 import { NotePlayer } from './../models/note-players';
 
 export default class EarTrainingResultModal extends Modal {
-    private notePLayer: NotePlayer;
+    private notePlayer: NotePlayer;
     private score: number;
     private totalExercises: number;
     private mistakeTracker: MistakeTracker;
 
-    constructor(app: App, notePLayer: NotePlayer, score: number, totalExercises: number, mistakeTracker: MistakeTracker) {
+    constructor(app: App, notePlayer: NotePlayer, score: number, totalExercises: number, mistakeTracker: MistakeTracker) {
         super(app);
-        this.notePLayer = notePLayer;
+        this.notePlayer = notePlayer;
         this.score = score;
         this.totalExercises = totalExercises;
         this.mistakeTracker = mistakeTracker;
@@ -45,19 +45,13 @@ export default class EarTrainingResultModal extends Modal {
 
                     const playedNoteButton = mistakeItem.createEl('button', { text: playedNoteLabel });
                     playedNoteButton.addEventListener('click', () => {
-                        // Handle button click event here, e.g., show details for this playedNote
-                        this.notePLayer.setRootNote(rootAndSelectedNote.rootNote);
-                        this.notePLayer.setPlayedNotes(playedNotes);
-                        this.notePLayer.playNotes();
+                        this.notePlayer.playNotes(playedNotes, rootAndSelectedNote.rootNote);
                     });
 
 
                     const selectedNoteButton = mistakeItem.createEl('button', { text: selectedNotesLabel });
                     selectedNoteButton.addEventListener('click', () => {
-                        // Handle button click event here, e.g., show details for this playedNote
-                        this.notePLayer.setRootNote(rootAndSelectedNote.rootNote);
-                        this.notePLayer.setPlayedNotes(rootAndSelectedNote.selectedNotes);
-                        this.notePLayer.playNotes();
+                        this.notePlayer.playRelativeChord(playedNotes, rootAndSelectedNote.selectedNotes, rootAndSelectedNote.rootNote);
                     });
 
 

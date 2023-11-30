@@ -8,39 +8,22 @@ export class NotePlayer {
 
     private isHarmonic: boolean;
 
-    private rootNote: Note;
-    private playedNotes: string;
-
-
     constructor(audioUtils: AudioUtils, isHarmonic: boolean) {
         this.audioUtils = audioUtils;
         this.isHarmonic = isHarmonic;
     }
 
-    setPlayedNotes(playedNotes: string): void {
-        this.playedNotes = playedNotes;
+    generateRootNote(): Note {
+        return this.audioUtils.getRootNote();
     }
 
-    getPlayedNotes(): string {
-        return this.playedNotes;
-    }
-
-    updateRootNote(): void {
-        this.rootNote = this.audioUtils.getRootNote();
-    }
-
-    setRootNote(rootNote: Note): void {
-        this.rootNote = rootNote;
-    }
-
-    getRootNote(): Note {
-        return this.rootNote;
-    }
-
-     async playNotes(): void {
-        console.log('to be implemented. ')
+     async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): void {
+        console.log('to be implemented. ');
      }
 
+    async playNotes(playedNote: string, rootNote: Note): void {
+        console.log('to be implemented. ');
+     }
 }
 
 
@@ -57,36 +40,70 @@ export class IntervalNotePlayer extends NotePlayer {
         this.isAscending = isAscending;
     }
 
-    async playNotes(): void {
-        if (this.playedNotes) {
+    async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): void {
+        if (selectedNote) {
             // Display a notice with the interval
-            const semitoneInterval = semitoneIntervals[this.playedNotes];
+            const semitoneInterval = semitoneIntervals[selectedNote];
 
-            const secondNote: Note = this.audioUtils.getNextNote(this.rootNote, this.isAscending ? semitoneInterval : -semitoneInterval);
-            await this.audioUtils.playNotes(this.isHarmonic, this.rootNote, secondNote);
+            const secondNote: Note = this.audioUtils.getRelativeNote(rootNote, this.isAscending ? semitoneInterval : -semitoneInterval);
+            await this.audioUtils.playNotes(this.isHarmonic, rootNote, secondNote);
+        }
+    }
+
+    async playNotes(playedNote: string, rootNote: Note): void {
+        if (playedNote) {
+            // Display a notice with the interval
+            const semitoneInterval = semitoneIntervals[playedNote];
+
+            const secondNote: Note = this.audioUtils.getRelativeNote(rootNote, this.isAscending ? semitoneInterval : -semitoneInterval);
+            await this.audioUtils.playNotes(this.isHarmonic, rootNote, secondNote);
         }
     }
 
 }
 
 export class ChordNotePlayer extends NotePlayer {
+
+    private getOrderedNotes(semitoneIntervals: List<number>, rootNote: Note): [Note] {
+        const third: Note = this.audioUtils.getRelativeNote(rootNote, semitoneIntervals[0]);
+        const fifth: Note = this.audioUtils.getRelativeNote(rootNote, semitoneIntervals[1]);
+
+        return this.audioUtils.orderedChords(rootNote, third, fifth);
+    }
+
+    private getLowestNote(semitoneIntervals: List<number>, rootNote: Note): Note {
+        return this.getOrderedNotes(semitoneIntervals, rootNote)[0];
+    }
     
     constructor(audioUtils: AudioUtils, isHarmonic: boolean) {
        super(audioUtils, isHarmonic);
     }
 
+    async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): void {
+        // Define the intervals based on the played and selected notes
 
-    async playNotes(): void {
-        if (this.playedNotes) {
+        const lowestPlayedNote = this.getLowestNote(chordsIntervals[playedNote], rootNote);
+        const lowestSelectedNote = this.getLowestNote(chordsIntervals[selectedNote], rootNote);
+
+        // Calculate the relative note based on the intervals
+        const semitoneInterval = this.audioUtils.calculateSemitoneInterval(lowestPlayedNote, lowestSelectedNote);
+
+        const relativeNote = this.audioUtils.getRelativeNote(rootNote, semitoneInterval);
+
+        const sortedChords = this.getOrderedNotes(chordsIntervals[selectedNote], relativeNote);
+
+        // Log or play the relative note
+        // Use your audio player to play the relative note
+        await this.audioUtils.playNotes(this.isHarmonic, ...sortedChords);
+    }
+
+    async playNotes(playedNote: string, rootNote: Note): void {
+        if (playedNote) {
             // Display a notice with the interval
-
-            const semitoneIntervals:List<number> = chordsIntervals[this.playedNotes];
-
-            const third: Note = this.audioUtils.getNextNote(this.rootNote, semitoneIntervals[0]);
-            const fifth: Note = this.audioUtils.getNextNote(this.rootNote, semitoneIntervals[1]);
-
-            const sortedChords = this.audioUtils.orderedChords(this.rootNote, third, fifth);
+            const sortedChords = this.getOrderedNotes(chordsIntervals[playedNote], rootNote);
+            
             await this.audioUtils.playNotes(this.isHarmonic, ...sortedChords);
         }
     }
+
 }

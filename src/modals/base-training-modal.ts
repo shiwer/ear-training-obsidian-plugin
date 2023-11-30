@@ -13,8 +13,9 @@ export default class BaseTrainingModal extends Modal {
     plugin: EarTrainingPlugin;
 
     protected notePlayer: NotePlayer;
+    protected playedNotes: string | null = null;
     protected selectedNotes: string | null = null; // To store the currently selected notes
-
+    private rootNote: Note | null = null;
 
     private practiceCount: number = 0; // To keep track of the number of exercises done
     private selectedNotesButton:HTMLButtonElement | null = null; // To store the selected notes button
@@ -48,7 +49,7 @@ export default class BaseTrainingModal extends Modal {
         this.customReset();
         this.selectedNotes = null;
         this.validateButton.components[0].buttonEl.disabled = true;
-        this.notePlayer.setPlayedNotes(this.getRandomNotes());
+        this.playedNotes = this.getRandomNotes();
         if(this.selectedNotesButton) {
             // Remove focus from the button
             this.selectedNotesButton.blur();
@@ -56,12 +57,12 @@ export default class BaseTrainingModal extends Modal {
             this.selectedNotesButton.style.color = '';
         }
 		this.selectedNotesButton = null;
-        this.notePlayer.updateRootNote();
+        this.rootNote = this.notePlayer.generateRootNote();
 		
         // Increment the practice count
         this.practiceCount++;
         this.dynamicHeader.textContent = this.headerText(this.practiceCount, this.exercise.settings.numExercises);
-        this.notePlayer.playNotes();
+        this.notePlayer.playNotes(this.playedNotes, this.rootNote);
         }
 
      // Method to add a visual transition effect
@@ -102,7 +103,7 @@ export default class BaseTrainingModal extends Modal {
         	new Notice(`Please select an ${this.name} !`);
         	return;
 		} 
-		const isCorrect = this.notePlayer.getPlayedNotes() === this.selectedNotes;
+		const isCorrect = this.playedNotes === this.selectedNotes;
 
 		if (isCorrect) {
             // Update score for correct answer
@@ -111,7 +112,7 @@ export default class BaseTrainingModal extends Modal {
             this.displayError();
 
             // Update mistakes for incorrect answer
-            this.mistakeTracker.recordMistake(this.notePlayer.getPlayedNotes(), this.selectedNotes, this.notePlayer.getRootNote());
+            this.mistakeTracker.recordMistake(this.playedNotes, this.selectedNotes, this.rootNote);
         }
 
 		// Determine the background color based on the correctness of the answer
