@@ -18,8 +18,6 @@ export default class IntervalTrainingModal extends BaseTrainingModal {
     }
 
     protected displayError() {
-        // to be implemented
-        // new Notice(`The ${this.name} played was : ${intervalMap[this.playedNotes]}`);
         new Notice(`The interval played was : ${intervalMap[this.playedNotes]}`);
     }
 

@@ -9,7 +9,6 @@ export default class ChordsTrainingModal extends BaseTrainingModal {
 
  	// Method to start a new practice session
     protected customReset(): void {
-		console.log('in progress')
     }
 
     protected getButtonText(id:string): string {
@@ -17,8 +16,6 @@ export default class ChordsTrainingModal extends BaseTrainingModal {
     }
 
     protected displayError() {
-        // to be implemented
-        // new Notice(`The ${this.name} played was : ${intervalMap[this.playedNotes]}`);
         new Notice(`The chord played was : ${chordsMap[this.playedNotes]}`);
     }
 
