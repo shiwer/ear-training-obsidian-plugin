@@ -98,6 +98,7 @@ export class ChordNotePlayer extends NotePlayer {
     }
 
     async playNotes(playedNote: string, rootNote: Note): void {
+
         if (playedNote) {
             // Display a notice with the interval
             const sortedChords = this.getOrderedNotes(chordsIntervals[playedNote], rootNote);

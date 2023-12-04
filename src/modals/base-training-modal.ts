@@ -178,7 +178,7 @@ export default class BaseTrainingModal extends Modal {
                 .setButtonText('Play Notes')
                 .onClick(() => {
                     // Play the notes
-                    this.notePlayer.playNotes();
+                    this.notePlayer.playNotes(this.playedNotes, this.rootNote);
                 }));
 
         this.contentEl.createEl('h4', { text: 'Select the correct answer.' });
@@ -242,7 +242,7 @@ export default class BaseTrainingModal extends Modal {
                 event.stopPropagation();
 
             } else if (key === 'backspace') {
-                this.notePlayer.playNotes();
+                this.notePlayer.playNotes(this.playedNotes, this.rootNote);
                 event.stopPropagation();
             } else {
 
