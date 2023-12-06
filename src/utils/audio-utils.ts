@@ -82,15 +82,19 @@ export class AudioUtils {
 	    return sortedNotes;
     }
 
+	playNote(note: Note): void {
+		let pitch = note.pitch;
+		let octave = note.octave;
+
+		this.printNote({pitch: pitch, octave: octave});
+		this.audioPlayer.playNote(pitch, octave);
+	}
     
 	async playNotes(isHarmonic: boolean, ...notes: [Note]): Promise<void> {
 		for (let i = 0; i < notes.length; i++) {
 			let note = notes[i];
-			let pitch = note.pitch;
-			let octave = note.octave;
 
-		    this.printNote({pitch: pitch, octave: octave});
-		    this.audioPlayer.playNote(pitch, octave);
+			this.playNote(note);
 
 		    if(!isHarmonic) {
 				// Introduce a delay before playing the second note

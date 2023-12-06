@@ -24,6 +24,10 @@ export class NotePlayer {
     async playNotes(playedNote: string, rootNote: Note): void {
         console.log('to be implemented. ');
      }
+
+     async playFirstNote(playedNote: string, rootNote: Note): void {
+	 	console.log('to be implemented. ');
+	 }
 }
 
 
@@ -42,7 +46,7 @@ export class IntervalNotePlayer extends NotePlayer {
 
     async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): void {
         if (selectedNote) {
-            // Display a notice with the interval
+            // TODO: check if it's working
             const semitoneInterval = semitoneIntervals[selectedNote];
 
             const secondNote: Note = this.audioUtils.getRelativeNote(rootNote, this.isAscending ? semitoneInterval : -semitoneInterval);
@@ -59,6 +63,10 @@ export class IntervalNotePlayer extends NotePlayer {
             await this.audioUtils.playNotes(this.isHarmonic, rootNote, secondNote);
         }
     }
+
+    async playFirstNote(playedNote: string, rootNote: Note): void {
+		this.audioUtils.playNote(rootNote);
+	}
 
 }
 
@@ -78,6 +86,12 @@ export class ChordNotePlayer extends NotePlayer {
     constructor(audioUtils: AudioUtils, isHarmonic: boolean) {
        super(audioUtils, isHarmonic);
     }
+
+	// first note played in a chord is the lowest
+	async playFirstNote(playedNote: string, rootNote: Note): void {
+		const lowestNote: Note = this.getLowestNote(chordsIntervals[playedNote], rootNote);
+		 await this.audioUtils.playNote(lowestNote);
+	}
 
     async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): void {
         // Define the intervals based on the played and selected notes

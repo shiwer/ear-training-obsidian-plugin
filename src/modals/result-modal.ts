@@ -43,11 +43,15 @@ export default class EarTrainingResultModal extends Modal {
                     
                     const mistakeItem = mistakeList.createEl('p');
 
+					const firstNoteButton = mistakeItem.createEl('button', { text: 'First Note' });
+					firstNoteButton.addEventListener('click', () => {
+						this.notePlayer.playFirstNote(playedNotes, rootAndSelectedNote.rootNote);
+					});
+
                     const playedNoteButton = mistakeItem.createEl('button', { text: playedNoteLabel });
                     playedNoteButton.addEventListener('click', () => {
                         this.notePlayer.playNotes(playedNotes, rootAndSelectedNote.rootNote);
                     });
-
 
                     const selectedNoteButton = mistakeItem.createEl('button', { text: selectedNotesLabel });
                     selectedNoteButton.addEventListener('click', () => {
@@ -55,11 +59,18 @@ export default class EarTrainingResultModal extends Modal {
                     });
 
 
-                    const textContainer = mistakeItem.createEl('span'); // Container for buttons
-                    textContainer.textContent = ` was mixed up with : `;
+                    const firstTextContainer = mistakeItem.createEl('span');
+                    firstTextContainer.textContent = ` .You mixed up : `;
 
+
+                    const secondTextContainer = mistakeItem.createEl('span');
+                    secondTextContainer.textContent = ` with : `;
+
+
+                    mistakeItem.appendChild(firstNoteButton);
+                    mistakeItem.appendChild(firstTextContainer);
                     mistakeItem.appendChild(playedNoteButton);
-                    mistakeItem.appendChild(textContainer);
+                    mistakeItem.appendChild(secondTextContainer);
                     mistakeItem.appendChild(selectedNoteButton);
                     
 

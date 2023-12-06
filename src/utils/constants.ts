@@ -231,11 +231,12 @@ const Exercise_4_2: EarTrainingSettings = {
 	settings: {
 		selectedNotes: [
 			'minor-root-based',
+			'major-third-based',
 			'major-root-based',
-			'minor-fifth-based',
 			'minor-third-based',
+			'minor-fifth-based',
 			'major-fifth-based',
-			'major-third-based'],
+            			],
 		mode: 'chords',
 		numExercises: 32,
 		isHarmonic: false
@@ -247,11 +248,12 @@ const Exercise_4_3: EarTrainingSettings = {
 	settings: {
 		selectedNotes: [
 			'minor-root-based',
+			'major-third-based',
 			'major-root-based',
-			'minor-fifth-based',
 			'minor-third-based',
+			'minor-fifth-based',
 			'major-fifth-based',
-			'major-third-based'],
+			],
 		mode: 'chords',
 		numExercises: 32,
 		isHarmonic: true
