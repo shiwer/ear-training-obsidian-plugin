@@ -10,6 +10,12 @@ export default class EarTrainingResultModal extends Modal {
     private score: number;
     private totalExercises: number;
     private mistakeTracker: MistakeTracker;
+    private elements: NodeListOf<HTMLElement>;
+    private selectedRaw: number = 0;
+
+    private handleKeyDown(event) {
+
+    }
 
     constructor(app: App, notePlayer: NotePlayer, score: number, totalExercises: number, mistakeTracker: MistakeTracker) {
         super(app);
@@ -80,6 +86,52 @@ export default class EarTrainingResultModal extends Modal {
             }
 
             contentEl.appendChild(mistakeList);
+
+            this.elements = document.querySelectorAll('.mistakes-results p');
+            if(this.elements) {
+            	this.selectedRaw = 0;
+				this.elements[this.selectedRaw].classList.add('selected');
+				 // Listen for the keydown event on the description container
+				contentEl.addEventListener('keydown', (event) => {
+					const key = event.key.toLowerCase();
+					if (key === 'arrowup' || key === 'arrowdown' || key === '+' || key === '-') {
+						event.preventDefault();
+
+						// Get the list of elements to navigate
+
+						this.elements[this.selectedRaw].classList.remove('selected');
+
+						if (key === 'arrowdown' || key === '+') {
+							this.selectedRaw = Math.min(this.elements.length - 1, this.selectedRaw + 1);
+						} else {
+							this.selectedRaw = Math.max(0, this.selectedRaw - 1);
+						}
+						this.elements[this.selectedRaw].classList.add('selected');
+
+						this.elements[this.selectedRaw].scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+					} else {
+
+						if(event.code.startsWith('Digit') || event.code.startsWith('Numpad')) {
+
+							let keyNumb = event.code.replace('Numpad', '');
+							if(event.code.startsWith('Digit')) {
+								keyNumb =  event.code.replace('Digit', '');
+							}
+							// If the pressed key corresponds to a note button, trigger its click event
+
+							if (keyNumb !== undefined) {
+								const noteButton = this.elements[this.selectedRaw].children[(keyNumb - 1) * 2];
+								if (noteButton) {
+									noteButton.click();
+								}
+							}
+						}
+
+					}
+				});
+            }
+
 
         } else {
             // Display congratulations if no mistakes

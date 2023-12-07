@@ -17,3 +17,7 @@ button:disabled, .disabled {
     grid-template-columns: 1fr auto;
     align-items: center;
 }
+
+.mistakes-results p.selected {
+	background-color: tomato;
+}

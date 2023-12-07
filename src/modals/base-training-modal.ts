@@ -236,18 +236,22 @@ export default class BaseTrainingModal extends Modal {
         // Listen for the keydown event on the description container
         this.contentEl.addEventListener('keydown', (event) => {
             const key = event.key.toLowerCase();
+            console.log(event);
             if (key === ' ' || key === 'enter') {
                 // Spacebar or Enter key pressed, validate the answer
                 this.validateAnswer();
                 event.stopPropagation();
 
-            } else if (key === 'backspace') {
+            } else if (key === 'backspace' || key === '+') {
                 this.notePlayer.playNotes(this.playedNotes, this.rootNote);
                 event.stopPropagation();
             } else {
 
-                if(event.code.startsWith('Digit')) {
-                    const keyNumb = event.code.replace('Digit', '');
+                if(event.code.startsWith('Digit') || event.code.startsWith('Numpad')) {
+                    let keyNumb = event.code.replace('Numpad', '');
+					if(event.code.startsWith('Digit')) {
+						keyNumb =  event.code.replace('Digit', '');
+					}
                     // If the pressed key corresponds to a note button, trigger its click event
 
                     if (keyNumb !== undefined) {

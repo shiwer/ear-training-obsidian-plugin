@@ -26,6 +26,22 @@ Configure the plugin settings to tailor your training experience:
 - **Practice Mode:** Select the training mode, such as melodic, harmonic, or a combination.
 - **Number of Exercises:** Set the desired number of exercises for each session.
 
+## Shortcuts
+
+- **Practice Modal:**
+	- **Numpad or Digit Numb:** Select answers.
+	- **Backspace:** Replay the song.
+	- **Enter or Space:** Validate.
+
+- **Result Modal:**
+	- **Arrow Up and Down:** Select the raw up and down.
+	- **+ Key:** Go down in the raw.
+	- **- Key:** Go up in the raw.
+	- **Numpad or Digit:**
+		- **1:** Play the first note played.
+		- **2:** Play the selection the user did.
+		- **3:** Play the correct answer.
+
 ## Feedback and Support
 
 For bug reports, feature requests, or general feedback, please [open an issue](https://github.com/shiwer/ear-training-obsidian-plugin/issues). We appreciate your input!

@@ -17,7 +17,7 @@ export default class EarTrainingPlugin extends Plugin {
 		await this.loadInformations();
 
         const baseDir = this.app.vault.adapter.getBasePath();
-        const pluginDir = baseDir + '/.obsidian/plugins/ear-training-plugin/public';
+        const pluginDir = baseDir + '/.obsidian/plugins/ear-training/public';
         const audioUtils = new AudioUtils(new AudioPlayer(pluginDir));
 
 		// This creates an icon in the left ribbon.
