@@ -236,7 +236,6 @@ export default class BaseTrainingModal extends Modal {
         // Listen for the keydown event on the description container
         this.contentEl.addEventListener('keydown', (event) => {
             const key = event.key.toLowerCase();
-            console.log(event);
             if (key === ' ' || key === 'enter') {
                 // Spacebar or Enter key pressed, validate the answer
                 this.validateAnswer();
