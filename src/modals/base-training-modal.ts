@@ -57,7 +57,7 @@ export default class BaseTrainingModal extends Modal {
             this.selectedNotesButton.style.color = '';
         }
 		this.selectedNotesButton = null;
-        this.rootNote = this.notePlayer.generateRootNote();
+        this.rootNote = this.notePlayer.generateRootNote(this.playedNotes);
 		
         // Increment the practice count
         this.practiceCount++;

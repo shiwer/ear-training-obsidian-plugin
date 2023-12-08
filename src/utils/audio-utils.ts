@@ -5,6 +5,21 @@ const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', '
 
 const octave = 3;
 
+const intervalsLimitations = {
+	1: [{pitch: 0, octave:3}, {pitch: 7, octave: 4}],
+	2: [{pitch: 0, octave:3}, {pitch: 7, octave: 4}],
+	3: [{pitch: 0, octave:3}, {pitch: 7, octave: 4}],
+	4: [{pitch: 0, octave:3}, {pitch: 7, octave: 4}],
+	5: [{pitch: 10, octave:2}, {pitch: 0, octave: 5}],
+	6: [{pitch: 10, octave:2}, {pitch: 0, octave: 5}],
+	7: [{pitch: 0, octave:2}, {pitch: 0, octave: 4}],
+	8: [{pitch: 5, octave:2}, {pitch: 0, octave: 4}],
+	9: [{pitch: 5, octave:2}, {pitch: 0, octave: 4}],
+	10: [{pitch: 5, octave:2}, {pitch: 0, octave: 4}],
+	11: [{pitch: 5, octave:2}, {pitch: 0, octave: 4}],
+	12: [{pitch: 5, octave:2}, {pitch: 0, octave: 4}]
+}
+
 export interface Note {
 	pitch: number,
 	octave: number
@@ -27,18 +42,31 @@ export class AudioUtils {
         return note.octave * 12 + note.pitch;
     }
 
+	private getRandomInteger(min: number, max: number): number {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
 	constructor(audioPlayer: AudioPlayer)  {
 		this.audioPlayer = audioPlayer;
 	}
 
-	getRootNote(): Note {
-	    // We pick a random note.
-	    const pitch = Math.floor(Math.random() * 12);
+	 getRootNote(semitonesLowestInterval: number, semitoneShit: number): Note {
+		const limitations = intervalsLimitations[semitonesLowestInterval];
 
-	    return {
-	    	pitch: pitch,
-	    	octave: octave
-	    }
+		const { pitch: minPitch, octave: minOctave } = limitations[0];
+		const { pitch: maxPitch, octave: maxOctave } = limitations[1];
+
+		const randomOctave = this.getRandomInteger(minOctave, maxOctave);
+
+		// If the pitch is at the maximum allowed pitch, limit the random pitch to be within the current octave
+		const maxPitchInOctave = randomOctave === maxOctave ? maxPitch : 11;
+		const minPitchInOctave = randomOctave === minOctave ? minPitch : 0;
+
+		const randomPitch = this.getRandomInteger(minPitchInOctave, maxPitchInOctave);
+
+		const lowestNote = { pitch: randomPitch, octave: randomOctave };
+
+		return this.getRelativeNote(lowestNote, semitoneShit);
 	}
 
 	getRelativeNote(baseNote:Note, interval: number): Note {

@@ -21,7 +21,7 @@ export default class ChordsTrainingModal extends BaseTrainingModal {
 
 
     constructor(app: App, plugin: EarTrainingPlugin, protected exercise: Exercise, audioUtils: AudioUtils, refreshCallback: () => void) {
-        super(app, plugin,'chords', exercise, refreshCallback, new ChordNotePlayer(audioUtils, exercise.settings.isHarmonic));
+        super(app, plugin,'chords', exercise, refreshCallback, new ChordNotePlayer(audioUtils, chordsIntervals, exercise.settings.isHarmonic));
     }
 
 }

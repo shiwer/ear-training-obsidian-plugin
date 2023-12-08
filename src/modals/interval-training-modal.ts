@@ -22,7 +22,7 @@ export default class IntervalTrainingModal extends BaseTrainingModal {
     }
 
     constructor(app: App, plugin: EarTrainingPlugin, protected exercise: Exercise, audioUtils: AudioUtils, refreshCallback: () => void) {
-        super(app, plugin,'interval', exercise, refreshCallback, new IntervalNotePlayer(audioUtils, exercise.settings.isHarmonic));
+        super(app, plugin,'interval', exercise, refreshCallback, new IntervalNotePlayer(audioUtils, semitoneIntervals, exercise.settings.isHarmonic));
     }
 
 }

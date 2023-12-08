@@ -35,19 +35,19 @@ export const intervalMap: Record<string, string> = {
 	'octave': 'Octave'
 };
 
-export const semitoneIntervals: Record<string, number> = {
-    'minor-second': 1,
-    'major-second': 2,
-    'minor-third': 3,
-    'major-third': 4,
-    'perfect-fourth': 5,
-    'augmented-fourth': 6,
-    'perfect-fifth': 7,
-    'minor-sixth': 8,
-    'major-sixth': 9,
-    'minor-seventh': 10,
-    'major-seventh': 11,
-    'octave': 12
+export const semitoneIntervals: Record<string, List<number>> = {
+    'minor-second': [1],
+    'major-second': [2],
+    'minor-third': [3],
+    'major-third': [4],
+    'perfect-fourth': [5],
+    'augmented-fourth': [6],
+    'perfect-fifth': [7],
+    'minor-sixth': [8],
+    'major-sixth': [9],
+    'minor-seventh': [10],
+    'major-seventh': [11],
+    'octave': [12]
 };
 
 
