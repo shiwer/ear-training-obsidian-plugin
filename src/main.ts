@@ -6,10 +6,10 @@ import MenuModal from './modals/menu-modal';
 import { intervalMap, EarTrainingSettings, BestScoreData, DEFAULT_SETTINGS } from './utils/constants';
 
 export default class EarTrainingPlugin extends Plugin {
-	settings: EarTrainingSettings = DEFAULT_SETTINGS;
+	settings: EarTrainingGlobalSettings = DEFAULT_SETTINGS;
     bestScores: BestScoreData = {};
     allInformations: {
-    	settings: EarTrainingSettings,
+    	settings: EarTrainingGlobalSettings,
     	bestScores: BestScoreData
     }
 

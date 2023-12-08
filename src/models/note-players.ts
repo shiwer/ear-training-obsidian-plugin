@@ -9,11 +9,9 @@ export class NotePlayer {
 
 	private getOrderedNotes(semitoneIntervals: List<number>, rootNote: Note): [Note] {
 		const noteList:[Note] = new Array(rootNote);
-		console.log('semitoneInterval', semitoneIntervals)
 		for( let i = 0; i < semitoneIntervals.length; i++ ) {
 			noteList.push(this.audioUtils.getRelativeNote(rootNote, semitoneIntervals[i]))
 		}
-		console.log('note list ', noteList);
 		return this.audioUtils.orderedChords(...noteList);
 	}
 
@@ -40,8 +38,8 @@ export class NotePlayer {
 
     	const lowestIntervalBetweenNotes = orderedSemitoneIntervals[1] - orderedSemitoneIntervals[0];
 
-		const semitoneShift = orderedSemitoneIntervals[0];
-    	console.log('lowest ', lowestIntervalBetweenNotes);
+		// the shift in array is always going to be negative or 0
+		const semitoneShift = -orderedSemitoneIntervals[0];
 
         return this.audioUtils.getRootNote(lowestIntervalBetweenNotes, semitoneShift);
     }
@@ -87,7 +85,6 @@ export class IntervalNotePlayer extends NotePlayer {
         if (playedNote) {
             // Display a notice with the interval
             const semitoneInterval = this.intervalSemitonesMap[playedNote][0];
-            console.log('playing ', semitoneInterval);
 
             const secondNote: Note = this.audioUtils.getRelativeNote(rootNote, this.isAscending ? semitoneInterval : -semitoneInterval);
             await this.audioUtils.playNotes(this.isHarmonic, rootNote, secondNote);

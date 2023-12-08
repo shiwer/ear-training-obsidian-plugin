@@ -7,16 +7,42 @@ export interface EarTrainingSettings {
 	isHarmonic: boolean
 }
 
+export interface Exercise {
+	exerciseId: number,
+	settings: EarTrainingSettings
+}
+
 export interface BestScoreData {
 	[exerciseNumber: number]: number;
 }
 
+export interface EarTrainingGlobalSettings {
+	intervals: Exercise,
+	chords: Exercise
+}
 
-export const DEFAULT_SETTINGS: EarTrainingSettings = {
-	selectedNotes: ['minor-second', 'major-second'],
-	mode: 'oam',
-	numExercises: 10,
-	isHarmonic: false
+
+export const DEFAULT_SETTINGS: EarTrainingGlobalSettings = {
+	intervals: {
+		exerciseId: -1,
+		settings: {
+			selectedNotes: ['minor-second', 'major-second'],
+			mode: 'oam',
+			numExercises: 10,
+			isHarmonic: false
+		}
+	},
+	chords: {
+		exerciseId:0,
+		settings: {
+			selectedNotes: ['minor-root-based', 'major-root-based'],
+			mode: 'chords',
+			numExercises: 10,
+			isHarmonic: false
+		}
+	}
+
+
 }
 
 // Interval map with kebab case keys and English labels
@@ -67,12 +93,6 @@ export const chordsIntervals: Record<string, List<number>> = {
 	'minor-third-based': [-9, -5],
 	'major-fifth-based': [4, -5],
 	'major-third-based': [-8, -5],
-}
-
-
-export interface Exercise {
-	exerciseId: number,
-	settings: EarTrainingSettings
 }
 
 

@@ -3,11 +3,13 @@ import { App, Modal, Notice, Setting } from 'obsidian';
 import { AudioUtils } from './../utils/audio-utils';
 import { chapterTitles } from './../utils/constants';
 import IntervalTrainingModal from './interval-training-modal';
+import ChordsTrainingModal from './chords-training-modal';
 import ChapterModal from './chapter-modal';
 
 
 export default class MenuModal extends Modal {
-    private freePracticeButton: HTMLButtonElement | null = null;
+    private freeIntervalPracticeButton: HTMLButtonElement | null = null;
+    private freeChordsPracticeButton: HTMLButtonElement | null = null;
     private audioUtils: AudioUtils;
     plugin: EarTrainingPlugin;
 
@@ -24,21 +26,30 @@ export default class MenuModal extends Modal {
 
         // Check if the selected intervals meet the requirement based on the mode
         if (
-            (this.plugin.settings.mode === 'oam' || this.plugin.settings.mode === 'odm') &&
-            this.plugin.settings.selectedNotes.length < 2
+            (this.plugin.settings.intervals.settings.mode === 'oam' || this.plugin.settings.intervals.settings.mode === 'odm') &&
+            this.plugin.settings.intervals.settings.selectedNotes.length < 2
         ) {
-            this.freePracticeButton.components[0].disabled = true;
-            this.freePracticeButton.setDesc('Please select at least 2 intervals for OAM or ODM mode.');
+            this.freeIntervalPracticeButton.components[0].disabled = true;
+            this.freeIntervalPracticeButton.setDesc('Please select at least 2 intervals for OAM or ODM mode.');
             return;
-        } else if (this.plugin.settings.selectedNotes.length < 1) {
-            this.freePracticeButton.components[0].disabled = true;
-            this.freePracticeButton.setDesc('Please select at least 1 interval.');
+        } else if (this.plugin.settings.intervals.settings.selectedNotes.length < 1) {
+            this.freeIntervalPracticeButton.components[0].disabled = true;
+            this.freeIntervalPracticeButton.setDesc('Please select at least 1 interval.');
             return;
         }
 
+        if(this.plugin.settings.chords.settings.selectedNotes.length < 2) {
+	 		this.freeChordsPracticeButton.components[0].disabled = true;
+			this.freeChordsPracticeButton.setDesc('Please select at least 2 chords.');
+        }
+
         // Remove the disabled class if the conditions are met
-        this.freePracticeButton.controlEl.removeClass('disabled');
-        this.freePracticeButton.setDesc('');
+        this.freeIntervalPracticeButton.controlEl.removeClass('disabled');
+        this.freeIntervalPracticeButton.setDesc('');
+    }
+
+    private nothing(): void {
+
     }
 
 
@@ -49,8 +60,10 @@ export default class MenuModal extends Modal {
 
         contentEl.createEl('h2', { text: 'Exercises Menu' });
 
+        contentEl.createEl('h3', { text: 'Free practices' });
+
         // Display a button to start the free interval practice
-        this.freePracticeButton = new Setting(contentEl)
+        this.freeIntervalPracticeButton = new Setting(contentEl)
             .setName('Free Interval Training')
             .setDesc('Practice intervals freely')
             .addButton(button => {
@@ -58,10 +71,24 @@ export default class MenuModal extends Modal {
                     .setButtonText('Start Free Interval Training')
                     .onClick(() => {
                         // Open the Free Interval Training modal
-                        new IntervalTrainingModal(this.app, {exerciseId: 0, settings: this.plugin.settings}, this.audioUtils).open();
-                        this.close();
+                        console.log(this.plugin.settings);
+                        new IntervalTrainingModal(this.app, this.plugin, this.plugin.settings.intervals, this.audioUtils, this.nothing.bind(this)).open();
                     });
             });
+            
+		this.freeChordsPracticeButton = new Setting(contentEl)
+			.setName('Free Chords Training')
+			.setDesc('Practice chords freely')
+			.addButton(button => {
+				button
+					.setButtonText('Start Free Chords Training')
+					.onClick(() => {
+						// Open the Free Interval Training modal
+						new ChordsTrainingModal(this.app, this.plugin, this.plugin.settings.chords, this.audioUtils, this.nothing.bind(this)).open();
+					});
+			});
+
+        contentEl.createEl('h3', { text: 'Chapters' });
 
         for (const key in chapterTitles) {
             if (Object.prototype.hasOwnProperty.call(chapterTitles, key)) {
