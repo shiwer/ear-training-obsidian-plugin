@@ -1,7 +1,7 @@
 // ear-training-plugin/audio-utils.ts
 import { AudioPlayer } from './audio';
 
-const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+export const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
 const octave = 3;
 
@@ -48,6 +48,25 @@ export class AudioUtils {
 
 	constructor(audioPlayer: AudioPlayer)  {
 		this.audioPlayer = audioPlayer;
+	}
+
+	getRootNoteFromLowestNote(semitonesLowestInterval: number, semitoneShit: number, lowestNotePitch: number) {
+			const limitations = intervalsLimitations[semitonesLowestInterval];
+
+    		let { pitch: minPitch, octave: minOctave } = limitations[0];
+    		let { pitch: maxPitch, octave: maxOctave } = limitations[1];
+
+    		if(lowestNotePitch < minPitch) {
+    			minOctave++;
+    		}
+    		if(lowestNotePitch > maxPitch) {
+    			maxOctave--;
+    		}
+			const randomOctave = this.getRandomInteger(minOctave, maxOctave);
+
+    		const lowestNote = { pitch: lowestNotePitch, octave: randomOctave };
+    		return this.getRelativeNote(lowestNote, semitoneShit);
+
 	}
 
 	 getRootNote(semitonesLowestInterval: number, semitoneShit: number): Note {

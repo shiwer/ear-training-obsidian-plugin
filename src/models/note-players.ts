@@ -19,6 +19,26 @@ export class NotePlayer {
 		return this.getOrderedNotes(semitoneIntervals, rootNote)[0];
 	}
 
+	private getLowestIntervalAndSemitoneShift(playedNotes: string) {
+			const orderedSemitoneIntervals: List<number> = [...this.intervalSemitonesMap[playedNotes]];
+        	// 0 is the potential root note
+        	orderedSemitoneIntervals.push(0);
+        	// we sort the note
+        	orderedSemitoneIntervals.sort((a, b) => {
+            	        return a - b;
+            	    });
+
+        	const lowestIntervalBetweenNotes = orderedSemitoneIntervals[1] - orderedSemitoneIntervals[0];
+
+    		// the shift in array is always going to be negative or 0
+    		const semitoneShift = -orderedSemitoneIntervals[0];
+
+    		return {
+    			lowestIntervalBetweenNotes: lowestIntervalBetweenNotes,
+    			semitoneShift: semitoneShift
+    		}
+	}
+
     constructor(audioUtils: AudioUtils, intervalSemitonesMap: Record<string, List<number>>, isHarmonic: boolean) {
         this.audioUtils = audioUtils;
         this.intervalSemitonesMap = intervalSemitonesMap;
@@ -28,20 +48,15 @@ export class NotePlayer {
 	// when we generate a root note we need to be aware that picking a note that is too low with small intervals will make hearing really difficult
 	// for now the ascending part concerning the interval will not be treated.
     generateRootNote(playedNotes: string): Note {
-    	const orderedSemitoneIntervals: List<number> = [...this.intervalSemitonesMap[playedNotes]];
-    	// 0 is the potential root note
-    	orderedSemitoneIntervals.push(0);
-    	// we sort the note
-    	orderedSemitoneIntervals.sort((a, b) => {
-        	        return a - b;
-        	    });
-
-    	const lowestIntervalBetweenNotes = orderedSemitoneIntervals[1] - orderedSemitoneIntervals[0];
-
-		// the shift in array is always going to be negative or 0
-		const semitoneShift = -orderedSemitoneIntervals[0];
+    	const { lowestIntervalBetweenNotes, semitoneShift } = this.getLowestIntervalAndSemitoneShift(playedNotes);
 
         return this.audioUtils.getRootNote(lowestIntervalBetweenNotes, semitoneShift);
+    }
+
+    getRootFromLowestNote(playedNotes:string, pitch: number) {
+		const { lowestIntervalBetweenNotes, semitoneShift } = this.getLowestIntervalAndSemitoneShift(playedNotes);
+
+		return this.audioUtils.getRootNoteFromLowestNote(lowestIntervalBetweenNotes, semitoneShift, pitch);
     }
 
      async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): void {

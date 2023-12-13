@@ -120,11 +120,22 @@ export default class EarTrainingResultModal extends Modal {
 							}
 							// If the pressed key corresponds to a note button, trigger its click event
 
-							if (keyNumb !== undefined) {
+							if (keyNumb !== undefined && keyNumb < 4) {
+								// we map 1-> 0; 2 -> 2, 3 -> 4
 								const noteButton = this.elements[this.selectedRaw].children[(keyNumb - 1) * 2];
 								if (noteButton) {
 									noteButton.click();
 								}
+							// if keyNumb is 8 then pick a random raw
+							} else if(keyNumb !== undefined && keyNumb == 8 ){
+								this.elements[this.selectedRaw].classList.remove('selected');
+
+                                this.selectedRaw =  Math.floor(Math.random() * this.elements.length);
+                                console.log(this.selectedRaw);
+
+								this.elements[this.selectedRaw].classList.add('selected');
+
+								this.elements[this.selectedRaw].scrollIntoView({ behavior: 'smooth', block: 'center' });
 							}
 						}
 

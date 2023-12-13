@@ -21,6 +21,23 @@ export interface EarTrainingGlobalSettings {
 	chords: Exercise
 }
 
+export const Exercise_Listening: EarTrainingSettings = {
+	exerciseId: 17,
+	settings: {
+		selectedNotes: [
+			'minor-root-based',
+			'major-third-based',
+			'major-root-based',
+			'minor-third-based',
+			'minor-fifth-based',
+			'major-fifth-based',
+			],
+		mode: 'chords',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
 
 export const DEFAULT_SETTINGS: EarTrainingGlobalSettings = {
 	intervals: {

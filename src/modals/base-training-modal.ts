@@ -7,7 +7,7 @@ import { NotePlayer } from './../models/note-players';
 import EarTrainingResultModal from './result-modal';
 
 export default class BaseTrainingModal extends Modal {
-    protected name: string;
+    protected name: string
     private refreshCallback: () => void;
 
     plugin: EarTrainingPlugin;
@@ -238,9 +238,8 @@ export default class BaseTrainingModal extends Modal {
             const key = event.key.toLowerCase();
             if (key === ' ' || key === 'enter') {
                 // Spacebar or Enter key pressed, validate the answer
-                this.validateAnswer();
                 event.stopPropagation();
-
+                this.validateAnswer();
             } else if (key === 'backspace' || key === '+') {
                 this.notePlayer.playNotes(this.playedNotes, this.rootNote);
                 event.stopPropagation();
