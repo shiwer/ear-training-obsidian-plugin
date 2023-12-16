@@ -12,6 +12,17 @@ export interface Exercise {
 	settings: EarTrainingSettings
 }
 
+interface ListeningParameters {
+	repeatTimes: number,
+	delayInMs: number,
+	selectedChordList: [string],
+	lowestNotePitchList: [number]
+}
+
+export interface ListeningExercise extends Exercise {
+	parameters: ListeningParameters
+}
+
 export interface BestScoreData {
 	[exerciseNumber: number]: number;
 }
@@ -21,8 +32,8 @@ export interface EarTrainingGlobalSettings {
 	chords: Exercise
 }
 
-export const Exercise_Listening: EarTrainingSettings = {
-	exerciseId: 17,
+export const Exercise_Listening: ListeningExercise = {
+	exerciseId: -2,
 	settings: {
 		selectedNotes: [
 			'minor-root-based',
@@ -35,6 +46,12 @@ export const Exercise_Listening: EarTrainingSettings = {
 		mode: 'chords',
 		numExercises: 32,
 		isHarmonic: true
+	},
+	parameters: {
+		repeatTimes: 2,
+		delayInMs: 4000,
+		selectedChordList: [],
+		lowestNotePitchList: []
 	}
 }
 
