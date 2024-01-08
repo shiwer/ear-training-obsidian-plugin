@@ -114,10 +114,10 @@ export const semitoneIntervals: Record<string, List<number>> = {
 export const chordsMap: Record<string, string> = {
 	'minor-root-based': 'Minor Chord',
 	'major-root-based': 'Major Chord',
-	'minor-fifth-based': 'Xm/5th',
-	'minor-third-based': 'Xm/3rd',
-	'major-fifth-based': 'X/5th',
-	'major-third-based': 'X/3rd',
+	'minor-fifth-based': 'Minor 2nd Inv',
+	'minor-third-based': 'Minor 1st Inv',
+	'major-fifth-based': 'Major 2nd Inv',
+	'major-third-based': 'Major 1st Inv',
 }
 
 export const chordsIntervals: Record<string, List<number>> = {
@@ -291,14 +291,44 @@ const Exercise_4_2: EarTrainingSettings = {
 			'minor-fifth-based',
 			'major-fifth-based',
             			],
-		mode: 'chords',
+		mode: 'based-chords',
 		numExercises: 32,
-		isHarmonic: false
+		isHarmonic: true
 	}
 }
 
+
 const Exercise_4_3: EarTrainingSettings = {
 	exerciseId: 17,
+	settings: {
+		selectedNotes: [
+			'minor-root-based',
+			'minor-third-based',
+			'minor-fifth-based'
+            			],
+		mode: 'chords',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
+
+const Exercise_4_4: EarTrainingSettings = {
+	exerciseId: 18,
+	settings: {
+		selectedNotes: [
+			'major-root-based',
+			'major-third-based',
+			'major-fifth-based',
+            			],
+		mode: 'chords',
+		numExercises: 32,
+		isHarmonic: true
+	}
+}
+
+const Exercise_4_5: EarTrainingSettings = {
+	exerciseId: 19,
 	settings: {
 		selectedNotes: [
 			'minor-root-based',
@@ -315,7 +345,7 @@ const Exercise_4_3: EarTrainingSettings = {
 }
 
 const Exercise_5_1: EarTrainingSettings = {
-	exerciseId: 18,
+	exerciseId: 20,
 	settings: {
 		selectedNotes: ['minor-second', 'major-second'],
 		mode: 'oam',
@@ -325,7 +355,7 @@ const Exercise_5_1: EarTrainingSettings = {
 }
 
 const Exercise_5_2: EarTrainingSettings = {
-	exerciseId: 19,
+	exerciseId: 21,
 	settings: {
 		selectedNotes: ['minor-second', 'major-second', 'minor-third', 'major-third'],
 		mode: 'oam',
@@ -335,7 +365,7 @@ const Exercise_5_2: EarTrainingSettings = {
 }
 
 const Exercise_5_3: EarTrainingSettings = {
-	exerciseId: 20,
+	exerciseId: 22,
 	settings: {
 		selectedNotes: ['perfect-fourth', 'augmented-fourth', 'perfect-fifth'],
 		mode: 'oam',
@@ -345,7 +375,7 @@ const Exercise_5_3: EarTrainingSettings = {
 }
 
 const Exercise_5_4: EarTrainingSettings = {
-	exerciseId: 21,
+	exerciseId: 23,
 	settings: {
 		selectedNotes: ['minor-second', 'major-second', 'minor-third', 'major-third', 'perfect-fourth', 'augmented-fourth', 'perfect-fifth', 'octave'],
 		mode: 'oam',
@@ -356,7 +386,7 @@ const Exercise_5_4: EarTrainingSettings = {
 
 
 const Exercise_6_1: EarTrainingSettings = {
-	exerciseId: 22,
+	exerciseId: 24,
 	settings: {
 		selectedNotes: ['minor-second', 'major-second'],
 		mode: 'oam',
@@ -366,7 +396,7 @@ const Exercise_6_1: EarTrainingSettings = {
 }
 
 const Exercise_6_2: EarTrainingSettings = {
-	exerciseId: 23,
+	exerciseId: 25,
 	settings: {
 		selectedNotes: ['minor-second', 'major-second', 'minor-third', 'major-third'],
 		mode: 'oam',
@@ -376,7 +406,7 @@ const Exercise_6_2: EarTrainingSettings = {
 }
 
 const Exercise_6_3: EarTrainingSettings = {
-	exerciseId: 24,
+	exerciseId: 26,
 	settings: {
 		selectedNotes: ['perfect-fourth', 'augmented-fourth', 'perfect-fifth'],
 		mode: 'oam',
@@ -386,7 +416,7 @@ const Exercise_6_3: EarTrainingSettings = {
 }
 
 const Exercise_6_4: EarTrainingSettings = {
-	exerciseId: 25,
+	exerciseId: 27,
 	settings: {
 		selectedNotes: ['minor-second', 'major-second', 'minor-third', 'major-third', 'perfect-fourth', 'augmented-fourth', 'perfect-fifth', 'octave'],
 		mode: 'oam',
@@ -409,7 +439,7 @@ export const chapterExercises: Record<number, string> = {
 	1: [Exercise_1_1, Exercise_1_2, Exercise_1_3, Exercise_1_4],
 	2: [Exercise_2_1, Exercise_2_2, Exercise_2_3, Exercise_2_4],
 	3: [Exercise_3_1, Exercise_3_2, Exercise_3_3, Exercise_3_4, Exercise_3_5, Exercise_3_6],
-	4: [Exercise_4_1, Exercise_4_2, Exercise_4_3],
+	4: [Exercise_4_1, Exercise_4_2, Exercise_4_3, Exercise_4_4, Exercise_4_5],
 	5: [Exercise_5_1, Exercise_5_2, Exercise_5_3, Exercise_5_4],
 	6: [Exercise_6_1, Exercise_6_2, Exercise_6_3, Exercise_6_4]
 }

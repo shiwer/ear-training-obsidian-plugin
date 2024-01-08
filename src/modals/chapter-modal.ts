@@ -37,7 +37,7 @@ export default class ChapterModal extends Modal {
         }
 
         description += ((bestScores[exercise.exerciseId]) || 0)  + '/32' ;
-
+ 
         return description;
     }
 
@@ -54,7 +54,7 @@ export default class ChapterModal extends Modal {
                     .setButtonText('Go')
                     .onClick(() => {
                         // Open the Free Interval Training modal
-                        if(exercise.settings.mode === 'chords') {
+                        if(exercise.settings.mode === 'chords' || exercise.settings.mode === 'based-chords') {
                             new ChordsTrainingModal(this.app,this.plugin, exercise, this.audioUtils, this.refreshContent.bind(this)).open();
                         } else {
                             new IntervalTrainingModal(this.app,this.plugin, exercise, this.audioUtils, this.refreshContent.bind(this)).open();
