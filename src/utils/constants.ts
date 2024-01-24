@@ -37,9 +37,11 @@ export const Exercise_Listening: ListeningExercise = {
 	settings: {
 		selectedNotes: [
 			'minor-root-based',
-			'major-third-based',
 			'major-root-based',
+			'augmented',
+			'diminished',
 			'minor-third-based',
+			'major-third-based',
 			'minor-fifth-based',
 			'major-fifth-based',
 			],
@@ -114,6 +116,8 @@ export const semitoneIntervals: Record<string, List<number>> = {
 export const chordsMap: Record<string, string> = {
 	'minor-root-based': 'Minor Chord',
 	'major-root-based': 'Major Chord',
+	'augmented': 'Augmented Chord',
+	'diminished': 'Diminished Chord',
 	'minor-fifth-based': 'Minor 2nd Inv',
 	'minor-third-based': 'Minor 1st Inv',
 	'major-fifth-based': 'Major 2nd Inv',
@@ -127,6 +131,8 @@ export const chordsIntervals: Record<string, List<number>> = {
 	'minor-third-based': [-9, -5],
 	'major-fifth-based': [4, -5],
 	'major-third-based': [-8, -5],
+	'augmented': [4, 8],
+	'diminished': [3, 6],
 }
 
 
