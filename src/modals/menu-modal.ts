@@ -3,10 +3,11 @@ import { App, Modal, Notice, Setting } from 'obsidian';
 import { AudioUtils } from './../utils/audio-utils';
 import { ChordNotePlayer } from './../models/note-players';
 import { chapterTitles, chordsIntervals, Exercise_Listening } from './../utils/constants';
-import IntervalTrainingModal from './interval-training-modal';
+import IntervalTrainingModal from './intervals-training-modal';
 import ChordsTrainingModal from './chords-training-modal';
-import ListenOnRepeatModal from './listen-on-repeat';
-import ChapterModal from './chapter-modal';
+import ListenOnRepeatModal from './listen-on-repeat-modal';
+import ChordsSettingsModal from './chords-settings-modal';
+import IntervalsSettingsModal from './intervals-settings-modal';
 
 
 export default class MenuModal extends Modal {
@@ -59,9 +60,25 @@ export default class MenuModal extends Modal {
         contentEl.empty();
         contentEl.addClass('ear-plugin-modal');
 
-        contentEl.createEl('h2', { text: 'Exercises Menu' });
+        contentEl.createEl('h2', { text: 'Menu' });
 
-        contentEl.createEl('h3', { text: 'Free practices' });
+        contentEl.createEl('h3', { text: 'Interval' });
+
+		new Setting(contentEl)
+			.setName('Interval Settings')
+			.setDesc('Change intervals that needs to be played in the Free Interval Training.')
+			.addButton(button => {
+				button
+					.setButtonText('Options')
+					.onClick((evt) => {
+						// prevent relauch training modal at the end of the training
+						if (evt instanceof PointerEvent && evt.pointerType === '') {
+							// Do nothing if the Enter key is pressed
+							return;
+						}
+						new IntervalsSettingsModal(this.app, this.plugin).open();
+					});
+			});
 
         // Display a button to start the free interval practice
         this.freeIntervalPracticeButton = new Setting(contentEl)
@@ -80,6 +97,25 @@ export default class MenuModal extends Modal {
                     });
             });
             
+
+        contentEl.createEl('h3', { text: 'Chords' });
+
+		new Setting(contentEl)
+			.setName('Chords Settings')
+			.setDesc('Change chords that needs to be played in the Free Chord Training.')
+			.addButton(button => {
+				button
+					.setButtonText('Options')
+					.onClick((evt) => {
+						// prevent relauch training modal at the end of the training
+						if (evt instanceof PointerEvent && evt.pointerType === '') {
+							// Do nothing if the Enter key is pressed
+							return;
+						}
+						new ChordsSettingsModal(this.app, this.plugin).open();
+					});
+			});
+
 		this.freeChordsPracticeButton = new Setting(contentEl)
 			.setName('Free Chords Training')
 			.setDesc('Practice chords freely')
@@ -96,7 +132,7 @@ export default class MenuModal extends Modal {
 					});
 			});
 
- 			new Setting(contentEl)
+		new Setting(contentEl)
 			.setName('Listen on repeat')
 			.setDesc('Ear chords playing on repeat for passive practice.')
 			.addButton(button => {
@@ -111,23 +147,7 @@ export default class MenuModal extends Modal {
 						new ListenOnRepeatModal(this.app, this.plugin, Exercise_Listening,  new ChordNotePlayer(this.audioUtils, chordsIntervals, this.plugin.settings.chords.settings.isHarmonic)).open();
 					});
 			});
-        contentEl.createEl('h3', { text: 'Chapters' });
 
-        for (const key in chapterTitles) {
-            if (Object.prototype.hasOwnProperty.call(chapterTitles, key)) {
-                new Setting(contentEl)
-                .setName(`Chapter ${key}`)
-                .setDesc(chapterTitles[key])
-                .addButton(button => {
-                    button
-                        .setButtonText('Go')
-                        .onClick(() => {
-                            new ChapterModal(this.app, this.plugin, this.audioUtils, key).open();
-                            this.close();
-                        });
-                });
-            }
-        }
         // Check if free interval practice is allowed
         this.allowFreePractice();
     }

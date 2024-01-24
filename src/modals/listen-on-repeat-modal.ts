@@ -1,7 +1,6 @@
 // ear-training-plugin/modal.ts
 import { App, Modal, Notice, Setting } from 'obsidian';
 import { ListeningExercise, chordsMap } from './../utils/constants';
-
 import { Note, noteNames } from './../utils/audio-utils';
 import { NotePlayer } from './../models/note-players';
 
