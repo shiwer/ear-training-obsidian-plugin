@@ -1,7 +1,7 @@
 // ear-training-plugin/modal.ts
 import { App, Modal, Notice, Setting } from 'obsidian';
 import { Exercise, BestScoreData } from './../utils/constants';
-import { Note } from './../utils/audio-utils';
+import { Note, noteNames } from './../utils/audio-utils';
 import { MistakeTracker } from './../models/mistakes';
 import { NotePlayer } from './../models/note-players';
 import EarTrainingResultModal from './result-modal';
@@ -57,8 +57,14 @@ export default class BaseTrainingModal extends Modal {
             this.selectedNotesButton.style.color = '';
         }
 		this.selectedNotesButton = null;
-        this.rootNote = this.notePlayer.generateRootNote(this.playedNotes);
-		
+		let pitch = noteNames.indexOf(this.exercise.settings.tonality);
+		if(pitch == -1) {
+        	this.rootNote = this.notePlayer.generateRootNote(this.playedNotes);
+		} else {
+
+			this.rootNote = this.notePlayer.getRootFromLowestNote(this.playedNotes, pitch)
+		}
+
         // Increment the practice count
         this.practiceCount++;
         this.dynamicHeader.textContent = this.headerText(this.practiceCount, this.exercise.settings.numExercises);

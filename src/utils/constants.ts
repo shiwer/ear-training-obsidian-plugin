@@ -4,7 +4,8 @@ export interface EarTrainingSettings {
 	selectedNotes: List<string>,
 	mode : string,
 	numExercises: number,
-	isHarmonic: boolean
+	isHarmonic: boolean,
+	tonality: string
 }
 
 export interface Exercise {
@@ -64,8 +65,9 @@ export const DEFAULT_SETTINGS: EarTrainingGlobalSettings = {
 		settings: {
 			selectedNotes: ['minor-second', 'major-second'],
 			mode: 'oam',
-			numExercises: 10,
-			isHarmonic: false
+			numExercises: 20,
+			isHarmonic: false,
+			tonality: 'C'
 		}
 	},
 	chords: {
@@ -73,8 +75,9 @@ export const DEFAULT_SETTINGS: EarTrainingGlobalSettings = {
 		settings: {
 			selectedNotes: ['minor-root-based', 'major-root-based'],
 			mode: 'chords',
-			numExercises: 10,
-			isHarmonic: false
+			numExercises: 20,
+			isHarmonic: false,
+			tonality: 'C'
 		}
 	}
 

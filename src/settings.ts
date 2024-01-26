@@ -72,6 +72,21 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 
+	new Setting(contentEl)
+		.setName('Set a tonality')
+		.setDesc('Pick all or a specific tonality note')
+		.addDropdown((dropdown) => {
+			dropdown.addOption('all', 'all');
+			for (const note of noteNames) {
+				dropdown.addOption(note, note);
+			}
+			dropdown.setValue(this.plugin.settings.intervals.settings.tonality); // Set the initial value based on the loaded setting
+			dropdown.onChange(async (value) => {
+				this.plugin.settings.intervals.settings.tonality = value
+
+				await this.plugin.saveSettings();
+			});
+		});
         // Add UI for the number of exercises option
         new Setting(containerEl)
             .setName('Number of Exercises')
@@ -127,6 +142,22 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
 
 					await this.plugin.saveSettings();
 				}));
+
+		new Setting(contentEl)
+			.setName('Set a tonality')
+			.setDesc('Pick all or a specific tonality note')
+			.addDropdown((dropdown) => {
+				dropdown.addOption('all', 'all');
+				for (const note of noteNames) {
+					dropdown.addOption(note, note);
+				}
+				dropdown.setValue(this.plugin.settings.chords.settings.tonality); // Set the initial value based on the loaded setting
+				dropdown.onChange(async (value) => {
+					this.plugin.settings.chords.settings.tonality = value
+
+					await this.plugin.saveSettings();
+				});
+			});
 
 		// Add UI for the number of exercises option
 		new Setting(containerEl)

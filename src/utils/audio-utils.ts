@@ -50,7 +50,7 @@ export class AudioUtils {
 		this.audioPlayer = audioPlayer;
 	}
 
-	getRootNoteFromLowestNote(semitonesLowestInterval: number, semitoneShit: number, lowestNotePitch: number) {
+	getRootNoteFromLowestNote(semitonesLowestInterval: number, semitoneShit: number, lowestNotePitch: number): Note  {
 			const limitations = intervalsLimitations[semitonesLowestInterval];
 
     		let { pitch: minPitch, octave: minOctave } = limitations[0];

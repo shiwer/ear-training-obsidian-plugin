@@ -1,6 +1,7 @@
 // ear-training-plugin/menu-modal.ts
 import { App, Modal, Setting } from 'obsidian';
 import { chordsMap } from './../utils/constants';
+import { noteNames } from './../utils/audio-utils';
 
 export default class MenuModal extends Modal {
 
@@ -51,6 +52,22 @@ export default class MenuModal extends Modal {
 
 					await this.plugin.saveSettings();
 				}));
+
+		new Setting(contentEl)
+			.setName('Set a tonality')
+			.setDesc('Pick all or a specific tonality note')
+			.addDropdown((dropdown) => {
+				dropdown.addOption('all', 'all');
+				for (const note of noteNames) {
+					dropdown.addOption(note, note);
+				}
+				dropdown.setValue(this.plugin.settings.chords.settings.tonality); // Set the initial value based on the loaded setting
+				dropdown.onChange(async (value) => {
+					this.plugin.settings.chords.settings.tonality = value
+
+					await this.plugin.saveSettings();
+				});
+			});
 
 		// Add UI for the number of exercises option
 		new Setting(contentEl)

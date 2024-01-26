@@ -53,7 +53,7 @@ export class NotePlayer {
         return this.audioUtils.getRootNote(lowestIntervalBetweenNotes, semitoneShift);
     }
 
-    getRootFromLowestNote(playedNotes:string, pitch: number) {
+    getRootFromLowestNote(playedNotes:string, pitch: number): Note  {
 		const { lowestIntervalBetweenNotes, semitoneShift } = this.getLowestIntervalAndSemitoneShift(playedNotes);
 
 		return this.audioUtils.getRootNoteFromLowestNote(lowestIntervalBetweenNotes, semitoneShift, pitch);
@@ -91,8 +91,9 @@ export class IntervalNotePlayer extends NotePlayer {
             // TODO: check if it's working
             const semitoneInterval = this.intervalSemitonesMap[selectedNote][0];
 
-            const secondNote: Note = this.audioUtils.getRelativeNote(rootNote, this.isAscending ? semitoneInterval : -semitoneInterval);
-            await this.audioUtils.playNotes(this.isHarmonic, rootNote, secondNote);
+            const secondNote: Note = this.audioUtils.getRelativeNote(rootNote, semitoneInterval);
+            const notesOrdered = this.isAscending ? [rootNote, secondNote] : [secondNote, rootNote]
+            await this.audioUtils.playNotes(this.isHarmonic, ...notesOrdered);
         }
     }
 
@@ -101,8 +102,9 @@ export class IntervalNotePlayer extends NotePlayer {
             // Display a notice with the interval
             const semitoneInterval = this.intervalSemitonesMap[playedNote][0];
 
-            const secondNote: Note = this.audioUtils.getRelativeNote(rootNote, this.isAscending ? semitoneInterval : -semitoneInterval);
-            await this.audioUtils.playNotes(this.isHarmonic, rootNote, secondNote);
+            const secondNote: Note = this.audioUtils.getRelativeNote(rootNote, semitoneInterval);
+			const notesOrdered = this.isAscending ? [rootNote, secondNote] : [secondNote, rootNote]
+            await this.audioUtils.playNotes(this.isHarmonic, ...notesOrdered);
         }
     }
 
