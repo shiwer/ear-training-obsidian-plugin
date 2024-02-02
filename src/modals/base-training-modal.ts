@@ -110,13 +110,6 @@ export default class BaseTrainingModal extends Modal {
         	return;
 		}
 		let isCorrect = this.playedNotes === this.selectedNotes;
-		// for based chords we take as good answer all inversions of a chords
-		if(this.exercise.settings.mode === 'based-chords') {
-		 	const playedChordType = this.playedNotes.split('-')[0];
-			const selectedChordType = this.selectedNotes.split('-')[0];
-
-			isCorrect = playedChordType === selectedChordType;
-		}
 
 		if (isCorrect) {
             // Update score for correct answer
@@ -207,9 +200,6 @@ export default class BaseTrainingModal extends Modal {
         for (let i = 0; i < this.exercise.settings.selectedNotes.length; i++) {
             const notes = this.exercise.settings.selectedNotes[i];
 
-			if(this.exercise.settings.mode === 'based-chords' && notes.split('-')[1] !== 'root') {
-				continue;
-			}
             const notesButton = this.createButton(i, notes, () => {
                 // Code to run when button one is clicked
                 // Remove the highlight from the previously selected button
