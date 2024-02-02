@@ -2,27 +2,23 @@
 import { App, Modal } from 'obsidian';
 import { intervalMap, chordsMap } from './../utils/constants';
 import { Note } from './../utils/audio-utils';
-import { MistakeTracker, MistakeInfo } from './../models/mistakes';
+import { ScoreTracker, ScoreInfo } from './../models/score-recorder';
 import { NotePlayer } from './../models/note-players';
 
 export default class EarTrainingResultModal extends Modal {
     private notePlayer: NotePlayer;
     private score: number;
     private totalExercises: number;
-    private mistakeTracker: MistakeTracker;
+    private scoreTracker: ScoreTracker;
     private elements: NodeListOf<HTMLElement>;
     private selectedRaw: number = 0;
 
-    private handleKeyDown(event) {
-
-    }
-
-    constructor(app: App, notePlayer: NotePlayer, score: number, totalExercises: number, mistakeTracker: MistakeTracker) {
+    constructor(app: App, notePlayer: NotePlayer, score: number, totalExercises: number, scoreTracker: ScoreTracker) {
         super(app);
         this.notePlayer = notePlayer;
         this.score = score;
         this.totalExercises = totalExercises;
-        this.mistakeTracker = mistakeTracker;
+        this.scoreTracker = scoreTracker;
     }
 
 	onOpen() {
@@ -33,56 +29,54 @@ export default class EarTrainingResultModal extends Modal {
         const scoreHeading = contentEl.createEl('h2');
         scoreHeading.innerText = `Score: ${this.score}/${this.totalExercises}`;
         // Display mistakes if there are any
-        if (this.mistakeTracker.getMistakes().length > 0) {
+        const mistakes = this.scoreTracker.getMistakes();
+        if (mistakes.length > 0) {
             const mistakesHeading = contentEl.createEl('h3');
             mistakesHeading.innerText = 'Mistakes';
 
             const mistakeList = contentEl.createEl('div');
             mistakeList.addClass('mistakes-results');
-            const listPlayedNotes = this.mistakeTracker.getUniquePlayedNotes();
-            for (const playedNotes of listPlayedNotes) {
-                const playedNoteLabel = intervalMap[playedNotes] ? intervalMap[playedNotes] : chordsMap[playedNotes]; // Retrieve the English label
+            for (const mistake of mistakes) {
+                const playedNoteLabel = intervalMap[mistake.playedNotes] ? intervalMap[mistake.playedNotes] : chordsMap[mistake.playedNotes]; // Retrieve the English label
                
-                const listRootAndSelectedNote = this.mistakeTracker.getNotesForPlayedNote(playedNotes);
-                for (const rootAndSelectedNote of listRootAndSelectedNote) {
-                    const selectedNotesLabel = intervalMap[rootAndSelectedNote.selectedNotes] ? intervalMap[rootAndSelectedNote.selectedNotes] : chordsMap[rootAndSelectedNote.selectedNotes]; // Retrieve the English label
-                    
-                    const mistakeItem = mistakeList.createEl('p');
+				const selectedNotesLabel = intervalMap[mistake.selectedNotes] ? intervalMap[mistake.selectedNotes] : chordsMap[mistake.selectedNotes]; // Retrieve the English label
+				
+				const mistakeItem = mistakeList.createEl('p');
 
-					const firstNoteButton = mistakeItem.createEl('button', { text: 'First Note' });
-					firstNoteButton.addEventListener('click', () => {
-						this.notePlayer.playFirstNote(playedNotes, rootAndSelectedNote.rootNote);
-					});
+				const firstNoteButton = mistakeItem.createEl('button', { text: 'First Note' });
+				firstNoteButton.addEventListener('click', () => {
+					this.notePlayer.playFirstNote(mistake.playedNotes, mistake.rootNote);
+				});
 
-                    const playedNoteButton = mistakeItem.createEl('button', { text: playedNoteLabel });
-                    playedNoteButton.addEventListener('click', () => {
-                        this.notePlayer.playNotes(playedNotes, rootAndSelectedNote.rootNote);
-                    });
+				const playedNoteButton = mistakeItem.createEl('button', { text: playedNoteLabel });
+				playedNoteButton.addEventListener('click', () => {
+					this.notePlayer.playNotes(mistake.playedNotes, mistake.rootNote);
+				});
 
-                    const selectedNoteButton = mistakeItem.createEl('button', { text: selectedNotesLabel });
-                    selectedNoteButton.addEventListener('click', () => {
-                        this.notePlayer.playRelativeChord(playedNotes, rootAndSelectedNote.selectedNotes, rootAndSelectedNote.rootNote);
-                    });
+				const selectedNoteButton = mistakeItem.createEl('button', { text: selectedNotesLabel });
+				selectedNoteButton.addEventListener('click', () => {
+					this.notePlayer.playRelativeChord(mistake.playedNotes, mistake.selectedNotes, mistake.rootNote);
+				});
 
 
-                    const firstTextContainer = mistakeItem.createEl('span');
-                    firstTextContainer.textContent = ` .You mixed up : `;
+				const firstTextContainer = mistakeItem.createEl('span');
+				firstTextContainer.textContent = ` .You mixed up : `;
 
 
-                    const secondTextContainer = mistakeItem.createEl('span');
-                    secondTextContainer.textContent = ` with : `;
+				const secondTextContainer = mistakeItem.createEl('span');
+				secondTextContainer.textContent = ` with : `;
 
 
-                    mistakeItem.appendChild(firstNoteButton);
-                    mistakeItem.appendChild(firstTextContainer);
-                    mistakeItem.appendChild(playedNoteButton);
-                    mistakeItem.appendChild(secondTextContainer);
-                    mistakeItem.appendChild(selectedNoteButton);
-                    
+				mistakeItem.appendChild(firstNoteButton);
+				mistakeItem.appendChild(firstTextContainer);
+				mistakeItem.appendChild(playedNoteButton);
+				mistakeItem.appendChild(secondTextContainer);
+				mistakeItem.appendChild(selectedNoteButton);
+				
 
-                    mistakeList.appendChild(mistakeItem);
+				mistakeList.appendChild(mistakeItem);
 
-                }
+			
             }
 
             contentEl.appendChild(mistakeList);

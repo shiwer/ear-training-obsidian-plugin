@@ -2,7 +2,7 @@
 import { App, Modal, Notice, Setting } from 'obsidian';
 import { Exercise, BestScoreData } from './../utils/constants';
 import { Note, noteNames } from './../utils/audio-utils';
-import { MistakeTracker } from './../models/mistakes';
+import { ScoreTracker } from './../models/score-recorder';
 import { NotePlayer } from './../models/note-players';
 import EarTrainingResultModal from './result-modal';
 
@@ -23,7 +23,7 @@ export default class BaseTrainingModal extends Modal {
     private dynamicHeader:HTMLButtonElement | null = null; // To update the header
     private validateButton:HTMLButtonElement | null = null;
 
-    private mistakeTracker: MistakeTracker | null = null;
+    private scoreTracker: ScoreTracker | null = null;
     private score: number = 0;
 
     protected getButtonText(id:string): string {
@@ -109,6 +109,9 @@ export default class BaseTrainingModal extends Modal {
         	new Notice(`Please select an ${this.name} !`);
         	return;
 		}
+		// update scoreTracker
+		this.scoreTracker.recordScoreInfo(this.playedNotes, this.selectedNotes, this.rootNote);
+
 		let isCorrect = this.playedNotes === this.selectedNotes;
 
 		if (isCorrect) {
@@ -116,9 +119,6 @@ export default class BaseTrainingModal extends Modal {
             this.score++;
         } else {
             this.displayError();
-
-            // Update mistakes for incorrect answer
-            this.mistakeTracker.recordMistake(this.playedNotes, this.selectedNotes, this.rootNote);
         }
 
 		// Determine the background color based on the correctness of the answer
@@ -136,7 +136,7 @@ export default class BaseTrainingModal extends Modal {
             this.updateBestScore(this.exercise.exerciseId, this.score);
             // update chapter page
             this.refreshCallback();
-            new EarTrainingResultModal(this.app, this.notePlayer, this.score, this.exercise.settings.numExercises, this.mistakeTracker).open();
+            new EarTrainingResultModal(this.app, this.notePlayer, this.score, this.exercise.settings.numExercises, this.scoreTracker).open();
             this.close();
         }
     }
@@ -161,7 +161,7 @@ export default class BaseTrainingModal extends Modal {
         this.plugin = plugin;
         this.refreshCallback = refreshCallback;
         this.notePlayer = notePlayer;
-        this.mistakeTracker = new MistakeTracker();
+        this.scoreTracker = new ScoreTracker();
     }
 
   	onOpen() {
@@ -276,7 +276,7 @@ export default class BaseTrainingModal extends Modal {
 
     onClose() {
         const { contentEl } = this;
-        this.mistakeTracker.clearMistakes();
+        this.scoreTracker.clearScoreInfo();
         contentEl.empty();
     }
 }
