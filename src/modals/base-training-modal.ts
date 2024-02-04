@@ -250,20 +250,30 @@ export default class BaseTrainingModal extends Modal {
                 this.notePlayer.playNotes(this.playedNotes, this.rootNote);
                 event.stopPropagation();
             } else {
-
+				// move selections
                 if(event.code.startsWith('Digit') || event.code.startsWith('Numpad')) {
                     let keyNumb = event.code.replace('Numpad', '');
 					if(event.code.startsWith('Digit')) {
 						keyNumb =  event.code.replace('Digit', '');
 					}
                     // If the pressed key corresponds to a note button, trigger its click event
-
-                    if (keyNumb !== undefined) {
-                        const noteButton = document.getElementById(`noteButton-${keyNumb - 1}`);
-                        if (noteButton) {
-                            noteButton.click();
-                        }
-                    }
+					let noteNumb: number;
+                    if (keyNumb !== undefined && Number.isInteger(Number(keyNumb))) {
+                    	noteNumb = keyNumb - 1;
+                    } else if(event.code === 'NumpadMultiply' || event.code === 'NumpadDivide') {
+						const currentNumber = Number(this.selectedNotesButton.id.replace('noteButton-', ''));
+						if(event.code === 'NumpadDivide' && currentNumber < this.exercise.settings.selectedNotes.length) {
+							noteNumb = currentNumber - 1;
+						} else if(event.code === 'NumpadMultiply' && currentNumber >= 0) {
+							noteNumb = currentNumber + 1;
+						}
+					}
+					if(noteNumb !== undefined) {
+						const noteButton = document.getElementById(`noteButton-${noteNumb}`);
+						if (noteButton) {
+							noteButton.click();
+						}
+					}
                 }
                 
             }
