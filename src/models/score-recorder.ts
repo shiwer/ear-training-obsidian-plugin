@@ -51,10 +51,4 @@ export class ScoreTracker {
             rootNote: scoreInfo.rootNote,
         }));
     }
-
-    saveScoreInfo() {
-    	// To be implemented
-
-
-    }
 }

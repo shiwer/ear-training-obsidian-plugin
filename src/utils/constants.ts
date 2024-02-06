@@ -28,9 +28,16 @@ export interface BestScoreData {
 	[exerciseNumber: number]: number;
 }
 
+export interface SaveParameters {
+	autoSave: boolean,
+	folderPath: string,
+    filenameFormat: string
+}
+
 export interface EarTrainingGlobalSettings {
 	intervals: Exercise,
-	chords: Exercise
+	chords: Exercise,
+	saveParameters: SaveParameters,
 }
 
 export const Exercise_Listening: ListeningExercise = {
@@ -79,6 +86,11 @@ export const DEFAULT_SETTINGS: EarTrainingGlobalSettings = {
 			isHarmonic: false,
 			tonality: 'C'
 		}
+	},
+	saveParameters: {
+		autoSave: false,
+		folderPath: 'Ear Training Results',
+		filenameFormat: '[Ear Training ]YYYY-MM-DD HH[h]mm[m]ss[s]'
 	}
 
 

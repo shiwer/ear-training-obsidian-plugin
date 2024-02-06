@@ -21,3 +21,8 @@ button:disabled, .disabled {
 .mistakes-results p.selected {
 	background-color: tomato;
 }
+
+.setting-error-tooltip {
+    color: red;
+    font-size: 0.8em;
+}

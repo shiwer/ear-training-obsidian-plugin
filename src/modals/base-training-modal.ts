@@ -1,20 +1,18 @@
 // ear-training-plugin/modal.ts
-import { App, Modal, Notice, Setting } from 'obsidian';
+import { App, Modal, Notice, Setting, TFile, FileSystemAdapter } from 'obsidian';
 import { Exercise, BestScoreData } from './../utils/constants';
 import { Note, noteNames } from './../utils/audio-utils';
 import { ScoreTracker } from './../models/score-recorder';
+import { FileSaver } from './../models/file-saver';
 import { NotePlayer } from './../models/note-players';
 import EarTrainingResultModal from './result-modal';
+// refactor
 
 export default class BaseTrainingModal extends Modal {
-    protected name: string
-    private refreshCallback: () => void;
-
-    plugin: EarTrainingPlugin;
 
     protected notePlayer: NotePlayer;
     protected playedNotes: string | null = null;
-    protected selectedNotes: string | null = null; // To store the currently selected notes
+    private selectedNotes: string | null = null; // To store the currently selected notes
     private rootNote: Note | null = null;
 
     private practiceCount: number = 0; // To keep track of the number of exercises done
@@ -24,6 +22,7 @@ export default class BaseTrainingModal extends Modal {
     private validateButton:HTMLButtonElement | null = null;
 
     private scoreTracker: ScoreTracker | null = null;
+    private fileSaver: FileSaver | null = null;
     private score: number = 0;
 
     protected getButtonText(id:string): string {
@@ -132,22 +131,12 @@ export default class BaseTrainingModal extends Modal {
             // Start a new practice
             this.startPractice();
         } else {
-            // Practice is completed
-            this.updateBestScore(this.exercise.exerciseId, this.score);
-            // update chapter page
-            this.refreshCallback();
+            if(this.plugin.settings.saveParameters.autoSave) {
+				this.fileSaver.saveScoreInfo(this.scoreTracker.getScoreInfo());
+			}
+
             new EarTrainingResultModal(this.app, this.notePlayer, this.score, this.exercise.settings.numExercises, this.scoreTracker).open();
             this.close();
-        }
-    }
-
-    private updateBestScore(exerciseNumber: number, newScore: number): void {
-
-        if (exerciseNumber > 0 && (!this.plugin.bestScores[exerciseNumber] || newScore > this.plugin.bestScores[exerciseNumber])) {
-            this.plugin.bestScores[exerciseNumber] = newScore;
-
-            // Save the updated scores to the DataAdapter
-            this.plugin.saveBestScores();
         }
     }
 
@@ -155,13 +144,10 @@ export default class BaseTrainingModal extends Modal {
         return `Exercise ${practiceCount} / ${totalExercises}`;
     }
 
-    constructor(app: App, plugin: EarTrainingPlugin, protected name: string, protected exercise: Exercise, refreshCallback: () => void, notePlayer: NotePlayer) {
+    constructor(private app: App, private plugin: EarTrainingPlugin, private name: string, protected exercise: Exercise, protected notePlayer: NotePlayer) {
         super(app, plugin);
-        this.name = name;
-        this.plugin = plugin;
-        this.refreshCallback = refreshCallback;
-        this.notePlayer = notePlayer;
         this.scoreTracker = new ScoreTracker();
+        this.fileSaver = new FileSaver(app, this.plugin.settings.saveParameters.folderPath, this.plugin.settings.saveParameters.filenameFormat)
     }
 
   	onOpen() {

@@ -51,10 +51,6 @@ export default class MenuModal extends Modal {
         this.freeIntervalPracticeButton.setDesc('');
     }
 
-    private nothing(): void {
-
-    }
-
     onOpen() {
         const { contentEl } = this;
         contentEl.empty();
@@ -93,7 +89,7 @@ export default class MenuModal extends Modal {
 							// Do nothing if the Enter key is pressed
 							return;
 						}
-                        new IntervalTrainingModal(this.app, this.plugin, this.plugin.settings.intervals, this.audioUtils, this.nothing.bind(this)).open();
+                        new IntervalTrainingModal(this.app, this.plugin, this.plugin.settings.intervals, this.audioUtils).open();
                     });
             });
             
@@ -128,7 +124,7 @@ export default class MenuModal extends Modal {
 							// Do nothing if the Enter key is pressed
 							return;
 						}
-						new ChordsTrainingModal(this.app, this.plugin, this.plugin.settings.chords, this.audioUtils, this.nothing.bind(this)).open();
+						new ChordsTrainingModal(this.app, this.plugin, this.plugin.settings.chords, this.audioUtils).open();
 					});
 			});
 

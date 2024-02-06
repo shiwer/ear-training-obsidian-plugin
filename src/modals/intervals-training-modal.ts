@@ -21,8 +21,8 @@ export default class IntervalTrainingModal extends BaseTrainingModal {
         new Notice(`The interval played was : ${intervalMap[this.playedNotes]}`);
     }
 
-    constructor(app: App, plugin: EarTrainingPlugin, protected exercise: Exercise, audioUtils: AudioUtils, refreshCallback: () => void) {
-        super(app, plugin,'interval', exercise, refreshCallback, new IntervalNotePlayer(audioUtils, semitoneIntervals, exercise.settings.isHarmonic));
+    constructor(app: App, plugin: EarTrainingPlugin, protected exercise: Exercise, audioUtils: AudioUtils) {
+        super(app, plugin,'interval', exercise, new IntervalNotePlayer(audioUtils, semitoneIntervals, exercise.settings.isHarmonic));
     }
 
 }
