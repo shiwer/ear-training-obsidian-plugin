@@ -132,7 +132,7 @@ export default class BaseTrainingModal extends Modal {
             this.startPractice();
         } else {
             if(this.plugin.settings.saveParameters.autoSave) {
-				this.fileSaver.saveScoreInfo(this.scoreTracker.getScoreInfo());
+				this.fileSaver.saveScoreInfo(this.scoreTracker.getHeaderInfo(), this.scoreTracker.getScoreInfo());
 			}
 
             new EarTrainingResultModal(this.app, this.notePlayer, this.score, this.exercise.settings.numExercises, this.scoreTracker).open();
@@ -146,7 +146,10 @@ export default class BaseTrainingModal extends Modal {
 
     constructor(private app: App, private plugin: EarTrainingPlugin, private name: string, protected exercise: Exercise, protected notePlayer: NotePlayer) {
         super(app, plugin);
-        this.scoreTracker = new ScoreTracker();
+        // TODO : refactor this crap, mode refers to inconsistent values
+        const mode = exercise.settings.isHarmonic ? 'harmonic' : exercise.settings.mode === 'chords' ? 'ascending' : modeMap[exercise.settings.mode];
+        const tonalities = exercise.settings.tonality ? [exercise.settings.tonality] : noteNames;
+        this.scoreTracker = new ScoreTracker(name, mode, tonalities,exercise.settings.selectedNotes.length);
         this.fileSaver = new FileSaver(app, this.plugin.settings.saveParameters.folderPath, this.plugin.settings.saveParameters.filenameFormat)
     }
 

@@ -6,12 +6,34 @@ export interface ScoreInfo {
     rootNote: Note | null;
 }
 
+export interface HeaderInfo {
+    exercise: string;
+    mode: string;
+    tonalities: string[];
+    numberOfChoices: number;
+}
+
 export class ScoreTracker {
+	private headerInfo: HeaderInfo | null;
     private scoreInfo: ScoreInfo[] = [];
+
+    constructor(exercise: string, mode: string, tonalities: string[], numberOfChoices: number){
+    	this.headerInfo = {
+    		exercise: exercise,
+    		mode: mode,
+    		tonalities: tonalities,
+    		numberOfChoices: numberOfChoices
+    	}
+    	this.scoreInfo = [];
+    }
 
     recordScoreInfo(playedNotes: string, selectedNotes: string, rootNote: Note | null): void {
         this.scoreInfo.push({ playedNotes, selectedNotes, rootNote });
     }
+
+	getHeaderInfo(): HeaderInfo {
+		return this.headerInfo;
+	}
 
     getScoreInfo(): ScoreInfo[] {
         return this.scoreInfo;

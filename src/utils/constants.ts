@@ -40,6 +40,12 @@ export interface EarTrainingGlobalSettings {
 	saveParameters: SaveParameters,
 }
 
+export const modeMap = {
+	'oam': 'Only Ascendant Mode',
+	'odm': 'Only Descendant Mode',
+	'aad': 'Ascendant And Descendant',
+}
+
 export const Exercise_Listening: ListeningExercise = {
 	exerciseId: -2,
 	settings: {

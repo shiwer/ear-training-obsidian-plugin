@@ -8,6 +8,17 @@ export class FileSaver {
 	private folderPath: string;
 	private filenameFormat: string;
 
+	private formatHeaderInfo(headerInfo: HeaderInfo) {
+		let mdHeader = "---\n";
+		mdHeader += "exercise: " + headerInfo.exercise + "\n";
+		mdHeader += "mode: " + headerInfo.mode + "\n";
+		mdHeader += "tonalities: " + headerInfo.tonalities + "\n";
+		mdHeader += "numberOfChoices: " + headerInfo.numberOfChoices + "\n";
+		mdHeader += "---\n\n";
+
+		return mdHeader;
+	}
+
 	private formatResult(scoreInfo: ScoreInfo[]): string {
 		let tableContent = "| # | Root Note | Played | Selected |\n";
 		tableContent += "| --- | --- | --- | --- |\n";
@@ -33,7 +44,7 @@ export class FileSaver {
 		this.filenameFormat = filenameFormat;
 	}
 
-   async saveScoreInfo(scoreInfo: ScoreInfo[]): void {
+   async saveScoreInfo(headerInfo: HeaderInfo, scoreInfo: ScoreInfo[]): void {
 		const fileName = `${moment().format(this.filenameFormat)}`;
 
 		const normalizedFolderPath = normalizePath(this.folderPath);
@@ -47,11 +58,12 @@ export class FileSaver {
 		// Create or get the file in Obsidian
 
 		// Format the scoreInfo as a table
-		const tableContent = this.formatResult(scoreInfo);
+		let mdContent = this.formatHeaderInfo(headerInfo);
+		mdContent += this.formatResult(scoreInfo);
 
 		// Write data to the file
 		try {
-			await this.app.vault.adapter.write(filePath, tableContent);
+			await this.app.vault.adapter.write(filePath, mdContent);
 			new Notice(`Map saved to ${filePath}`);
 		} catch (error) {
 			console.error("Error saving map:", error);

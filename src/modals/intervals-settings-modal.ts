@@ -1,6 +1,6 @@
 // ear-training-plugin/menu-modal.ts
 import { App, Modal, Setting } from 'obsidian';
-import { intervalMap } from './../utils/constants';
+import { intervalMap, modeMap } from './../utils/constants';
 import { noteNames } from './../utils/audio-utils';
 
 export default class MenuModal extends Modal {
@@ -48,11 +48,7 @@ export default class MenuModal extends Modal {
 			.setName('Mode')
 			.setDesc('Select the ear training mode')
 			.addDropdown(dropdown => dropdown
-				.addOptions({
-					'oam': 'Only Ascendant Mode',
-					'odm': 'Only Descendant Mode',
-					'aad': 'Ascendant And Descendant',
-				})
+				.addOptions(modeMap)
 				.setValue(this.plugin.settings.intervals.settings.mode)
 				.onChange(async (value) => {
 					this.plugin.settings.intervals.settings.mode = value;
