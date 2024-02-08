@@ -10,19 +10,19 @@ export interface HeaderInfo {
     exercise: string;
     mode: string;
     tonalities: string[];
-    numberOfChoices: number;
+    choices: string[];
 }
 
 export class ScoreTracker {
 	private headerInfo: HeaderInfo | null;
     private scoreInfo: ScoreInfo[] = [];
 
-    constructor(exercise: string, mode: string, tonalities: string[], numberOfChoices: number){
+    constructor(exercise: string, mode: string, tonalities: string[], choices: string[]){
     	this.headerInfo = {
     		exercise: exercise,
     		mode: mode,
     		tonalities: tonalities,
-    		numberOfChoices: numberOfChoices
+    		choices: choices
     	}
     	this.scoreInfo = [];
     }

@@ -148,8 +148,8 @@ export default class BaseTrainingModal extends Modal {
         super(app, plugin);
         // TODO : refactor this crap, mode refers to inconsistent values
         const mode = exercise.settings.isHarmonic ? 'harmonic' : exercise.settings.mode === 'chords' ? 'ascending' : modeMap[exercise.settings.mode];
-        const tonalities = exercise.settings.tonality ? [exercise.settings.tonality] : noteNames;
-        this.scoreTracker = new ScoreTracker(name, mode, tonalities,exercise.settings.selectedNotes.length);
+        const tonalities = exercise.settings.tonality !== "all" ? [exercise.settings.tonality] : noteNames;
+        this.scoreTracker = new ScoreTracker(name, mode, tonalities, exercise.settings.selectedNotes);
         this.fileSaver = new FileSaver(app, this.plugin.settings.saveParameters.folderPath, this.plugin.settings.saveParameters.filenameFormat)
     }
 

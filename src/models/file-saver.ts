@@ -8,12 +8,24 @@ export class FileSaver {
 	private folderPath: string;
 	private filenameFormat: string;
 
+	private printList(list: string[]) {
+		let mdList = "\n";
+
+		for(let index in list) {
+			mdList += "  " + "- " + list[index];
+			if(index < list.length - 1) {
+				mdList += "\n";
+			}
+		}
+		return mdList;
+	}
+
 	private formatHeaderInfo(headerInfo: HeaderInfo) {
 		let mdHeader = "---\n";
 		mdHeader += "exercise: " + headerInfo.exercise + "\n";
 		mdHeader += "mode: " + headerInfo.mode + "\n";
-		mdHeader += "tonalities: " + headerInfo.tonalities + "\n";
-		mdHeader += "numberOfChoices: " + headerInfo.numberOfChoices + "\n";
+		mdHeader += "tonalities: " + this.printList(headerInfo.tonalities) + "\n";
+		mdHeader += "choices: " + this.printList(headerInfo.choices) + "\n";
 		mdHeader += "---\n\n";
 
 		return mdHeader;
