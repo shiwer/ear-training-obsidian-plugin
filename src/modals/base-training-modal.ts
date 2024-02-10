@@ -1,6 +1,6 @@
 // ear-training-plugin/modal.ts
 import { App, Modal, Notice, Setting, TFile, FileSystemAdapter } from 'obsidian';
-import { Exercise, BestScoreData } from './../utils/constants';
+import { Exercise, BestScoreData, modeMap } from './../utils/constants';
 import { Note, noteNames } from './../utils/audio-utils';
 import { ScoreTracker } from './../models/score-recorder';
 import { FileSaver } from './../models/file-saver';
