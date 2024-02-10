@@ -2,14 +2,21 @@
 
 ## Overview
 
-The Ear Training Plugin for Obsidian is designed to help users improve their musical ear by providing interactive ear training exercises. Whether you're a musician, composer, or music enthusiast, this plugin offers a fun and educational way to develop your ability to recognize intervals, chords, and more.
+The Ear Training Plugin for Obsidian was designed to help me improve on my musical ear. 
+
+Being a user of obsidian for a bit I decided to implement my solution to help me improve, which seems to start working for me.
+
+Whether you're a musician, composer, or music enthusiast, this plugin offers a fun and educational way to develop your ability to recognize intervals, chords.
+
 
 ## Features
 
 - **Interval Training:** Practice recognizing intervals by ear.
-- **Chord Progressions:** Explore and identify common chord progressions.
+- **Chord Training:** Explore and identify common chords by ear.
+- **Listen Training** Select a key set and chords you wish to train to identify.
 - **Customizable Settings:** Actually in development to ease use.
 - **Feedback:** Small feedback at the end of a training with all failed interval/chords.
+- **Saving  Results** Possibility to save results in md files. Not very custumazable for now.
 
 ## Usage
 
@@ -30,12 +37,14 @@ Configure the plugin settings to tailor your training experience:
 
 - **Practice Modal:**
 	- **Numpad or Digit Numb:** Select answers.
-	- **Backspace:** Replay the song.
+    - **/ Numpad Key:** Select previous answer.
+    - **\* Numpad Key:** Select next answer.
+	- **Backspace or + NumPad key :** Replay the song.
 	- **Enter or Space:** Validate.
 
 - **Result Modal:**
 	- **Arrow Up and Down:** Select the raw up and down.
-	- **+ Key:** Go down in the raw.
+	- **+ Numpad Key:** Go down in the raw.
 	- **- Key:** Go up in the raw.
 	- **Numpad or Digit:**
 		- **1:** Play the first note played.
@@ -48,7 +57,7 @@ For bug reports, feature requests, or general feedback, please [open an issue](h
 
 ## License
 
-This plugin is licensed under the [MIT License](MIT License).
+This plugin is licensed under the [AGPL-3.0 License](AGPL-3.0 License).
 
 ## Funding URL
 

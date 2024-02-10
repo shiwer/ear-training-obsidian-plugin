@@ -1,14 +1,11 @@
 {
 	"id": "ear-training",
 	"name": "Ear Training",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Offers ear training for musician inside your obsidian vault.",
 	"author": "Poe Zoel",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
-	"isDesktopOnly": false,
-	"dependencies": [],
-	"theme": "dark",
-	"license": "MIT"
+	"authorUrl": "https://www.instagram.com/poezoel?igsh=OGQ5ZDc2ODk2ZA==",
+	"fundingUrl": "https://www.buymeacoffee.com/poe.zoel",
+	"isDesktopOnly": false
 }
