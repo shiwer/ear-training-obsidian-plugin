@@ -24,8 +24,8 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
 
         // Add UI for the mode option
         new Setting(containerEl)
-            .setName('Mode Auto Save')
-            .setDesc('Set true if you want your ear training to be saved at the end of every practices')
+            .setName('Save practices')
+            .setDesc('Set to true if you want your ear training to be saved at the end of every practices')
            	.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.saveParameters.autoSave)
 				.onChange(async (value) => {
