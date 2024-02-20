@@ -33,7 +33,6 @@ export class AudioUtils {
   		const noteName = noteNames[note.pitch % 12];
 
   		const response = `${noteName}${note.octave}`;
-  		console.debug(response);
 
   		return response;
 	}

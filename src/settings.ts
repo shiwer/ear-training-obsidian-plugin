@@ -15,17 +15,10 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		
-        // Add a heading for Intervals
-		containerEl.createEl('h2', { text: 'Settings' });
-
-        // Add a heading for Options
-        containerEl.createEl('h3', { text: 'Options' });
-
         // Add UI for the mode option
         new Setting(containerEl)
             .setName('Save practices')
-            .setDesc('Set to true if you want your ear training to be saved at the end of every practices')
+            .setDesc('Set to true if you want your ear training to be saved at the end of every practices.')
            	.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.saveParameters.autoSave)
 				.onChange(async (value) => {
@@ -36,7 +29,7 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Folder Path')
-              .setDesc('Set a custom folder path for saving maps')
+              .setDesc('Set a custom folder path for saving practices.')
               .addText(text => text
                 .setValue(this.plugin.settings.saveParameters.folderPath)
                 .onChange(async (value) => {
@@ -47,7 +40,7 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Filename Format')
-		  	.setDesc('Set a custom filename format')
+		  	.setDesc('Set a custom filename format.')
 		  	.addText(text => text
                 .setValue(this.plugin.settings.saveParameters.filenameFormat)
                 .onChange(async (value) => {
@@ -58,7 +51,6 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
 						this.plugin.settings.saveParameters.filenameFormat = value;
 						await this.plugin.saveSettings();
 					} else {
-						console.log('text ', text)
 						// Validation failed, show error message and mark setting as invalid
 						 showErrorTooltip(text.inputEl, validationResult);
 					}

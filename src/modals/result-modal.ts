@@ -125,7 +125,6 @@ export default class EarTrainingResultModal extends Modal {
 								this.elements[this.selectedRaw].classList.remove('selected');
 
                                 this.selectedRaw =  Math.floor(Math.random() * this.elements.length);
-                                console.log(this.selectedRaw);
 
 								this.elements[this.selectedRaw].classList.add('selected');
 
