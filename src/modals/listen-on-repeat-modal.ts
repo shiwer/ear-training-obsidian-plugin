@@ -5,8 +5,8 @@ import { Note, noteNames } from './../utils/audio-utils';
 import { NotePlayer } from './../models/note-players';
 
 export default class ListenOnRepeatModal extends Modal {
-
-	private intervalId: NodeJS.Timer;
+	// Would like to assign number but I have issues with compiler.
+	private intervalId: number;
 
     private selectedChord: string | null = null; // To store the currently selected notes
     private lowestNotePitch: number | null = null;
@@ -118,7 +118,7 @@ export default class ListenOnRepeatModal extends Modal {
 	private playNoteInThread(): void {
 		// Use setInterval to call the playNote method every second (1000 milliseconds)
 		let i = 0;
-		this.intervalId = setInterval(() => {
+		this.intervalId = <any>setInterval(() => {
 				if(i == 0) {
 					this.selectedChord = this.exercise.parameters.selectedChordList[Math.floor(Math.random() * this.exercise.parameters.selectedChordList.length)];
 					this.lowestNotePitch = this.exercise.parameters.lowestNotePitchList[Math.floor(Math.random() * this.exercise.parameters.lowestNotePitchList.length)];
