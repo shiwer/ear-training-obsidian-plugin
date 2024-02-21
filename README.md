@@ -57,7 +57,7 @@ For bug reports, feature requests, or general feedback, please [open an issue](h
 
 ## License
 
-This plugin is licensed under the [AGPL-3.0 License](AGPL-3.0 License).
+This plugin is licensed under the [GNU-3.0 License](LICENSE.txt).
 
 ## Funding URL
 
