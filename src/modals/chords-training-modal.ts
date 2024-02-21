@@ -1,6 +1,6 @@
 // ear-training-plugin/modal.ts
 import { App, Notice } from 'obsidian';
-import { chordsMap, chordsIntervals, Exercise} from './../utils/constants';
+import { chordsMap, chordsIntervals, Exercise, SaveParameters} from './../utils/constants';
 import { AudioUtils, Note } from './../utils/audio-utils';
 import { ChordNotePlayer } from './../models/note-players';
 import BaseTrainingModal from './base-training-modal';
@@ -20,8 +20,8 @@ export default class ChordsTrainingModal extends BaseTrainingModal {
     }
 
 
-    constructor(app: App, plugin: EarTrainingPlugin, protected exercise: Exercise, audioUtils: AudioUtils) {
-        super(app, plugin,'chords', exercise, new ChordNotePlayer(audioUtils, chordsIntervals, exercise.settings.isHarmonic));
+    constructor(app: App, saveParameters: SaveParameters, protected exercise: Exercise, audioUtils: AudioUtils) {
+        super(app, saveParameters, 'chords', exercise, new ChordNotePlayer(audioUtils, chordsIntervals, exercise.settings.isHarmonic));
     }
 
 }

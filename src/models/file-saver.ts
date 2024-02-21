@@ -1,17 +1,19 @@
 import { App, Notice, normalizePath } from 'obsidian';
 import { intervalMap, chordsMap } from './../utils/constants';
 import { noteNames } from './../utils/audio-utils';
+import { ScoreInfo, HeaderInfo} from './score-recorder'
 import moment from "moment";
 
 export class FileSaver {
 	private app: App;
+	private save: boolean;
 	private folderPath: string;
 	private filenameFormat: string;
 
 	private printList(list: string[]) {
 		let mdList = "\n";
 
-		for(let index in list) {
+		for(let index = 0; index < list.length; index++) {
 			mdList += "  " + "- " + list[index];
 			if(index < list.length - 1) {
 				mdList += "\n";
@@ -50,13 +52,17 @@ export class FileSaver {
 		return tableContent;
 	}
 
-	constructor(app: App, folderPath: string, filenameFormat: string) {
+	constructor(app: App, save: boolean, folderPath: string, filenameFormat: string) {
 		this.app = app;
+		this.save = save;
 		this.folderPath = folderPath;
 		this.filenameFormat = filenameFormat;
 	}
 
-   async saveScoreInfo(headerInfo: HeaderInfo, scoreInfo: ScoreInfo[]): void {
+   async saveScoreInfo(headerInfo: HeaderInfo, scoreInfo: ScoreInfo[]): Promise<void> {
+   		if(!this.save) {
+   			return;
+   		}
 		const fileName = `${moment().format(this.filenameFormat)}`;
 
 		const normalizedFolderPath = normalizePath(this.folderPath);

@@ -6,9 +6,7 @@ import { NotePlayer } from './../models/note-players';
 
 export default class ListenOnRepeatModal extends Modal {
 
-	private intervalId: number | null = null;
-
-    protected notePlayer: NotePlayer;
+	private intervalId: NodeJS.Timer;
 
     private selectedChord: string | null = null; // To store the currently selected notes
     private lowestNotePitch: number | null = null;
@@ -107,8 +105,8 @@ export default class ListenOnRepeatModal extends Modal {
 	
 	private playChord() {
 		if(this.selectedChord && this.lowestNotePitch != null) {
-			const chordButtonElement = document.getElementById(`${this.prefixSelectedNote}${this.selectedChord}`);
-			const pitchButtonElement = document.getElementById(`${this.prefixSelectedRootNote}${this.lowestNotePitch}`)
+			const chordButtonElement: HTMLButtonElement = document.getElementById(`${this.prefixSelectedNote}${this.selectedChord}`) as HTMLButtonElement;
+			const pitchButtonElement: HTMLButtonElement = document.getElementById(`${this.prefixSelectedRootNote}${this.lowestNotePitch}`) as HTMLButtonElement;
 
 			this.notePlayer.playNotes(this.selectedChord, this.notePlayer.getRootFromLowestNote(this.selectedChord, this.lowestNotePitch));
 
@@ -133,8 +131,8 @@ export default class ListenOnRepeatModal extends Modal {
 		}, this.exercise.parameters.delayInMs);
 	}
 
-    constructor(private app: App, private plugin: EarTrainingPlugin, private exercise: ListeningExercise, private notePlayer: NotePlayer) {
-        super(app, plugin);
+    constructor(app: App, private exercise: ListeningExercise, private notePlayer: NotePlayer) {
+        super(app);
     }
 
   	onOpen() {
@@ -143,7 +141,7 @@ export default class ListenOnRepeatModal extends Modal {
         contentEl.addClass('ear-plugin-modal');
 
         // Add a heading
-        this.dynamicHeader = this.contentEl.createEl('h2', { text: 'Listen' });
+        this.contentEl.createEl('h2', { text: 'Listen' });
 
         new Setting(contentEl)
                     .setName('Number of Repeats')
@@ -189,7 +187,7 @@ export default class ListenOnRepeatModal extends Modal {
         for (let i = 0; i < noteNames.length; i++) {
             const note = noteNames[i];
 
-            const noteButton = this.createButton(i, note, this.prefixSelectedRootNote, () => this.changeLowestNoteList(noteButton, i));
+            const noteButton = this.createButton(`${i}`, note, this.prefixSelectedRootNote, () => this.changeLowestNoteList(noteButton, i));
             containerRoot.appendChild(noteButton);
         }
 

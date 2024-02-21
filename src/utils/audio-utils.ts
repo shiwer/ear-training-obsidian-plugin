@@ -5,7 +5,7 @@ export const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 
 
 const octave = 3;
 
-const intervalsLimitations = {
+const intervalsLimitations: Record<number, Note[]> = {
 	1: [{pitch: 0, octave:3}, {pitch: 7, octave: 4}],
 	2: [{pitch: 0, octave:3}, {pitch: 7, octave: 4}],
 	3: [{pitch: 0, octave:3}, {pitch: 7, octave: 4}],
@@ -113,7 +113,7 @@ export class AudioUtils {
         return semitones1 - semitones2;
     }
 
-	orderedChords(...notes: [Note]): [Note] {
+	orderedChords(...notes: Note[]): Note[] {
 	    // Use the spread operator to create a new array to avoid modifying the original array
 	    const sortedNotes = [...notes];
 
@@ -136,7 +136,7 @@ export class AudioUtils {
 		this.audioPlayer.playNote(pitch, octave);
 	}
     
-	async playNotes(isHarmonic: boolean, ...notes: [Note]): Promise<void> {
+	async playNotes(isHarmonic: boolean, ...notes: Note[]): Promise<void> {
 		for (let i = 0; i < notes.length; i++) {
 			let note = notes[i];
 

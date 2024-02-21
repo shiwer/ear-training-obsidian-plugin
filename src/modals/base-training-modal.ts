@@ -1,6 +1,6 @@
 // ear-training-plugin/modal.ts
-import { App, Modal, Notice, Setting, TFile, FileSystemAdapter } from 'obsidian';
-import { Exercise, BestScoreData, modeMap } from './../utils/constants';
+import { App, Modal, Notice, Setting, ButtonComponent, TFile, FileSystemAdapter } from 'obsidian';
+import { Exercise, BestScoreData, modeMap, SaveParameters } from './../utils/constants';
 import { Note, noteNames } from './../utils/audio-utils';
 import { ScoreTracker } from './../models/score-recorder';
 import { FileSaver } from './../models/file-saver';
@@ -10,23 +10,23 @@ import EarTrainingResultModal from './result-modal';
 
 export default class BaseTrainingModal extends Modal {
 
-    protected notePlayer: NotePlayer;
-    protected playedNotes: string | null = null;
-    private selectedNotes: string | null = null; // To store the currently selected notes
-    private rootNote: Note | null = null;
+    protected playedNotes: string = "";
+    private selectedNotes: string = ""; // To store the currently selected notes
+    private rootNote: Note;
 
     private practiceCount: number = 0; // To keep track of the number of exercises done
     private selectedNotesButton:HTMLButtonElement | null = null; // To store the selected notes button
     
-    private dynamicHeader:HTMLButtonElement | null = null; // To update the header
-    private validateButton:HTMLButtonElement | null = null;
+    private dynamicHeader:HTMLElement | null = null; // To update the header
+    private validateButton:ButtonComponent | null = null;
 
-    private scoreTracker: ScoreTracker | null = null;
-    private fileSaver: FileSaver | null = null;
+    private scoreTracker: ScoreTracker;
+    private fileSaver: FileSaver;
     private score: number = 0;
 
     protected getButtonText(id:string): string {
         console.log('implement button text');
+        return "";
     }
 
     protected customReset(): void {
@@ -46,8 +46,8 @@ export default class BaseTrainingModal extends Modal {
  	// Method to start a new practice session
     private startPractice(): void {
         this.customReset();
-        this.selectedNotes = null;
-        this.validateButton.components[0].buttonEl.disabled = true;
+        this.selectedNotes = "";
+        this.validateButton!.disabled = true;
         this.playedNotes = this.getRandomNotes();
         if(this.selectedNotesButton) {
             // Remove focus from the button
@@ -66,7 +66,7 @@ export default class BaseTrainingModal extends Modal {
 
         // Increment the practice count
         this.practiceCount++;
-        this.dynamicHeader.textContent = this.headerText(this.practiceCount, this.exercise.settings.numExercises);
+        this.dynamicHeader!.textContent = this.headerText(this.practiceCount, this.exercise.settings.numExercises);
         this.notePlayer.playNotes(this.playedNotes, this.rootNote);
         }
 
@@ -131,9 +131,7 @@ export default class BaseTrainingModal extends Modal {
             // Start a new practice
             this.startPractice();
         } else {
-            if(this.plugin.settings.saveParameters.autoSave) {
-				this.fileSaver.saveScoreInfo(this.scoreTracker.getHeaderInfo(), this.scoreTracker.getScoreInfo());
-			}
+			this.fileSaver.saveScoreInfo(this.scoreTracker.getHeaderInfo(), this.scoreTracker.getScoreInfo());
 
             new EarTrainingResultModal(this.app, this.notePlayer, this.score, this.exercise.settings.numExercises, this.scoreTracker).open();
             this.close();
@@ -144,13 +142,13 @@ export default class BaseTrainingModal extends Modal {
         return `Exercise ${practiceCount} / ${totalExercises}`;
     }
 
-    constructor(private app: App, private plugin: EarTrainingPlugin, private name: string, protected exercise: Exercise, protected notePlayer: NotePlayer) {
-        super(app, plugin);
+    constructor(app: App, saveParameters: SaveParameters, private name: string, protected exercise: Exercise, protected notePlayer: NotePlayer) {
+        super(app);
         // TODO : refactor this crap, mode refers to inconsistent values
         const mode = exercise.settings.isHarmonic ? 'harmonic' : exercise.settings.mode === 'chords' ? 'ascending' : modeMap[exercise.settings.mode];
         const tonalities = exercise.settings.tonality !== "all" ? [exercise.settings.tonality] : noteNames;
         this.scoreTracker = new ScoreTracker(name, mode, tonalities, exercise.settings.selectedNotes);
-        this.fileSaver = new FileSaver(app, this.plugin.settings.saveParameters.folderPath, this.plugin.settings.saveParameters.filenameFormat)
+        this.fileSaver = new FileSaver(app, saveParameters.autoSave ,saveParameters.folderPath, saveParameters.filenameFormat)
     }
 
   	onOpen() {
@@ -158,9 +156,7 @@ export default class BaseTrainingModal extends Modal {
         contentEl.empty();
         contentEl.addClass('ear-plugin-modal');
 
-
         this.practiceCount = 0;
-        this.mistakes = {};
         this.score = 0;
 
         // Add a heading
@@ -192,8 +188,8 @@ export default class BaseTrainingModal extends Modal {
             const notesButton = this.createButton(i, notes, () => {
                 // Code to run when button one is clicked
                 // Remove the highlight from the previously selected button
-                if(this.validateButton.components[0].buttonEl.disabled) {
-                    this.validateButton.components[0].buttonEl.disabled = false;
+                if(this.validateButton!.disabled) {
+                    this.validateButton!.disabled = false;
                 }
 
                 if (this.selectedNotesButton) {
@@ -218,15 +214,18 @@ export default class BaseTrainingModal extends Modal {
         this.addSpacer();
 
         // Display a button to validate the answer
-        this.validateButton = new Setting(this.contentEl)
+        new Setting(this.contentEl)
             .setName('Validate')
             .setDesc('Click to validate your answer')
-            .addButton(button => button
-                .setButtonText('Validate')
-                .onClick(() => {
-                    // Validate the answer
-                    this.validateAnswer();
-                }));
+            .addButton(button => {
+            	this.validateButton = button
+            	.setButtonText('Validate')
+            	.onClick(() => {
+            		// Validate the answer
+            		this.validateAnswer();
+            	});
+            	return button;
+            })
 
         // Listen for the keydown event on the description container
         this.contentEl.addEventListener('keydown', (event) => {
@@ -246,16 +245,18 @@ export default class BaseTrainingModal extends Modal {
 						keyNumb =  event.code.replace('Digit', '');
 					}
                     // If the pressed key corresponds to a note button, trigger its click event
-					let noteNumb: number;
+					let noteNumb: number | undefined;
                     if (keyNumb !== undefined && Number.isInteger(Number(keyNumb))) {
-                    	noteNumb = keyNumb - 1;
+                    	noteNumb = Number(keyNumb) - 1;
                     } else if(event.code === 'NumpadMultiply' || event.code === 'NumpadDivide') {
-						const currentNumber = Number(this.selectedNotesButton.id.replace('noteButton-', ''));
-						if(event.code === 'NumpadDivide' && currentNumber < this.exercise.settings.selectedNotes.length) {
-							noteNumb = currentNumber - 1;
-						} else if(event.code === 'NumpadMultiply' && currentNumber >= 0) {
-							noteNumb = currentNumber + 1;
-						}
+                    	if(this.selectedNotesButton !== null) {
+                    		const currentNumber = Number(this.selectedNotesButton.id.replace('noteButton-', ''));
+							if(event.code === 'NumpadDivide' && currentNumber < this.exercise.settings.selectedNotes.length) {
+								noteNumb = currentNumber - 1;
+							} else if(event.code === 'NumpadMultiply' && currentNumber >= 0) {
+								noteNumb = currentNumber + 1;
+							}
+                    	}
 					}
 					if(noteNumb !== undefined) {
 						const noteButton = document.getElementById(`noteButton-${noteNumb}`);

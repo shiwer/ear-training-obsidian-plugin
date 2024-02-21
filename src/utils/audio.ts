@@ -1,10 +1,5 @@
 import * as fs from 'fs';
 
-export type NoteValue = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
-
-// 7 octaves for full sized piano with 88 keys
-export type Octave = 1 | 2 | 3 | 4 | 5 | 6 | 7;
-
 // Use import.meta.url to get the URL of the current module file
 
 export class AudioPlayer {
@@ -56,7 +51,7 @@ export class AudioPlayer {
   });
 }
 
-  private playTone(noteValue: number, sample: AudioBuffer) {
+  private playTone(pitch: number, sample: AudioBuffer) {
     if (!this.audioContext) {
       return;
     }
@@ -64,12 +59,12 @@ export class AudioPlayer {
     const source = this.audioContext.createBufferSource();
     source.buffer = sample;
 
-    // first try to use the detune property for pitch shifting
+    // first try to use the detune property for p	itch shifting
     if (source.detune) {
-      source.detune.value = noteValue * 100;
+      source.detune.value = pitch * 100;
     } else {
       // fallback to using playbackRate for pitch shifting
-      source.playbackRate.value = 2 ** (noteValue / 12);
+      source.playbackRate.value = 2 ** (pitch / 12);
     }
 
     source.connect(this.audioContext.destination);
@@ -85,22 +80,22 @@ export class AudioPlayer {
   }
 
   private getBestSampleForNote(
-    noteValue: number,
+    pitch: number,
     octave: number
-  ): [adjustedNoteValue: number, sample: AudioBuffer] {
-    let adjustedNoteValue = noteValue;
+  ): [adjustedPitch: number, sample: AudioBuffer] {
+    let adjustedPitch = pitch;
     let adjustedOctave = octave;
 
     // use the closest sample to minimize pitch shifting
-    if (noteValue > 6 && octave <= 7) {
+    if (pitch > 6 && octave <= 7) {
       adjustedOctave = octave + 1;
-      adjustedNoteValue = noteValue - 12;
+      adjustedPitch = pitch - 12;
     }
 
     type SampleName = keyof typeof this.samples;
 
     return [
-      adjustedNoteValue,
+      adjustedPitch,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.samples![`C${adjustedOctave}` as SampleName],
     ];
@@ -112,11 +107,11 @@ export class AudioPlayer {
     }
   }
 
-  playNote(noteValue: NoteValue, octave: Omit<Octave, 1 | 7>) {
+  playNote(pitch: number, octave: number) {
     if (!this.audioContext || !this.samples) {
       return;
     }
 
-    this.playTone(...this.getBestSampleForNote(noteValue, octave as number));
+    this.playTone(...this.getBestSampleForNote(pitch, octave));
   }
 }

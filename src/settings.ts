@@ -1,13 +1,12 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
 import { intervalMap, chordsMap } from './utils/constants';
-import { validateFormat, showErrorTooltip, removeErrorTooltip } from './utils/validation'
+import { validateFormat, showErrorTooltip, removeErrorTooltip } from './utils/validation';
+import EarTrainingPlugin from './main'
 
 export default class EarTrainingSettingTab extends PluginSettingTab {
-	plugin: EarTrainingPlugin;
 
-	constructor(app: App, plugin: EarTrainingPlugin) {
+	constructor(app: App, private plugin: EarTrainingPlugin) {
 		super(app, plugin);
-		this.plugin = plugin;
 	}
 
 	display(): void {
@@ -47,12 +46,12 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
                 	const validationResult = validateFormat(value);
 					if (validationResult === "") {
 						// Validation passed, update settings and save
-						removeErrorTooltip(text.inputEl);
+						removeErrorTooltip(text.inputEl as any);
 						this.plugin.settings.saveParameters.filenameFormat = value;
 						await this.plugin.saveSettings();
 					} else {
 						// Validation failed, show error message and mark setting as invalid
-						 showErrorTooltip(text.inputEl, validationResult);
+						 showErrorTooltip(text.inputEl as any, validationResult);
 					}
                 }));
 	}

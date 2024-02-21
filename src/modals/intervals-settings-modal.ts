@@ -2,11 +2,12 @@
 import { App, Modal, Setting } from 'obsidian';
 import { intervalMap, modeMap } from './../utils/constants';
 import { noteNames } from './../utils/audio-utils';
+import EarTrainingPlugin from './../main';
 
-export default class MenuModal extends Modal {
+export default class IntervalsSettingsModal extends Modal {
 
     constructor(app: App, private plugin: EarTrainingPlugin) {
-        super(app, plugin);
+        super(app);
     }
 
     onOpen() {

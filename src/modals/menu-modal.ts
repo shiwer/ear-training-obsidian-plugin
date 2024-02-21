@@ -2,7 +2,8 @@
 import { App, Modal, Notice, Setting } from 'obsidian';
 import { AudioUtils } from './../utils/audio-utils';
 import { ChordNotePlayer } from './../models/note-players';
-import { chapterTitles, chordsIntervals, Exercise_Listening } from './../utils/constants';
+import { chordsIntervals, Exercise_Listening } from './../utils/constants';
+import EarTrainingPlugin from './../main'
 import IntervalTrainingModal from './intervals-training-modal';
 import ChordsTrainingModal from './chords-training-modal';
 import ListenOnRepeatModal from './listen-on-repeat-modal';
@@ -11,15 +12,11 @@ import IntervalsSettingsModal from './intervals-settings-modal';
 
 
 export default class MenuModal extends Modal {
-    private freeIntervalPracticeButton: HTMLButtonElement | null = null;
-    private freeChordsPracticeButton: HTMLButtonElement | null = null;
-    private audioUtils: AudioUtils;
-    plugin: EarTrainingPlugin;
+    private freeIntervalPracticeButton: Setting;
+    private freeChordsPracticeButton: Setting;
 
-    constructor(app: App, plugin: EarTrainingPlugin, audioUtils: AudioUtils) {
-        super(app, plugin);
-        this.plugin = plugin;
-        this.audioUtils = audioUtils;
+    constructor(app: App, private plugin: EarTrainingPlugin, private audioUtils: AudioUtils) {
+        super(app);
     }
 
     // ear-training-plugin/menu-modal.ts
@@ -89,7 +86,7 @@ export default class MenuModal extends Modal {
 							// Do nothing if the Enter key is pressed
 							return;
 						}
-                        new IntervalTrainingModal(this.app, this.plugin, this.plugin.settings.intervals, this.audioUtils).open();
+                        new IntervalTrainingModal(this.app, this.plugin.settings.saveParameters, this.plugin.settings.intervals, this.audioUtils).open();
                     });
             });
             
@@ -124,7 +121,7 @@ export default class MenuModal extends Modal {
 							// Do nothing if the Enter key is pressed
 							return;
 						}
-						new ChordsTrainingModal(this.app, this.plugin, this.plugin.settings.chords, this.audioUtils).open();
+						new ChordsTrainingModal(this.app, this.plugin.settings.saveParameters, this.plugin.settings.chords, this.audioUtils).open();
 					});
 			});
 
@@ -140,7 +137,7 @@ export default class MenuModal extends Modal {
 							// Do nothing if the Enter key is pressed
 							return;
 						}
-						new ListenOnRepeatModal(this.app, this.plugin, Exercise_Listening,  new ChordNotePlayer(this.audioUtils, chordsIntervals, this.plugin.settings.chords.settings.isHarmonic)).open();
+						new ListenOnRepeatModal(this.app, Exercise_Listening,  new ChordNotePlayer(this.audioUtils, chordsIntervals, this.plugin.settings.chords.settings.isHarmonic)).open();
 					});
 			});
 

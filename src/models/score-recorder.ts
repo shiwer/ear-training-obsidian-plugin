@@ -1,9 +1,9 @@
-import { Note } from './../utils/constants'; // Adjust the path accordingly
+import { Note } from './../utils/audio-utils'; // Adjust the path accordingly
 
 export interface ScoreInfo {
     playedNotes: string;
     selectedNotes: string;
-    rootNote: Note | null;
+    rootNote: Note;
 }
 
 export interface HeaderInfo {
@@ -14,8 +14,8 @@ export interface HeaderInfo {
 }
 
 export class ScoreTracker {
-	private headerInfo: HeaderInfo | null;
-    private scoreInfo: ScoreInfo[] = [];
+	private headerInfo: HeaderInfo;
+    private scoreInfo: ScoreInfo[];
 
     constructor(exercise: string, mode: string, tonalities: string[], choices: string[]){
     	this.headerInfo = {
@@ -27,7 +27,7 @@ export class ScoreTracker {
     	this.scoreInfo = [];
     }
 
-    recordScoreInfo(playedNotes: string, selectedNotes: string, rootNote: Note | null): void {
+    recordScoreInfo(playedNotes: string, selectedNotes: string, rootNote: Note): void {
         this.scoreInfo.push({ playedNotes, selectedNotes, rootNote });
     }
 
@@ -63,7 +63,7 @@ export class ScoreTracker {
     }
 
     // Add a new method to get selectedNotes and rootNote for a specific playedNote
-    getNotesForPlayedNote(playedNote: string): [{ selectedNotes: string, rootNote: Note | null }] {
+    getNotesForPlayedNote(playedNote: string): { selectedNotes: string, rootNote: Note }[] {
         // Filter scoreInfo based on the provided playedNote
         const filteredScoreInfo = this.scoreInfo.filter((scoreInfo) => scoreInfo.playedNotes === playedNote);
 

@@ -1,26 +1,24 @@
-import { Note, AudioUtils } from './../utils/constants'; // Adjust the path accordingly
-
-
+import { Note, AudioUtils } from './../utils/audio-utils'; // Adjust the path accordingly
 
 export class NotePlayer {
-    private audioUtils: AudioUtils;
-	private intervalSemitonesMap: Record<string, List<number>>;
-    private isHarmonic: boolean;
+    protected audioUtils: AudioUtils;
+	protected intervalSemitonesMap: Record<string, number[]>;
+    protected isHarmonic: boolean;
 
-	private getOrderedNotes(semitoneIntervals: List<number>, rootNote: Note): [Note] {
-		const noteList:[Note] = new Array(rootNote);
+	protected getOrderedNotes(semitoneIntervals: number[], rootNote: Note): Note[] {
+		const noteList:Note[] = new Array(rootNote);
 		for( let i = 0; i < semitoneIntervals.length; i++ ) {
 			noteList.push(this.audioUtils.getRelativeNote(rootNote, semitoneIntervals[i]))
 		}
 		return this.audioUtils.orderedChords(...noteList);
 	}
 
-	private getLowestNote(semitoneIntervals: List<number>, rootNote: Note): Note {
+	protected getLowestNote(semitoneIntervals: number[], rootNote: Note): Note {
 		return this.getOrderedNotes(semitoneIntervals, rootNote)[0];
 	}
 
-	private getLowestIntervalAndSemitoneShift(playedNotes: string) {
-			const orderedSemitoneIntervals: List<number> = [...this.intervalSemitonesMap[playedNotes]];
+	protected getLowestIntervalAndSemitoneShift(playedNotes: string) {
+			const orderedSemitoneIntervals: number[] = [...this.intervalSemitonesMap[playedNotes]];
         	// 0 is the potential root note
         	orderedSemitoneIntervals.push(0);
         	// we sort the note
@@ -39,7 +37,7 @@ export class NotePlayer {
     		}
 	}
 
-    constructor(audioUtils: AudioUtils, intervalSemitonesMap: Record<string, List<number>>, isHarmonic: boolean) {
+    constructor(audioUtils: AudioUtils, intervalSemitonesMap: Record<string, number[]>, isHarmonic: boolean) {
         this.audioUtils = audioUtils;
         this.intervalSemitonesMap = intervalSemitonesMap;
         this.isHarmonic = isHarmonic;
@@ -59,15 +57,15 @@ export class NotePlayer {
 		return this.audioUtils.getRootNoteFromLowestNote(lowestIntervalBetweenNotes, semitoneShift, pitch);
     }
 
-     async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): void {
+     async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): Promise<void> {
         console.log('to be implemented. ');
      }
 
-    async playNotes(playedNote: string, rootNote: Note): void {
+    async playNotes(playedNote: string, rootNote: Note): Promise<void> {
         console.log('to be implemented. ');
      }
 
-     async playFirstNote(playedNote: string, rootNote: Note): void {
+     async playFirstNote(playedNote: string, rootNote: Note): Promise<void> {
 	 	console.log('to be implemented. ');
 	 }
 }
@@ -78,15 +76,15 @@ export class IntervalNotePlayer extends NotePlayer {
 
     private isAscending: boolean | null = null;
 
-    constructor(audioUtils: AudioUtils, intervalSemitonesMap: Record<string, List<number>>, isHarmonic: boolean) {
+    constructor(audioUtils: AudioUtils, intervalSemitonesMap: Record<string, number[]>, isHarmonic: boolean) {
        super(audioUtils, intervalSemitonesMap, isHarmonic);
     }
 
-    updateIsAscending(isAscending: boolean) {
+    updateIsAscending(isAscending: boolean): void {
         this.isAscending = isAscending;
     }
 
-    async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): void {
+    async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): Promise<void> {
         if (selectedNote) {
             // TODO: check if it's working
             const semitoneInterval = this.intervalSemitonesMap[selectedNote][0];
@@ -97,7 +95,7 @@ export class IntervalNotePlayer extends NotePlayer {
         }
     }
 
-    async playNotes(playedNote: string, rootNote: Note): void {
+    async playNotes(playedNote: string, rootNote: Note): Promise<void> {
         if (playedNote) {
             // Display a notice with the interval
             const semitoneInterval = this.intervalSemitonesMap[playedNote][0];
@@ -108,7 +106,7 @@ export class IntervalNotePlayer extends NotePlayer {
         }
     }
 
-    async playFirstNote(playedNote: string, rootNote: Note): void {
+    async playFirstNote(playedNote: string, rootNote: Note): Promise<void> {
 		this.audioUtils.playNote(rootNote);
 	}
 
@@ -116,17 +114,18 @@ export class IntervalNotePlayer extends NotePlayer {
 
 export class ChordNotePlayer extends NotePlayer {
     
-    constructor(audioUtils: AudioUtils, intervalSemitonesMap: Record<string, List<number>>, isHarmonic: boolean) {
+    constructor(audioUtils: AudioUtils, intervalSemitonesMap: Record<string, number[
+    ]>, isHarmonic: boolean) {
        super(audioUtils, intervalSemitonesMap, isHarmonic);
     }
 
 	// first note played in a chord is the lowest
-	async playFirstNote(playedNote: string, rootNote: Note): void {
+	async playFirstNote(playedNote: string, rootNote: Note): Promise<void> {
 		const lowestNote: Note = this.getLowestNote(this.intervalSemitonesMap[playedNote], rootNote);
 	 	await this.audioUtils.playNote(lowestNote);
 	}
 
-    async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): void {
+    async playRelativeChord(playedNote: string, selectedNote: string, rootNote: Note): Promise<void> {
         // Define the intervals based on the played and selected notes
 
         const lowestPlayedNote = this.getLowestNote(this.intervalSemitonesMap[playedNote], rootNote);
@@ -144,7 +143,7 @@ export class ChordNotePlayer extends NotePlayer {
         await this.audioUtils.playNotes(this.isHarmonic, ...sortedChords);
     }
 
-    async playNotes(playedNote: string, rootNote: Note): void {
+    async playNotes(playedNote: string, rootNote: Note): Promise<void> {
 
         if (playedNote) {
             // Display a notice with the interval

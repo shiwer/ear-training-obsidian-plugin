@@ -1,7 +1,7 @@
 // ear-training-plugin/constants.ts
 
 export interface EarTrainingSettings {
-	selectedNotes: List<string>,
+	selectedNotes: string[],
 	mode : string,
 	numExercises: number,
 	isHarmonic: boolean,
@@ -16,8 +16,8 @@ export interface Exercise {
 interface ListeningParameters {
 	repeatTimes: number,
 	delayInMs: number,
-	selectedChordList: [string],
-	lowestNotePitchList: [number]
+	selectedChordList: string[],
+	lowestNotePitchList: number[]
 }
 
 export interface ListeningExercise extends Exercise {
@@ -40,10 +40,10 @@ export interface EarTrainingGlobalSettings {
 	saveParameters: SaveParameters,
 }
 
-export const modeMap = {
-	'oam': 'Only Ascendant Mode',
-	'odm': 'Only Descendant Mode',
-	'aad': 'Ascendant And Descendant',
+export const modeMap: Record<string, string> = {
+	oam: 'Only Ascendant Mode',
+	odm: 'Only Descendant Mode',
+	aad: 'Ascendant And Descendant',
 }
 
 export const Exercise_Listening: ListeningExercise = {
@@ -61,7 +61,8 @@ export const Exercise_Listening: ListeningExercise = {
 			],
 		mode: 'chords',
 		numExercises: 32,
-		isHarmonic: true
+		isHarmonic: true,
+		tonality: 'all'
 	},
 	parameters: {
 		repeatTimes: 2,
@@ -118,7 +119,7 @@ export const intervalMap: Record<string, string> = {
 	'octave': 'Octave'
 };
 
-export const semitoneIntervals: Record<string, List<number>> = {
+export const semitoneIntervals: Record<string, number[]> = {
     'minor-second': [1],
     'major-second': [2],
     'minor-third': [3],
@@ -145,7 +146,7 @@ export const chordsMap: Record<string, string> = {
 	'major-third-based': 'Major 1st Inv',
 }
 
-export const chordsIntervals: Record<string, List<number>> = {
+export const chordsIntervals: Record<string, number[]> = {
 	'minor-root-based': [3, 7],
 	'major-root-based': [4, 7],
 	'minor-fifth-based': [3, -5],

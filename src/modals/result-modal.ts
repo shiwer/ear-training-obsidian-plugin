@@ -6,19 +6,11 @@ import { ScoreTracker, ScoreInfo } from './../models/score-recorder';
 import { NotePlayer } from './../models/note-players';
 
 export default class EarTrainingResultModal extends Modal {
-    private notePlayer: NotePlayer;
-    private score: number;
-    private totalExercises: number;
-    private scoreTracker: ScoreTracker;
     private elements: NodeListOf<HTMLElement>;
     private selectedRaw: number = 0;
 
-    constructor(app: App, notePlayer: NotePlayer, score: number, totalExercises: number, scoreTracker: ScoreTracker) {
+    constructor(app: App, private notePlayer: NotePlayer, private score: number, private totalExercises: number, private scoreTracker: ScoreTracker) {
         super(app);
-        this.notePlayer = notePlayer;
-        this.score = score;
-        this.totalExercises = totalExercises;
-        this.scoreTracker = scoreTracker;
     }
 
 	onOpen() {
@@ -114,14 +106,14 @@ export default class EarTrainingResultModal extends Modal {
 							}
 							// If the pressed key corresponds to a note button, trigger its click event
 
-							if (keyNumb !== undefined && keyNumb < 4) {
+							if (Number(keyNumb) < 4) {
 								// we map 1-> 0; 2 -> 2, 3 -> 4
-								const noteButton = this.elements[this.selectedRaw].children[(keyNumb - 1) * 2];
+								const noteButton: HTMLButtonElement = this.elements[this.selectedRaw].children[(Number(keyNumb) - 1) * 2] as HTMLButtonElement;
 								if (noteButton) {
 									noteButton.click();
 								}
 							// if keyNumb is 8 then pick a random raw
-							} else if(keyNumb !== undefined && keyNumb == 8 ){
+							} else if(Number(keyNumb) == 8 ){
 								this.elements[this.selectedRaw].classList.remove('selected');
 
                                 this.selectedRaw =  Math.floor(Math.random() * this.elements.length);

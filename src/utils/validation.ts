@@ -1,4 +1,4 @@
-
+import { Setting } from 'obsidian'
 
 function isValidFilename(filename: string): boolean {
   const illegalRe = /[?<>\\:*|"]/g;
@@ -29,7 +29,7 @@ export function validateFormat(format: string): string {
 
 
 // Function to show error tooltip
-export function showErrorTooltip(inputEl: HTMLInputElement, message: string) {
+export function showErrorTooltip(inputEl: any, message: string) {
 	const tooltip = document.createElement("div");
 	tooltip.textContent = message;
 	tooltip.className = "setting-error-tooltip";
@@ -41,7 +41,7 @@ export function showErrorTooltip(inputEl: HTMLInputElement, message: string) {
 }
 
 // Function to remove error tooltip
-export function removeErrorTooltip(inputEl: HTMLInputElement) {
+export function removeErrorTooltip(inputEl: any) {
 	const parent: HTMLInputElement = inputEl.parentElement.parentElement.parentElement;
 	inputEl.style.color = '';
 	inputEl.style.borderColor = '';
