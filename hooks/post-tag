@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Extract the tag name
+tag=$(git describe --tags --abbrev=0)
+
+# Update the version property in the manifest file
+sed -i "s/\"version\": \".*\"/\"version\": \"$tag\"/" /../manifest.json

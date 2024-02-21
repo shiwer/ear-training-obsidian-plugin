@@ -1,7 +1,7 @@
 {
 	"id": "ear-training",
 	"name": "Ear Training",
-	"version": "1.0.2",
+	"version": "1.0.7",
 	"minAppVersion": "0.15.0",
 	"description": "Get ear training exercises inside your Obsidian vault.",
 	"author": "Poe Zoel",
