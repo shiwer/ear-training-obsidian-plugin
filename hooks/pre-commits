@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Run TypeScript compilation
+npx tsc
+
+# Check if there were any errors
+if [ $? -ne 0 ]; then
+    echo "Error: TypeScript compilation failed. Please fix the errors and try again."
+    exit 1
+fi
