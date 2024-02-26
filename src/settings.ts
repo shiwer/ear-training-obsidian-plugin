@@ -46,12 +46,12 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
                 	const validationResult = validateFormat(value);
 					if (validationResult === "") {
 						// Validation passed, update settings and save
-						removeErrorTooltip(text.inputEl as any);
+						removeErrorTooltip(text.inputEl!);
 						this.plugin.settings.saveParameters.filenameFormat = value;
 						await this.plugin.saveSettings();
 					} else {
 						// Validation failed, show error message and mark setting as invalid
-						 showErrorTooltip(text.inputEl as any, validationResult);
+						 showErrorTooltip(text.inputEl!, validationResult);
 					}
                 }));
 	}

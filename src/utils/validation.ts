@@ -29,19 +29,19 @@ export function validateFormat(format: string): string {
 
 
 // Function to show error tooltip
-export function showErrorTooltip(inputEl: any, message: string) {
+export function showErrorTooltip(inputEl: HTMLElement, message: string) {
 	const tooltip = document.createElement("div");
 	tooltip.textContent = message;
 	tooltip.className = "setting-error-tooltip";
 
-	const parent: HTMLInputElement = inputEl.parentElement.parentElement.parentElement;
+	const parent: HTMLElement = inputEl.parentElement!.parentElement!.parentElement!;
 	inputEl.classList.add('setting-error');
 	parent.appendChild(tooltip);
 }
 
 // Function to remove error tooltip
-export function removeErrorTooltip(inputEl: any) {
-	const parent: HTMLInputElement = inputEl.parentElement.parentElement.parentElement;
+export function removeErrorTooltip(inputEl: HTMLElement) {
+	const parent: HTMLElement = inputEl.parentElement!.parentElement!.parentElement!;
 	inputEl.classList.remove('setting-error')
 	const tooltip = parent.querySelector(".setting-error-tooltip");
 	if (tooltip) {

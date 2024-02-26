@@ -173,7 +173,7 @@ export default class ListenOnRepeatModal extends Modal {
         this.contentEl.createEl('h4', { text: 'Select the bottom note to play.' });
 
         const containerRoot = document.createElement('div');
-        container.classList.add('answer-list');
+        containerRoot.classList.add('answer-list');
 
         // Display the selected notes list as clickable buttons (dropdown-like)
         for (let i = 0; i < noteNames.length; i++) {
