@@ -32,7 +32,7 @@ export default class ListenOnRepeatModal extends Modal {
 
     private addSpacer(): void {
         const spacerEl = document.createElement('div');
-        spacerEl.style.height = '10px'; // Adjust the height as needed
+        spacerEl.classList.add('spacer');
         this.contentEl.appendChild(spacerEl);
     }
 
@@ -42,8 +42,7 @@ export default class ListenOnRepeatModal extends Modal {
 		if (index !== -1) {
 			// Add the interval to the selected intervals list
 			this.exercise.parameters.selectedChordList.splice(index, 1);
-			chordButton.style.backgroundColor = '';
-			chordButton.style.color = '';
+			chordButton.classList.remove('button-selected');
 
 			// we need to set to null the selectedChord if the list is now empty
 			if(!this.exercise.parameters.selectedChordList){
@@ -51,8 +50,8 @@ export default class ListenOnRepeatModal extends Modal {
 			}
 		} else {
 			this.exercise.parameters.selectedChordList.push(chord);
-			chordButton.style.backgroundColor = 'lightgreen';
-			chordButton.style.color = 'white';
+			chordButton.classList.add('button-selected');
+
 
 			// we set the selectedChord to be the new one
 			this.selectedChord = chord;
@@ -69,8 +68,8 @@ export default class ListenOnRepeatModal extends Modal {
 		if (index !== -1) {
 			// Add the interval to the selected intervals list
 			this.exercise.parameters.lowestNotePitchList.splice(index, 1);
-			lowestNoteButton.style.backgroundColor = '';
-			lowestNoteButton.style.color = '';
+			lowestNoteButton.classList.remove('button-selected');
+
 
 			// we need to set to null the lowestNotePitch if the list is now empty
 			if(!this.exercise.parameters.lowestNotePitchList){
@@ -78,8 +77,8 @@ export default class ListenOnRepeatModal extends Modal {
 			}
 		} else {
 			this.exercise.parameters.lowestNotePitchList.push(lowestNote);
-			lowestNoteButton.style.backgroundColor = 'lightgreen';
-			lowestNoteButton.style.color = 'white';
+			lowestNoteButton.classList.remove('button-selected');
+
 
 			// we set the lowestNotePitch to be the new one
 			this.lowestNotePitch = lowestNote;
@@ -91,15 +90,11 @@ export default class ListenOnRepeatModal extends Modal {
 	private flashCoral(button: HTMLButtonElement): void {
 		const contentEl = this.contentEl;
 
-		// Save the current background color
-		const originalBackgroundColor = 'lightgreen';
-		const flashColor = 'lightcoral';
-
 		// Add a transition effect (e.g., change background color to yellow briefly)
-		button.style.backgroundColor = flashColor;
+		button.classList.add('highlight');
 		setTimeout(() => {
 			// Restore the original background color after a short delay
-			button.style.backgroundColor = originalBackgroundColor;
+			button.classList.remove('highlight');
 		}, 300); // Adjust the duration of the effect (in milliseconds) as needed
 	}
 	
@@ -178,10 +173,7 @@ export default class ListenOnRepeatModal extends Modal {
         this.contentEl.createEl('h4', { text: 'Select the bottom note to play.' });
 
         const containerRoot = document.createElement('div');
-        containerRoot.style.display = 'grid';
-        containerRoot.style.gridTemplateColumns = '1fr 1fr 1fr 1fr'; // Use 'row' for a horizontal layout
-        containerRoot.style.gridGap = '10px';
-        containerRoot.style.justifyItems = 'inherit';
+        container.classList.add('answer-list');
 
         // Display the selected notes list as clickable buttons (dropdown-like)
         for (let i = 0; i < noteNames.length; i++) {
@@ -197,10 +189,7 @@ export default class ListenOnRepeatModal extends Modal {
 		this.contentEl.createEl('h4', { text: 'Select the interval/chord to play.' });
 
 		const container = document.createElement('div');
-		container.style.display = 'grid';
-		container.style.gridTemplateColumns = '1fr 1fr 1fr 1fr'; // Use 'row' for a horizontal layout
-		container.style.gridGap = '10px';
-		container.style.justifyItems = 'inherit';
+		container.classList.add('answer-list');
 
 		// Display the selected notes list as clickable buttons (dropdown-like)
 		for (let i = 0; i < this.exercise.settings.selectedNotes.length; i++) {

@@ -35,16 +35,14 @@ export function showErrorTooltip(inputEl: any, message: string) {
 	tooltip.className = "setting-error-tooltip";
 
 	const parent: HTMLInputElement = inputEl.parentElement.parentElement.parentElement;
-	inputEl.style.color = 'red';
-	inputEl.style.borderColor = 'red';
+	inputEl.classList.add('setting-error');
 	parent.appendChild(tooltip);
 }
 
 // Function to remove error tooltip
 export function removeErrorTooltip(inputEl: any) {
 	const parent: HTMLInputElement = inputEl.parentElement.parentElement.parentElement;
-	inputEl.style.color = '';
-	inputEl.style.borderColor = '';
+	inputEl.classList.remove('setting-error')
 	const tooltip = parent.querySelector(".setting-error-tooltip");
 	if (tooltip) {
 		tooltip.remove();

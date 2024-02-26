@@ -52,8 +52,7 @@ export default class BaseTrainingModal extends Modal {
         if(this.selectedNotesButton) {
             // Remove focus from the button
             this.selectedNotesButton.blur();
-            this.selectedNotesButton.style.backgroundColor = '';
-            this.selectedNotesButton.style.color = '';
+            this.selectedNotesButton.classList.remove('button-selected');
         }
 		this.selectedNotesButton = null;
 		let pitch = noteNames.indexOf(this.exercise.settings.tonality);
@@ -71,23 +70,21 @@ export default class BaseTrainingModal extends Modal {
         }
 
      // Method to add a visual transition effect
-    private addTransitionEffect(backgroundColor: string): void {
+    private addTransitionEffect(isCorrect: boolean): void {
         const contentEl = this.contentEl;
-        
-        // Save the current background color
-        const originalBackgroundColor = '';
 
+        const buttonTransitionClass = isCorrect ? 'is-correct': 'is-incorrect';
         // Add a transition effect (e.g., change background color to yellow briefly)
-        contentEl.style.backgroundColor = backgroundColor;
+        contentEl.classList.add(buttonTransitionClass);
         setTimeout(() => {
             // Restore the original background color after a short delay
-            contentEl.style.backgroundColor = originalBackgroundColor;
+            contentEl.classList.remove(buttonTransitionClass);
         }, 300); // Adjust the duration of the effect (in milliseconds) as needed
     }
 
     private addSpacer(): void {
         const spacerEl = document.createElement('div');
-        spacerEl.style.height = '10px'; // Adjust the height as needed
+        spacerEl.classList.add('spacer');
         this.contentEl.appendChild(spacerEl);
     }
 
@@ -120,10 +117,8 @@ export default class BaseTrainingModal extends Modal {
             this.displayError();
         }
 
-		// Determine the background color based on the correctness of the answer
-        const backgroundColor = isCorrect ? 'lightgreen' : 'lightcoral';
 		// Add a visual effect to indicate the correctness of the answer
-        this.addTransitionEffect(backgroundColor);
+        this.addTransitionEffect(isCorrect);
 
         // ...
         // Check if the practice should continue
@@ -176,10 +171,7 @@ export default class BaseTrainingModal extends Modal {
 
 
         const container = document.createElement('div');
-        container.style.display = 'grid';
-        container.style.gridTemplateColumns = '1fr 1fr 1fr 1fr'; // Use 'row' for a horizontal layout
-        container.style.gridGap = '10px';
-        container.style.justifyItems = 'inherit';
+        container.classList.add('answer-list');
 
         // Display the selected notes list as clickable buttons (dropdown-like)
         for (let i = 0; i < this.exercise.settings.selectedNotes.length; i++) {
@@ -193,8 +185,7 @@ export default class BaseTrainingModal extends Modal {
                 }
 
                 if (this.selectedNotesButton) {
-                    this.selectedNotesButton.style.backgroundColor = '';
-                    this.selectedNotesButton.style.color = '';
+                    this.selectedNotesButton.classList.remove('button-selected');
                 }
 
                 // Set the selected notes
@@ -203,8 +194,7 @@ export default class BaseTrainingModal extends Modal {
 
                 // Highlight the selected button with a green color
                 if (this.selectedNotesButton) {
-                    this.selectedNotesButton.style.backgroundColor = 'lightgreen';
-                    this.selectedNotesButton.style.color = "white"
+                	this.selectedNotesButton.classList.add('button-selected');
                 }
             });
             container.appendChild(notesButton);

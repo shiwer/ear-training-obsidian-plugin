@@ -18,11 +18,46 @@ button:disabled, .disabled {
     align-items: center;
 }
 
-.mistakes-results p.selected {
+.ear-plugin-modal .mistakes-results p.selected {
 	background-color: tomato;
 }
 
-.setting-error-tooltip {
+.ear-plugin-modal .button-selected {
+	background-color: lightgreen;
+	color: white;
+}
+
+.ear-plugin-modal .button-selected.highlight {
+	background-color: lightcoral;
+}
+
+.ear-plugin-modal.is-correct {
+	background-color: lightgreen;
+}
+
+
+
+.ear-plugin-modal.is-incorrect {
+	background-color: lightcoral;
+}
+
+.ear-plugin-modal .spacer {
+	height: 10x;
+}
+
+.ear-plugin-modal .answer-list {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-gap: 10px;
+	justify-items: inherit;
+}
+
+.ear-plugin-modal .setting-error {
+	color: red;
+	border-color: red;
+}
+
+.ear-plugin-modal .setting-error-tooltip {
     color: red;
     font-size: 0.8em;
 }
