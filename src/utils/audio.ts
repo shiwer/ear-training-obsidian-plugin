@@ -1,105 +1,95 @@
-import * as fs from 'fs';
-
+import { C2v10 } from '../audio/C2v10';
+import { C3v10 } from '../audio/C3v10';
+import { C4v10 } from '../audio/C4v10';
+import { C5v10 } from '../audio/C5v10';
+import { C6v10 } from '../audio/C6v10';
+import { C7v10 } from '../audio/C7v10';
 // Use import.meta.url to get the URL of the current module file
 
 export class AudioPlayer {
-  audioContext?: AudioContext;
-  samples?: {
-    C2: AudioBuffer;
-    C3: AudioBuffer;
-    C4: AudioBuffer;
-    C5: AudioBuffer;
-    C6: AudioBuffer;
-    C7: AudioBuffer;
-  };
+	audioContext?: AudioContext;
+	samples?: {
+		C2: Promise<AudioBuffer>;
+		C3: Promise<AudioBuffer>;
+		C4: Promise<AudioBuffer>;
+		C5: Promise<AudioBuffer>;
+		C6: Promise<AudioBuffer>;
+		C7: Promise<AudioBuffer>;
+	};
 
-  constructor(baseDir: string) {
-    this.playNote = this.playNote.bind(this);
+	private async playTone(pitch: number, sample: Promise<AudioBuffer>) {
+		if (!this.audioContext) {
+  			return;
+		}
 
-    this.audioContext = new AudioContext();
-    const audioExtension = "mp3";
+		const source = this.audioContext.createBufferSource();
+		source.buffer = await sample;
 
-    // check for support for the web audio api
-    if (!this.audioContext || !audioExtension) {
-      return;
-    }
+		// first try to use the detune property for p	itch shifting
+		if (source.detune) {
+		  	source.detune.value = pitch * 100;
+		} else {
+			// fallback to using playbackRate for pitch shifting
+			source.playbackRate.value = 2 ** (pitch / 12);
+		}
 
-    const fileNames = ["C2v10", "C3v10", "C4v10", "C5v10", "C6v10", "C7v10"];
+		source.connect(this.audioContext.destination);
 
-    Promise.all(
-      fileNames.map((fileName) =>
-        this.loadSample(
-          `${baseDir}/audio/${fileName}.${audioExtension}`
-        )
-      )
-    ).then((audioBuffers) => {
-      const [C2, C3, C4, C5, C6, C7] = audioBuffers;
-      this.samples = { C2, C3, C4, C5, C6, C7 };
-    });
+		this.audioContext.resume().then(() => {
+		  source.start(0);
+
+		  // Stop the source after 2 seconds
+		  setTimeout(() => {
+			source.stop();
+		  }, 3000);
+		});
+	}
+
+	private getBestSampleForNote(
+		pitch: number,
+		octave: number
+	): [adjustedPitch: number, sample: Promise<AudioBuffer>] {
+		let adjustedPitch = pitch;
+		let adjustedOctave = octave;
+
+		// use the closest sample to minimize pitch shifting
+		if (pitch > 6 && octave <= 7) {
+			adjustedOctave = octave + 1;
+			adjustedPitch = pitch - 12;
+		}
+
+		type SampleName = keyof typeof this.samples;
+
+		return [
+			adjustedPitch,
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			this.samples![`C${adjustedOctave}` as SampleName],
+		];
   }
 
- private loadSample(filePath: string): Promise<AudioBuffer> {
-  return new Promise((resolve, reject) => {
-    fs.readFile(filePath, (err, data) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-
-      this.audioContext!.decodeAudioData(data.buffer, resolve, reject);
-    });
-  });
-}
-
-  private playTone(pitch: number, sample: AudioBuffer) {
-    if (!this.audioContext) {
-      return;
-    }
-
-    const source = this.audioContext.createBufferSource();
-    source.buffer = sample;
-
-    // first try to use the detune property for p	itch shifting
-    if (source.detune) {
-      source.detune.value = pitch * 100;
-    } else {
-      // fallback to using playbackRate for pitch shifting
-      source.playbackRate.value = 2 ** (pitch / 12);
-    }
-
-    source.connect(this.audioContext.destination);
-
-    this.audioContext.resume().then(() => {
-      source.start(0);
-
-      // Stop the source after 2 seconds
-      setTimeout(() => {
-        source.stop();
-      }, 3000);
-    });
+   private async decodeAudio(base64Data: string): Promise<AudioBuffer> {
+      const audioData = atob(base64Data);
+      return await new Promise((resolve, reject) => {
+        this.audioContext?.decodeAudioData(
+          Uint8Array.from(audioData, c => c.charCodeAt(0)).buffer,
+          buffer => resolve(buffer),
+          error => reject(error)
+        );
+      });
   }
 
-  private getBestSampleForNote(
-    pitch: number,
-    octave: number
-  ): [adjustedPitch: number, sample: AudioBuffer] {
-    let adjustedPitch = pitch;
-    let adjustedOctave = octave;
+	constructor() {
+		this.audioContext = new AudioContext();
+		this.samples = {
+			  C2: this.decodeAudio(C2v10),
+			  C3: this.decodeAudio(C3v10),
+			  C4: this.decodeAudio(C4v10),
+			  C5: this.decodeAudio(C5v10),
+			  C6: this.decodeAudio(C6v10),
+			  C7: this.decodeAudio(C7v10),
+			};
 
-    // use the closest sample to minimize pitch shifting
-    if (pitch > 6 && octave <= 7) {
-      adjustedOctave = octave + 1;
-      adjustedPitch = pitch - 12;
-    }
-
-    type SampleName = keyof typeof this.samples;
-
-    return [
-      adjustedPitch,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.samples![`C${adjustedOctave}` as SampleName],
-    ];
-  }
+	}
 
   resumeAudioContext() {
     if (this.audioContext && this.audioContext.state === "suspended") {
@@ -107,7 +97,7 @@ export class AudioPlayer {
     }
   }
 
-  playNote(pitch: number, octave: number) {
+  async playNote(pitch: number, octave: number) {
     if (!this.audioContext || !this.samples) {
       return;
     }

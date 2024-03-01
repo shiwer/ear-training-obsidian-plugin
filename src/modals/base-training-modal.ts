@@ -44,7 +44,7 @@ export default class BaseTrainingModal extends Modal {
 
 
  	// Method to start a new practice session
-    private startPractice(): void {
+    private async startPractice(): void {
         this.customReset();
         this.selectedNotes = "";
         this.validateButton!.disabled = true;
@@ -162,7 +162,7 @@ export default class BaseTrainingModal extends Modal {
             .setDesc('Click to play the notes')
             .addButton(button => button
                 .setButtonText('Play notes')
-                .onClick(() => {
+                .onClick(async () => {
                     // Play the notes
                     this.notePlayer.playNotes(this.playedNotes, this.rootNote);
                 }));
@@ -218,14 +218,14 @@ export default class BaseTrainingModal extends Modal {
             })
 
         // Listen for the keydown event on the description container
-        this.contentEl.addEventListener('keydown', (event) => {
+        this.contentEl.addEventListener('keydown',async (event) => {
             const key = event.key.toLowerCase();
             if (key === ' ' || key === 'enter') {
                 // Spacebar or Enter key pressed, validate the answer
                 event.stopPropagation();
                 this.validateAnswer();
             } else if (key === 'backspace' || key === '+') {
-                this.notePlayer.playNotes(this.playedNotes, this.rootNote);
+                await this.notePlayer.playNotes(this.playedNotes, this.rootNote);
                 event.stopPropagation();
             } else {
 				// move selections

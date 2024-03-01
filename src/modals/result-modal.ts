@@ -41,7 +41,7 @@ export default class EarTrainingResultModal extends Modal {
 				});
 
 				const playedNoteButton = mistakeItem.createEl('button', { text: playedNoteLabel });
-				playedNoteButton.addEventListener('click', () => {
+				playedNoteButton.addEventListener('click', async () => {
 					this.notePlayer.playNotes(mistake.playedNotes, mistake.rootNote);
 				});
 

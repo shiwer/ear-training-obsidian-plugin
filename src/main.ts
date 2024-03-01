@@ -16,10 +16,7 @@ export default class EarTrainingPlugin extends Plugin {
 	async onload() {
 		await this.loadInformations();
 
-		// TODO : fix this.
-        const baseDir = this.app.vault.adapter.getBasePath();
-        const pluginDir = baseDir + '/' + this.manifest.dir +'/public';
-        const audioUtils = new AudioUtils(new AudioPlayer(pluginDir));
+        const audioUtils = new AudioUtils(new AudioPlayer());
 
 		// This creates an icon in the left ribbon.
 		 const earTrainingIcon = this.addRibbonIcon('music', 'Ear training', async () => {
