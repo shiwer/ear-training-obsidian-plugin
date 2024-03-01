@@ -16,7 +16,7 @@ export default class IntervalsSettingsModal extends Modal {
         
 		contentEl.createEl('h2', { text: 'Intervals' });
                 
-		contentEl.createEl('h3', { text: 'Select Intervals' });
+		contentEl.createEl('h3', { text: 'Select intervals' });
 
 		// Add UI for interval selection using toggle buttons
 		for (const key in intervalMap) {
@@ -84,7 +84,7 @@ export default class IntervalsSettingsModal extends Modal {
 	
 		// Add UI for the number of exercises option
 		new Setting(contentEl)
-			.setName('Number of Exercises')
+			.setName('Number of exercises')
 			.setDesc('Set the number of exercises per practice')
 			.addText(text => text
 				.setPlaceholder('Enter a number')

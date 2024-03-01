@@ -27,7 +27,7 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Folder Path')
+			.setName('Folder path')
               .setDesc('Set a custom folder path for saving practices.')
               .addText(text => text
                 .setValue(this.plugin.settings.saveParameters.folderPath)
@@ -38,7 +38,7 @@ export default class EarTrainingSettingTab extends PluginSettingTab {
 
 
 		new Setting(containerEl)
-			.setName('Filename Format')
+			.setName('Filename format')
 		  	.setDesc('Set a custom filename format.')
 		  	.addText(text => text
                 .setValue(this.plugin.settings.saveParameters.filenameFormat)

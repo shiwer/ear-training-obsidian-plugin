@@ -158,10 +158,10 @@ export default class BaseTrainingModal extends Modal {
         this.dynamicHeader = this.contentEl.createEl('h2', { text: this.headerText(this.practiceCount, this.exercise.settings.numExercises) });
         // Display a button to play the notes
         new Setting(this.contentEl)
-            .setName('Play Notes')
+            .setName('Play notes')
             .setDesc('Click to play the notes')
             .addButton(button => button
-                .setButtonText('Play Notes')
+                .setButtonText('Play notes')
                 .onClick(() => {
                     // Play the notes
                     this.notePlayer.playNotes(this.playedNotes, this.rootNote);

@@ -16,7 +16,7 @@ export default class ChordsSettingsModal extends Modal {
         
 		contentEl.createEl('h2', { text: 'Chords' });
                 
-		contentEl.createEl('h3', { text: 'Select Chords' });
+		contentEl.createEl('h3', { text: 'Select chords' });
 
 		// Add UI for interval selection using toggle buttons
 		for (const key in chordsMap) {
@@ -72,7 +72,7 @@ export default class ChordsSettingsModal extends Modal {
 
 		// Add UI for the number of exercises option
 		new Setting(contentEl)
-			.setName('Number of Exercises')
+			.setName('Number of exercises')
 			.setDesc('Set the number of exercises per practice')
 			.addText(text => text
 				.setPlaceholder('Enter a number')

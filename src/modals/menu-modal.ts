@@ -58,8 +58,8 @@ export default class MenuModal extends Modal {
         contentEl.createEl('h3', { text: 'Interval' });
 
 		new Setting(contentEl)
-			.setName('Interval Settings')
-			.setDesc('Change intervals that needs to be played in the Free Interval Training.')
+			.setName('Interval settings')
+			.setDesc('Change intervals that needs to be played in the free interval training.')
 			.addButton(button => {
 				button
 					.setButtonText('Options')
@@ -75,11 +75,11 @@ export default class MenuModal extends Modal {
 
         // Display a button to start the free interval practice
         this.freeIntervalPracticeButton = new Setting(contentEl)
-            .setName('Free Interval Training')
+            .setName('Free interval training')
             .setDesc('Practice intervals freely')
             .addButton(button => {
                 button
-                    .setButtonText('Start Free Interval Training')
+                    .setButtonText('Start free interval training')
                     .onClick((evt) => {
                        // prevent relauch training modal at the end of the training
                        if (evt instanceof PointerEvent && evt.pointerType === '') {
@@ -94,8 +94,8 @@ export default class MenuModal extends Modal {
         contentEl.createEl('h3', { text: 'Chords' });
 
 		new Setting(contentEl)
-			.setName('Chords Settings')
-			.setDesc('Change chords that needs to be played in the Free Chord Training.')
+			.setName('Chords settings')
+			.setDesc('Change chords that needs to be played in the free chord training.')
 			.addButton(button => {
 				button
 					.setButtonText('Options')
@@ -110,11 +110,11 @@ export default class MenuModal extends Modal {
 			});
 
 		this.freeChordsPracticeButton = new Setting(contentEl)
-			.setName('Free Chords Training')
+			.setName('Free chords training')
 			.setDesc('Practice chords freely')
 			.addButton(button => {
 				button
-					.setButtonText('Start Free Chords Training')
+					.setButtonText('Start free chords training')
 					.onClick((evt) => {
 						// prevent relauch training modal at the end of the training
 						if (evt instanceof PointerEvent && evt.pointerType === '') {
@@ -130,7 +130,7 @@ export default class MenuModal extends Modal {
 			.setDesc('Ear chords playing on repeat for passive practice.')
 			.addButton(button => {
 				button
-					.setButtonText('Start Listening Chords Training')
+					.setButtonText('Start listening chords training')
 					.onClick((evt) => {
 						// prevent relauch training modal at the end of the training
 						if (evt instanceof PointerEvent && evt.pointerType === '') {

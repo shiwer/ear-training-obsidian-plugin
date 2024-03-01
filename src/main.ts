@@ -16,12 +16,13 @@ export default class EarTrainingPlugin extends Plugin {
 	async onload() {
 		await this.loadInformations();
 
+		// TODO : fix this.
         const baseDir = this.app.vault.adapter.getBasePath();
         const pluginDir = baseDir + '/' + this.manifest.dir +'/public';
         const audioUtils = new AudioUtils(new AudioPlayer(pluginDir));
 
 		// This creates an icon in the left ribbon.
-		 const earTrainingIcon = this.addRibbonIcon('music', 'Ear Training', async () => {
+		 const earTrainingIcon = this.addRibbonIcon('music', 'Ear training', async () => {
             // Open the ear training modal
             new MenuModal(this.app, this, audioUtils).open();
         });
@@ -30,7 +31,7 @@ export default class EarTrainingPlugin extends Plugin {
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
 			id: 'open-ear-training',
-			name: 'Make Practice',
+			name: 'Make practice',
 			callback: () => {
 				// Open the ear training modal
             	new MenuModal(this.app, this, audioUtils).open();

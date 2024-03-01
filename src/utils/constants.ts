@@ -41,9 +41,9 @@ export interface EarTrainingGlobalSettings {
 }
 
 export const modeMap: Record<string, string> = {
-	oam: 'Only Ascendant Mode',
-	odm: 'Only Descendant Mode',
-	aad: 'Ascendant And Descendant',
+	oam: 'Only ascendant mode',
+	odm: 'Only descendant mode',
+	aad: 'Ascendant and descendant',
 }
 
 export const Exercise_Listening: ListeningExercise = {
@@ -136,10 +136,10 @@ export const semitoneIntervals: Record<string, number[]> = {
 
 
 export const chordsMap: Record<string, string> = {
-	'minor-root-based': 'Minor Chord',
-	'major-root-based': 'Major Chord',
-	'augmented': 'Augmented Chord',
-	'diminished': 'Diminished Chord',
+	'minor-root-based': 'Minor chord',
+	'major-root-based': 'Major chord',
+	'augmented': 'Augmented chord',
+	'diminished': 'Diminished chord',
 	'minor-fifth-based': 'Minor 2nd Inv',
 	'minor-third-based': 'Minor 1st Inv',
 	'major-fifth-based': 'Major 2nd Inv',

@@ -20,7 +20,6 @@
     ]
   },
   "include": [
-    "src/**/*.ts",
-	"obsidian.d.ts"
+    "src/**/*.ts"
   ]
 }

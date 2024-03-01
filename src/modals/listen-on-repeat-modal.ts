@@ -139,7 +139,7 @@ export default class ListenOnRepeatModal extends Modal {
         this.contentEl.createEl('h2', { text: 'Listen' });
 
         new Setting(contentEl)
-                    .setName('Number of Repeats')
+                    .setName('Number of repeats')
                     .setDesc('Set the number of repeats')
                     .addText(text => text
                         .setPlaceholder('Enter a number from 0 to 50')

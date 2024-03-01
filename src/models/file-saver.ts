@@ -1,8 +1,7 @@
-import { App, Notice, normalizePath } from 'obsidian';
+import { App, Notice, normalizePath, moment } from 'obsidian';
 import { intervalMap, chordsMap } from './../utils/constants';
 import { noteNames } from './../utils/audio-utils';
-import { ScoreInfo, HeaderInfo} from './score-recorder'
-import moment from "moment";
+import { ScoreInfo, HeaderInfo} from './score-recorder';
 
 export class FileSaver {
 	private app: App;
