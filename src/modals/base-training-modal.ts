@@ -44,7 +44,7 @@ export default class BaseTrainingModal extends Modal {
 
 
  	// Method to start a new practice session
-    private async startPractice(): void {
+    private async startPractice(): Promise<void> {
         this.customReset();
         this.selectedNotes = "";
         this.validateButton!.disabled = true;
