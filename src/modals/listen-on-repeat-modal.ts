@@ -77,8 +77,7 @@ export default class ListenOnRepeatModal extends Modal {
 			}
 		} else {
 			this.exercise.parameters.lowestNotePitchList.push(lowestNote);
-			lowestNoteButton.classList.remove('button-selected');
-
+			lowestNoteButton.classList.add('button-selected');
 
 			// we set the lowestNotePitch to be the new one
 			this.lowestNotePitch = lowestNote;
