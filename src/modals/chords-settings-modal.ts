@@ -1,6 +1,6 @@
 // ear-training-plugin/menu-modal.ts
 import { App, Modal, Setting } from 'obsidian';
-import { chordsMap } from './../utils/constants';
+import { triadsMap, tetradsMap } from './../utils/constants';
 import { noteNames } from './../utils/audio-utils';
 import EarTrainingPlugin from './../main';
 
@@ -10,19 +10,25 @@ export default class ChordsSettingsModal extends Modal {
         super(app);
     }
 
-    onOpen() {
-        const { contentEl } = this;
-        contentEl.empty();
-        
-		contentEl.createEl('h2', { text: 'Chords' });
-                
-		contentEl.createEl('h3', { text: 'Select chords' });
+    private createAccordion(title: string, map: Record<string, string>): HTMLElement {
+    	const accordionItem = document.createElement('div');
+		accordionItem.classList.add('collapse-item');
 
+		// Create the accordion item title
+		const titleElement = document.createElement('div');
+		titleElement.classList.add('collapse-item-title');
+		titleElement.textContent = title;
+		titleElement.addEventListener('click', () => {
+			accordionItem.classList.toggle('open');
+		});
+
+		const contentElement = document.createElement('div');
+		contentElement.classList.add('collapse-item-content');
 		// Add UI for interval selection using toggle buttons
-		for (const key in chordsMap) {
-			if (Object.prototype.hasOwnProperty.call(chordsMap, key)) {
-				new Setting(contentEl)
-					.setName(chordsMap[key])
+		for (const key in map) {
+			if (Object.prototype.hasOwnProperty.call(map, key)) {
+				new Setting(contentElement)
+					.setName(map[key])
 					.addToggle(toggle => toggle
 						.setValue(this.plugin.settings.chords.settings.selectedNotes.includes(key))
 						.onChange(async (value) => {
@@ -40,6 +46,28 @@ export default class ChordsSettingsModal extends Modal {
 						}));
 			}
 		}
+
+		// Append title and content to the accordion item
+		accordionItem.appendChild(titleElement);
+		accordionItem.appendChild(contentElement);
+
+		return accordionItem;
+    }
+
+    onOpen() {
+        const { contentEl } = this;
+        contentEl.empty();
+        contentEl.addClass('ear-plugin-modal');
+
+		contentEl.createEl('h2', { text: 'Chords' });
+                
+		contentEl.createEl('h3', { text: 'Select chords' });
+
+		const collapsableTriads = this.createAccordion('Triads', triadsMap);
+		contentEl.appendChild(collapsableTriads);
+
+		const collapsableTetrads = this.createAccordion('Tetrads', tetradsMap);
+		contentEl.appendChild(collapsableTetrads);
 
 		// Add a heading for Options
 		contentEl.createEl('h3', { text: 'Options' });

@@ -1,4 +1,5 @@
 import { App, Plugin, normalizePath } from 'obsidian';
+import Migration from './migration/migration'
 import { AudioPlayer } from './utils/audio';
 import { AudioUtils } from './utils/audio-utils';
 import EarTrainingSettingTab from './settings';
@@ -6,15 +7,22 @@ import MenuModal from './modals/menu-modal';
 import { intervalMap, EarTrainingGlobalSettings, BestScoreData, DEFAULT_SETTINGS } from './utils/constants';
 
 export default class EarTrainingPlugin extends Plugin {
+	version: string;
 	settings: EarTrainingGlobalSettings = DEFAULT_SETTINGS;
-    bestScores: BestScoreData = {};
     allInformations: {
-    	settings: EarTrainingGlobalSettings,
-    	bestScores: BestScoreData
+    	version: string
+    	settings: EarTrainingGlobalSettings
     }
 
 	async onload() {
 		await this.loadInformations();
+		if(this.allInformations.version != this.manifest.version) {
+			const migration = new Migration(this);
+			await migration.migrateData(this.allInformations.version);
+
+			this.allInformations.version = this.manifest.version;
+			await this.saveData(this.allInformations);
+		}
 
         const audioUtils = new AudioUtils(new AudioPlayer());
 
@@ -47,9 +55,14 @@ export default class EarTrainingPlugin extends Plugin {
     	await this.loadData().then(data => {
     		if(data) {
     			this.settings = Object.assign({}, DEFAULT_SETTINGS, data.settings);
-    			this.bestScores = data.bestScores || {};
+    			// in the first release, "version" was not set
+    			this.version = data.version || "0.0.0";
     		}
-    		this.allInformations = data || {};
+
+    		this.allInformations = {
+				version: this.version || this.manifest.version,
+				settings: this.settings || DEFAULT_SETTINGS
+			}
     	});
     }
 

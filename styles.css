@@ -35,8 +35,6 @@ button:disabled, .disabled {
 	background-color: lightgreen;
 }
 
-
-
 .ear-plugin-modal.is-incorrect {
 	background-color: lightcoral;
 }
@@ -61,3 +59,34 @@ button:disabled, .disabled {
     color: red;
     font-size: 0.8em;
 }
+
+.ear-plugin-modal .collapse-item {
+	margin-bottom: 10px;
+}
+
+.ear-plugin-modal .collapse-item .collapse-item-content {
+    max-height: 0;
+	padding: 0 5px;
+	overflow: hidden;
+	transition: max-height 0.3s ease-out;
+}
+
+.ear-plugin-modal .collapse-item.open .collapse-item-content {
+	max-height: 400px; /* Adjust the maximum height as needed */
+	padding: 5px
+}
+
+.ear-plugin-modal .collapse-item-title {
+    cursor: pointer;
+    background-color: #f8f9fa;
+	padding: 10px 5px;
+	border: 1px solid #dee2e6;
+	border-radius: 0.25rem;
+	transition: background-color 0.3s ease;
+}
+
+.ear-plugin-modal .collapse-item-title:hover {
+	background-color: #e9ecef;
+}
+
+

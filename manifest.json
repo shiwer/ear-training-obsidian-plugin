@@ -1,7 +1,7 @@
 {
 	"id": "ear-training",
 	"name": "Ear Training",
-	"version": "0.0.1",
+	"version": "0.0.3",
 	"minAppVersion": "0.15.0",
 	"description": "Get ear training exercises inside your vault.",
 	"author": "Poe Zoel",

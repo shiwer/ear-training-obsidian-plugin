@@ -50,14 +50,16 @@ export const Exercise_Listening: ListeningExercise = {
 	exerciseId: -2,
 	settings: {
 		selectedNotes: [
-			'minor-root-based',
-			'major-root-based',
+			'minor',
+			'major',
 			'augmented',
 			'diminished',
-			'minor-third-based',
-			'major-third-based',
-			'minor-fifth-based',
-			'major-fifth-based',
+			'minor-seventh',
+			'major-seventh',
+			'dominant-seventh',
+			'minor-major-seventh',
+			'half-diminished-seventh',
+			'diminished-seventh',
 			],
 		mode: 'chords',
 		numExercises: 32,
@@ -87,7 +89,7 @@ export const DEFAULT_SETTINGS: EarTrainingGlobalSettings = {
 	chords: {
 		exerciseId:0,
 		settings: {
-			selectedNotes: ['minor-root-based', 'major-root-based'],
+			selectedNotes: ['minor', 'major'],
 			mode: 'chords',
 			numExercises: 20,
 			isHarmonic: false,
@@ -136,23 +138,53 @@ export const semitoneIntervals: Record<string, number[]> = {
 
 
 export const chordsMap: Record<string, string> = {
-	'minor-root-based': 'Minor chord',
-	'major-root-based': 'Major chord',
-	'augmented': 'Augmented chord',
-	'diminished': 'Diminished chord',
-	'minor-fifth-based': 'Minor 2nd Inv',
-	'minor-third-based': 'Minor 1st Inv',
-	'major-fifth-based': 'Major 2nd Inv',
-	'major-third-based': 'Major 1st Inv',
+	'minor': 'Minor',
+	'major': 'Major',
+	'augmented': 'Augmented',
+	'diminished': 'Diminished',
+	'minor-seventh': 'Minor 7th',
+	'major-seventh': 'Major 7th',
+    'dominant-seventh': 'Dominant 7th',
+	'minor-major-seventh': 'Minor major 7th',
+	'half-diminished-seventh': 'Diminished 7th',
+    'diminished-seventh': 'Diminished 7th',
 }
 
 export const chordsIntervals: Record<string, number[]> = {
-	'minor-root-based': [3, 7],
-	'major-root-based': [4, 7],
-	'minor-fifth-based': [3, -5],
-	'minor-third-based': [-9, -5],
-	'major-fifth-based': [4, -5],
-	'major-third-based': [-8, -5],
+	'minor': [3, 7],
+	'major': [4, 7],
 	'augmented': [4, 8],
 	'diminished': [3, 6],
+	'minor-seventh': [3, 7, 10],
+	'major-seventh': [4, 7, 11],
+	'dominant-seventh': [4, 7, 10],
+	'minor-major-seventh': [3, 7, 11],
+	'half-diminished-seventh': [3, 6, 10],
+	'diminished-seventh': [3, 6, 9],
 }
+
+export const triadsInversion = {
+	'first-inv': [-1,-1],
+	'second-inv': [0, -1],
+}
+
+export const tetradsInversion = {
+	'1-3-7-5': [0,0,1,0],
+	'1-5-7-3': [0,1,0,0],
+	'1-5-3-7': [0,1,0,1],
+	'1-7-5-3': [0,1,2,0],
+	'1-7-3-5': [0,1,1,0],
+}
+
+export const triadsMap: Record<string, string> = {};
+export const tetradsMap: Record<string, string> = {};
+
+Object.keys(chordsIntervals).forEach(key => {
+    const intervals = chordsIntervals[key];
+    const name = chordsMap[key];
+    if (intervals.length === 2) {
+        triadsMap[key] = name;
+    } else if (intervals.length === 3) {
+        tetradsMap[key] = name;
+    }
+});

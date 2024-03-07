@@ -1,6 +1,6 @@
 {
 	"name": "ear-training-plugin",
-	"version": "0.0.1",
+	"version": "0.0.3",
 	"description": "Based on sample plugin Obsidian (https://obsidian.md)",
 	"main": "main.js",
 	"scripts": {
@@ -10,8 +10,8 @@
 		"convert-audio": "node convert-audio.mjs"
 	},
 	"keywords": [],
-	"author": "",
-	"license": "MIT",
+	"author": "Poe Zoel",
+	"license": "GNU",
 	"devDependencies": {
 		"@types/node": "^20.11.19",
 		"@typescript-eslint/eslint-plugin": "7.0.2",
