@@ -22,14 +22,6 @@ jobs:
           npm install
           npm run build
 
-      - name: Install GitHub CLI
-        run: sudo apt-get install gh
-
-      - name: Authenticate GitHub CLI
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: gh auth login --with-token
-
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
