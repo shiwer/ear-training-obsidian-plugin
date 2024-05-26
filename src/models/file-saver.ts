@@ -25,6 +25,7 @@ export class FileSaver {
 		let mdHeader = "---\n";
 		mdHeader += "exercise: " + headerInfo.exercise + "\n";
 		mdHeader += "mode: " + headerInfo.mode + "\n";
+		mdHeader += "playMode: " + headerInfo.playMode + "\n";
 		mdHeader += "tonalities: " + this.printList(headerInfo.tonalities) + "\n";
 		mdHeader += "choices: " + this.printList(headerInfo.choices) + "\n";
 		mdHeader += "---\n\n";

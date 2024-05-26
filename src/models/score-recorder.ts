@@ -8,6 +8,7 @@ export interface ScoreInfo {
 
 export interface HeaderInfo {
     exercise: string;
+    playMode: string;
     mode: string;
     tonalities: string[];
     choices: string[];
@@ -17,10 +18,11 @@ export class ScoreTracker {
 	private headerInfo: HeaderInfo;
     private scoreInfo: ScoreInfo[];
 
-    constructor(exercise: string, mode: string, tonalities: string[], choices: string[]){
+    constructor(exercise: string, playMode: string, mode: string, tonalities: string[], choices: string[]){
     	this.headerInfo = {
     		exercise: exercise,
-    		mode: mode,
+    		playMode: playMode,
+    		mode:mode,
     		tonalities: tonalities,
     		choices: choices
     	}

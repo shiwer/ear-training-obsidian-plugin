@@ -1,6 +1,6 @@
 // ear-training-plugin/menu-modal.ts
 import { App, Modal, Setting } from 'obsidian';
-import { intervalMap, modeMap } from './../utils/constants';
+import { intervalMap, modeMap, ExerciseMode } from './../utils/constants';
 import { noteNames } from './../utils/audio-utils';
 import EarTrainingPlugin from './../main';
 
@@ -46,25 +46,33 @@ export default class IntervalsSettingsModal extends Modal {
 
 		// Add UI for the mode option
 		new Setting(contentEl)
-			.setName('Mode')
-			.setDesc('Select the ear training mode')
+			.setName('Play Mode')
+			.setDesc('Select the ear training play mode option')
 			.addDropdown(dropdown => dropdown
 				.addOptions(modeMap)
-				.setValue(this.plugin.settings.intervals.settings.mode)
+				.setValue(this.plugin.settings.intervals.settings.playMode)
 				.onChange(async (value) => {
-					this.plugin.settings.intervals.settings.mode = value;
+					this.plugin.settings.intervals.settings.playMode = value;
 					await this.plugin.saveSettings();
 				}));
 
 		new Setting(contentEl)
-				.setName('Play harmonically')
-				.addToggle(toggle => toggle
-					.setValue(this.plugin.settings.intervals.settings.isHarmonic)
-					.onChange(async (value) => {
-						this.plugin.settings.intervals.settings.isHarmonic = value
-	
-						await this.plugin.saveSettings();
-					}));
+			.setName('Mode')
+			.setDesc('Pick the training mode')
+			.addDropdown((dropdown) => {
+				// using values to avoid issues later
+				Object.values(ExerciseMode).forEach((value) => {
+						dropdown.addOption(value, value);
+				})
+				dropdown.setValue(this.plugin.settings.intervals.settings.mode); // Set the initial value based on the loaded setting
+
+				dropdown.onChange(async (value) => {
+					this.plugin.settings.intervals.settings.mode = value as ExerciseMode
+
+					await this.plugin.saveSettings();
+				});
+			});
+
 
 		new Setting(contentEl)
 			.setName('Set a tonality')

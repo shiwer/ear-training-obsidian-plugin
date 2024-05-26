@@ -10,7 +10,7 @@ export default class IntervalTrainingModal extends BaseTrainingModal {
 
  	// Method to start a new practice session
     protected customReset(): void {
-		(this.notePlayer as IntervalNotePlayer).updateIsAscending(this.exercise.settings.mode === 'oam' || (this.exercise.settings.mode === 'aad' && Math.random() < 0.5));
+		(this.notePlayer as IntervalNotePlayer).updateIsAscending(this.exercise.settings.playMode === 'oam' || (this.exercise.settings.playMode === 'aad' && Math.random() < 0.5));
     }
 
     protected getButtonText(id:string): string {
@@ -22,7 +22,7 @@ export default class IntervalTrainingModal extends BaseTrainingModal {
     }
 
     constructor(app: App, saveParameters: SaveParameters, protected exercise: Exercise, audioUtils: AudioUtils) {
-        super(app, saveParameters,'interval', exercise, new IntervalNotePlayer(audioUtils, semitoneIntervals, exercise.settings.isHarmonic));
+        super(app, saveParameters,'interval', exercise, new IntervalNotePlayer(audioUtils, semitoneIntervals, exercise.settings.playMode === 'chords'));
     }
 
 }

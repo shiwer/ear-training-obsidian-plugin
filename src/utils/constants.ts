@@ -2,10 +2,16 @@
 
 export interface EarTrainingSettings {
 	selectedNotes: string[],
-	mode : string,
+	playMode : string,
 	numExercises: number,
-	isHarmonic: boolean,
-	tonality: string
+	tonality: string,
+	mode: ExerciseMode
+}
+
+export enum ExerciseMode {
+	Normal = 'Normal',
+	StopOnError = "Stop on error",
+	Easy = 'Easy',
 }
 
 export interface Exercise {
@@ -41,9 +47,10 @@ export interface EarTrainingGlobalSettings {
 }
 
 export const modeMap: Record<string, string> = {
-	oam: 'Only ascendant mode',
-	odm: 'Only descendant mode',
+	oam: 'Only ascendant',
+	odm: 'Only descendant',
 	aad: 'Ascendant and descendant',
+	chords: 'Chords'
 }
 
 export const Exercise_Listening: ListeningExercise = {
@@ -61,10 +68,10 @@ export const Exercise_Listening: ListeningExercise = {
 			'half-diminished-seventh',
 			'diminished-seventh',
 			],
-		mode: 'chords',
+		playMode: 'chords',
 		numExercises: 32,
-		isHarmonic: true,
-		tonality: 'all'
+		tonality: 'all',
+		mode: ExerciseMode.Normal
 	},
 	parameters: {
 		repeatTimes: 2,
@@ -80,20 +87,20 @@ export const DEFAULT_SETTINGS: EarTrainingGlobalSettings = {
 		exerciseId: -1,
 		settings: {
 			selectedNotes: ['minor-second', 'major-second'],
-			mode: 'oam',
+			playMode: 'oam',
 			numExercises: 20,
-			isHarmonic: false,
-			tonality: 'C'
+			tonality: 'C',
+			mode: ExerciseMode.Normal
 		}
 	},
 	chords: {
 		exerciseId:0,
 		settings: {
 			selectedNotes: ['minor', 'major'],
-			mode: 'chords',
+			playMode: 'chords',
 			numExercises: 20,
-			isHarmonic: false,
-			tonality: 'C'
+			tonality: 'C',
+			mode: ExerciseMode.Normal
 		}
 	},
 	saveParameters: {
@@ -146,7 +153,7 @@ export const chordsMap: Record<string, string> = {
 	'major-seventh': 'Major 7th',
     'dominant-seventh': 'Dominant 7th',
 	'minor-major-seventh': 'Minor major 7th',
-	'half-diminished-seventh': 'Diminished 7th',
+	'half-diminished-seventh': 'Half diminished 7th',
     'diminished-seventh': 'Diminished 7th',
 }
 

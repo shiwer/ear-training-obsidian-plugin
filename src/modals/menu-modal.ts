@@ -24,17 +24,9 @@ export default class MenuModal extends Modal {
     private allowFreePractice(): void {
         const { contentEl } = this;
 
-        // Check if the selected intervals meet the requirement based on the mode
-        if (
-            (this.plugin.settings.intervals.settings.mode === 'oam' || this.plugin.settings.intervals.settings.mode === 'odm') &&
-            this.plugin.settings.intervals.settings.selectedNotes.length < 2
-        ) {
+        if (this.plugin.settings.intervals.settings.selectedNotes.length < 2) {
             this.freeIntervalPracticeButton.components[0].disabled = true;
-            this.freeIntervalPracticeButton.setDesc('Please select at least 2 intervals for OAM or ODM mode.');
-            return;
-        } else if (this.plugin.settings.intervals.settings.selectedNotes.length < 1) {
-            this.freeIntervalPracticeButton.components[0].disabled = true;
-            this.freeIntervalPracticeButton.setDesc('Please select at least 1 interval.');
+            this.freeIntervalPracticeButton.setDesc('Please select at least 2 intervals.');
             return;
         }
 
@@ -137,7 +129,7 @@ export default class MenuModal extends Modal {
 							// Do nothing if the Enter key is pressed
 							return;
 						}
-						new ListenOnRepeatModal(this.app, Exercise_Listening,  new ChordNotePlayer(this.audioUtils, chordsIntervals, this.plugin.settings.chords.settings.isHarmonic)).open();
+						new ListenOnRepeatModal(this.app, Exercise_Listening,  new ChordNotePlayer(this.audioUtils, chordsIntervals, this.plugin.settings.chords.settings.playMode === 'chords')).open();
 					});
 			});
 

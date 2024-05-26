@@ -40,7 +40,7 @@ button:disabled, .disabled {
 }
 
 .ear-plugin-modal .spacer {
-	height: 10x;
+	min-height: 15px;
 }
 
 .ear-plugin-modal .answer-list {
@@ -87,6 +87,10 @@ button:disabled, .disabled {
 
 .ear-plugin-modal .collapse-item-title:hover {
 	background-color: #e9ecef;
+}
+
+.ear-plugin-modal .invisible {
+	display: none;
 }
 
 

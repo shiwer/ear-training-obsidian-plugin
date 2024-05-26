@@ -21,7 +21,7 @@ export default class ChordsTrainingModal extends BaseTrainingModal {
 
 
     constructor(app: App, saveParameters: SaveParameters, protected exercise: Exercise, audioUtils: AudioUtils) {
-        super(app, saveParameters, 'chords', exercise, new ChordNotePlayer(audioUtils, chordsIntervals, exercise.settings.isHarmonic));
+        super(app, saveParameters, 'chords', exercise, new ChordNotePlayer(audioUtils, chordsIntervals, exercise.settings.playMode === 'chords'));
     }
 
 }
