@@ -22,6 +22,14 @@ jobs:
           npm install
           npm run build
 
+      - name: Install GitHub CLI
+        run: sudo apt-get install gh
+
+      - name: Authenticate GitHub CLI
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: gh auth login --with-token <<< "$GITHUB_TOKEN"
+
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
@@ -29,6 +37,6 @@ jobs:
           tag="${GITHUB_REF#refs/tags/}"
 
           gh release create "$tag" \
-            --title="$tag" \
+            --title "$tag" \
             --draft \
             main.js manifest.json styles.css
